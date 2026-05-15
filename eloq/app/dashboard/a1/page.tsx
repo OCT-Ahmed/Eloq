@@ -4,7 +4,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const A1 = () => {
     return (
-        <div className="py-4 px-6 flex flex-col gap-4 ">
+        <div className="py-4 px-6 flex flex-col gap-4 text-base">
             {/* Lesson Layout Header */}
             <header>
                 <Card className="flex flex-col items-start justify-start gap-0 p-4">
@@ -23,7 +23,7 @@ const A1 = () => {
                         Conversation 
                     </h1>
                     {/* Conversation Content */}
-                    <div className="" id="conversation-content">
+                    <div className="bg-background p-4 rounded rounded-lg" id="conversation-content">
                         <p>Adam: Hi, I'm Adam.</p>
                         <p>Sarah: Hello Adam! I'm Sarah.</p>
                     </div>
@@ -51,13 +51,13 @@ const A1 = () => {
             </main>
             {/* Lesson Layout Footer */}
             <footer>
-                <div>
-                    <Button className="text-white bg-black p-2 rounded rounded-xl flex gap-1">
+                <div className="flex items-center justify-between ">
+                    <Button className="text-white bg-eloq-black p-2 rounded rounded-xl flex gap-1">
                         <ArrowLeft />
                         Previous
                     </Button>
                     {/* RIGHT BUTTON */}
-                    <Button className="text-white bg-black p-2 rounded rounded-xl flex gap-1">
+                    <Button className="text-white bg-eloq-black p-2 rounded rounded-xl flex gap-1">
                         Next 
                         <ArrowRight />
                     </Button>
