@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarProvider } from "@/components/ui/sidebar";
-import { BookOpen, Bot, Brain, BrainIcon, Earth, Home, Rocket, Settings, SidebarIcon } from "lucide-react";
+import { BookOpen, Bot, Brain, BrainIcon, Earth, FireExtinguisher, Flame, Grid2x2, Home, KanbanSquare, Layers2, LayoutDashboardIcon, LayoutGrid, LayoutList, Rocket, Settings, SidebarIcon, User, UserCircle } from "lucide-react";
 import Link from "next/link";
 
 export default function DashboardLayout({
@@ -10,9 +10,11 @@ export default function DashboardLayout({
 }) {
     return (
         <div className="max-h-full flex flex-col items-start justify-stretch h-screen" id="dashboard-container">
-            <header className="flex items-center justify-start gap-6 text-white h-18 w-full px-5 py-2 bg-primary">
-                <Link className="mr-51 cursor-default" href="/"><p>ELOQ</p></Link> 
-                <Link className="text-sm" href="dashboard">Dashboard</Link>
+            <header className="flex items-center justify-start gap-6 text-white h-18 w-full px-5 py-2 bg-primary shadow-b shadow-2xl">
+                <Link className="mr-50 cursor-default" href="/">
+                    <h1 className="text-xl font-semibold">ELOQ</h1>
+                </Link> 
+                <Link className="text-white/75 hover:text-white p-2 hover:bg-white/5 rounded-lg transition-all duration-300" href="dashboard">Dashboard</Link>
                 {/* Add header links array */}
             </header>
 
@@ -29,18 +31,35 @@ export default function DashboardLayout({
                 </SidebarProvider> 
                 */} 
                 <aside className="flex flex-col gap-4 bg-purple-300 px-4 py-5 w-64 h-full border-r border-base/15 shadow-2xl text-regular">
-                    <header className="flex gap-2 pb-4 border-b border-primary/15">
-                        <Rocket color="purple" />
-                        <h1 className="font-semibold">
-                            My Dashboard
-                        </h1>
+                    <header className="flex items-start justify-start gap-2 pb-4 border-b border-primary/15">
+                        {/* <Rocket color="purple" /> */}
+                        <div className="bg-purple-500 p-2 h-10 w-10 rounded-full">
+                           <User color="none" /> 
+                        </div>
+                        
+                        <div>
+                            <div className="flex items-center gap-1">
+                                
+                                <h1 className="font-semibold">
+                                    Ahmed Khyr
+                                </h1>
+                                <div className="relative flex"> 
+                                    <Flame fill="darkorange" color="orange" size={15} strokeWidth={1} />
+                                    <span className="font-mono font-semibold text-[10px]">12</span>
+                                </div>
+                            </div>
+                            <span className="text-[11px] bg-white/25 filter-blur-xl rounded-full p-1 px-2 font-mono">
+                                Intermediate
+                            </span>
+                        </div>
+                        
                         {/* add sidebar links array */}
                     </header>
 
                     <main className="flex flex-1 flex-col gap-1 pb-4 border-b border-primary/15">
-                        <Link className="flex gap-2 p-2 hover:bg-white/35 text-sm rounded-lg transition-colors duration-300" href="/dashboard">
-                            <Home size={18} />
-                            Home
+                        <Link className="flex gap-2 p-2 hover: bg-white/35 text-sm rounded-lg transition-colors duration-300" href="/dashboard">
+                            <LayoutDashboardIcon color="purple" size={18} strokeWidth={1.9} />
+                            Dashboard
                         </Link>
                         <Link className="flex gap-2 p-2  text-sm rounded-lg hover:bg-white/35 transition-colors duration-300" href="/dashboard/a1">
                             <BookOpen size={18} />
