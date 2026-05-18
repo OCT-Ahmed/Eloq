@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { unit1 } from "@/data/curriculum/beginner-a1/unit-1";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const A1 = () => {
     return (
-        <div className="py-4 px-6 flex flex-col gap-4 text-base">
+        <div className="max-h-[calc(100vh_-_72px)] flex flex-col gap-4 text-base ">
             {/* Lesson Layout Header */}
             <header>
                 <Card className="flex flex-col items-start justify-start gap-0 p-4">
@@ -46,6 +47,37 @@ const A1 = () => {
                                 Im Ahmed
                             </span>
                         </div>
+                    </div>
+
+                    <div className="flex flex-col bg-green-200 p-8 rounded-lg">
+                        {
+                            <>
+                                <p>{unit1.unitQuiz.title}</p>
+                                <p>{unit1.unitQuiz.description}</p>
+                                <p>Total questions: {unit1.unitQuiz.total_questions}</p>
+                                <p>Passing scores: {unit1.unitQuiz.passing_score}</p>
+                                <p>{unit1.unitQuiz.questions.map((q) => (
+                                        <>
+                                            <div>
+                                                <p>q{q.id}: {q.type}</p>
+                                                <p>{q.question}</p>
+                                                {   
+                                                    q.pairs &&
+                                                    q.pairs?.map(p => (
+                                                        <div>
+                                                            {p.arabic}
+                                                            {p.english}
+                                                        </div>
+                                                    ))
+                                                }
+                                                <div className="flex gap-3 p-4 rounded-lg bg-blue-600/15">{q.options?.map(op => (<span>{op}</span>))}</div>
+                                            </div>
+                                            <p>{q.correct_answer}</p>
+                                        </>
+                                    ))}
+                                </p>
+                            </>
+                        }
                     </div>
                 </Card>  
             </main>

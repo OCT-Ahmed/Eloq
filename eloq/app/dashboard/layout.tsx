@@ -15,10 +15,14 @@ export default function DashboardLayout({
                     <h1 className="text-xl font-semibold">ELOQ</h1>
                 </Link> 
                 <Link className="text-white/75 hover:text-white p-2 hover:bg-white/5 rounded-lg transition-all duration-300" href="dashboard">Dashboard</Link>
+
+                <div className="w-80">
+                    <input className="text-sm p-4 rounded-xl w-full h-8 bg-white/15 backdrop-blur-xl active:border active:border-white/25 actie:border-none focusborder-none" type="text" placeholder="Search for a word, lesson or .." />
+                </div>
                 {/* Add header links array */}
             </header>
 
-            <main className="flex items-stretch justify-start h-full w-full border">
+            <main className="flex items-stretch justify-start h-full w-full ">
             
                 {/* 
                 <SidebarProvider className="h-full" >
@@ -30,7 +34,7 @@ export default function DashboardLayout({
                     </Sidebar>
                 </SidebarProvider> 
                 */} 
-                <aside className="flex flex-col gap-4 bg-purple-300 px-4 py-5 w-64 h-full border-r border-base/15 shadow-2xl text-regular">
+                <aside className="flex flex-col items-stretch justify-stretch gap-4 bg-purple-300 px-4 pt-5 pb-3 w-64 h-full border-r border-black/15 shadow-2xl text-regular">
                     <header className="flex items-start justify-start gap-2 pb-4 border-b border-primary/15">
                         {/* <Rocket color="purple" /> */}
                         <div className="bg-purple-500 p-2 h-10 w-10 rounded-full">
@@ -86,9 +90,9 @@ export default function DashboardLayout({
                     </footer>
                 </aside>
             
-                <div className="w-full flex-1">
+                <section className="w-full flex-1 py-4 px-6">
                     {children}
-                </div>
+                </section>
             </main>    
         </div>      
     )
