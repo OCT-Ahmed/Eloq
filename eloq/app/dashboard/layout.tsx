@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarProvider } from "@/components/ui/sidebar";
-import { BookOpen, Bot, Brain, BrainIcon, Earth, FireExtinguisher, Flame, Grid2x2, Home, KanbanSquare, Layers2, LayoutDashboardIcon, LayoutGrid, LayoutList, Rocket, Settings, SidebarIcon, User, UserCircle } from "lucide-react";
+import { BookOpen, Bot, Brain, BrainIcon, Earth, FireExtinguisher, Flame, Grid2x2, Home, HomeIcon, KanbanSquare, Layers2, LayoutDashboardIcon, LayoutGrid, LayoutList, Rocket, Settings, SidebarIcon, User, UserCircle } from "lucide-react";
 import Link from "next/link";
 
 export default function DashboardLayout({
@@ -9,7 +9,7 @@ export default function DashboardLayout({
     children: React.ReactNode,
 }) {
     return (
-        <div className="max-h-full flex flex-col items-start justify-stretch h-screen" id="dashboard-container">
+        <div className="flex flex-col items-start justify-stretch w-screen h-screen overflow-hidden" id="dashboard-container">
             <header className="flex items-center justify-start gap-6 text-white h-18 w-full px-5 py-2 bg-primary shadow-b shadow-2xl">
                 <Link className="mr-50 cursor-default" href="/">
                     <h1 className="text-xl font-semibold">ELOQ</h1>
@@ -22,7 +22,7 @@ export default function DashboardLayout({
                 {/* Add header links array */}
             </header>
 
-            <main className="flex items-stretch justify-start h-full w-full ">
+            <main className="flex items-stretch justify-start w-full h-[calc(100vh-64px)]">
             
                 {/* 
                 <SidebarProvider className="h-full" >
@@ -34,7 +34,7 @@ export default function DashboardLayout({
                     </Sidebar>
                 </SidebarProvider> 
                 */} 
-                <aside className="flex flex-col items-stretch justify-stretch gap-4 bg-purple-300 px-4 pt-5 pb-3 w-64 h-full border-r border-black/15 shadow-2xl text-regular">
+                <aside className="flex-shrink-0 flex flex-col items-stretch justify-stretch gap-4 bg-purple-300 px-4 pt-5 pb-3 w-64 h-full border-r border-black/15 shadow-2xl text-regular">
                     <header className="flex items-start justify-start gap-2 pb-4 border-b border-primary/15">
                         {/* <Rocket color="purple" /> */}
                         <div className="bg-purple-500 p-2 h-10 w-10 rounded-full">
@@ -62,8 +62,8 @@ export default function DashboardLayout({
 
                     <main className="flex flex-1 flex-col gap-1 pb-4 border-b border-primary/15">
                         <Link className="flex gap-2 p-2 hover: bg-white/35 text-sm rounded-lg transition-colors duration-300" href="/dashboard">
-                            <LayoutDashboardIcon color="purple" size={18} strokeWidth={1.9} />
-                            Dashboard
+                            <HomeIcon color="purple" size={18} strokeWidth={1.9} />
+                            Home
                         </Link>
                         <Link className="flex gap-2 p-2  text-sm rounded-lg hover:bg-white/35 transition-colors duration-300" href="/dashboard/a1">
                             <BookOpen size={18} />
@@ -90,7 +90,7 @@ export default function DashboardLayout({
                     </footer>
                 </aside>
             
-                <section className="w-full flex-1 py-4 px-6">
+                <section className="w-full h-full flex-1 py-4 px-6 overflow-hidden">
                     {children}
                 </section>
             </main>    
