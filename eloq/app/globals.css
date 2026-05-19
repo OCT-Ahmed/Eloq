@@ -6,6 +6,7 @@
   --foreground: #ffffff;
   --primary: #111827;
   --base: #1B1B32;
+  --muted: #ffffffab;
   --eloq-purple: #460546;
   --eloq-soft-purple:  rgba(161, 20, 161, 0.603);
   --eloq-black: black;
@@ -24,6 +25,7 @@
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
   --color-base: var(--base);
+  --color-muted: var(--muted);
   --color-eloq-purple: var(--eloq-purple);
   --color-eloq-soft-purple: var(--eloq-soft-purple);
   --color-eloq-black: var(--eloq-black);
