@@ -5,9 +5,9 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const A1 = () => {
     return (
-        <div className="max-h-[calc(100vh_-_72px)] flex flex-col gap-4 text-base ">
+        <div className="flex flex-col gap-4 text-base h-full w-full overflow-hidden">
             {/* Lesson Layout Header */}
-            <header>
+            <header className="flex-shrink-0">
                 <Card className="flex flex-col items-start justify-start gap-0 p-4">
                     <h1 className="font-sans font-semibold text-2xl">
                         Unit 1 - Meeting New People
@@ -18,8 +18,8 @@ const A1 = () => {
                 </Card>
             </header>
             {/* Main Lesson Layout Content */}
-            <main className="h-auto flex items-start justify-center">
-                <Card className="flex flex-col items-start justify-center justify-center w-full bg-white shadow-lg px-4">
+            <main className="flex-1 overflow-y-auto pr-1">
+                <Card className="flex flex-col items-stretch justify-start gap-4 w-full bg-white shadow-lg px-4">
                     <h1 className="font-semibold text-xl">
                         Conversation 
                     </h1>
@@ -82,19 +82,19 @@ const A1 = () => {
                 </Card>  
             </main>
             {/* Lesson Layout Footer */}
-            <footer>
+            {/* <footer className="flex-shrink-0">
                 <div className="flex items-center justify-between ">
                     <Button className="text-white bg-eloq-black p-2 rounded rounded-xl flex gap-1">
                         <ArrowLeft />
                         Previous
                     </Button>
-                    {/* RIGHT BUTTON */}
+                    {/* RIGHT BUTTON //
                     <Button className="text-white bg-eloq-black p-2 rounded rounded-xl flex gap-1">
                         Next 
                         <ArrowRight />
                     </Button>
                 </div>
-            </footer>
+            </footer> */}
         </div>
     )
 }
