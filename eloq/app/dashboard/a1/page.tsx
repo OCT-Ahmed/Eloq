@@ -5,21 +5,28 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const A1 = () => {
     return (
-        <div className="flex flex-col gap-4 text-base h-full w-full overflow-hidden">
+        <div className="flex flex-col gap-4 text-base h-full w-full overflow-hidden relative">
+             
             {/* Lesson Layout Header */}
             <header className="flex-shrink-0">
-                <Card className="flex flex-col items-start justify-start gap-0 p-4">
+                <div className="flex flex-col items-start justify-start gap-0 px-4 ">
                     <h1 className="font-sans font-semibold text-2xl leading-tight">
                         Unit 1 - Meeting New People
                     </h1>
-                    <p className="tracking-wide">
-                        Learn greetings and introductions.
-                    </p>
-                </Card>
+                </div>
             </header>
             {/* Main Lesson Layout Content */}
-            <main className="flex-1 overflow-y-auto pr-1  ">
-                <Card className="flex flex-col items-stretch justify-start gap-4 w-full bg-white shadow-lg px-4 text-[18px] leading-8 tracking-[-0.01px]">
+            <main className="flex-1 overflow-y-auto  pr-1 py-2 relative rounded-lg">
+               
+                <Card className="flex flex-col items-stretch justify-start gap-4 w-full bg-white shadow-lg p-10 text-[18px] leading-8 tracking-[-0.01px] ">
+                    <div className="flex flex-col items-start justify-start gap-0">
+                        <h1 className="font-sans font-semibold text-2xl leading-tight">
+                            Unit 1 - Meeting New People
+                        </h1>
+                        <p className="tracking-wide">
+                            Learn greetings and introductions.
+                        </p>
+                    </div>
                     <h1 className="font-semibold text-xl">
                         Conversation 
                     </h1>
