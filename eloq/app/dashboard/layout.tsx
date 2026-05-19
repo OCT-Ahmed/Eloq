@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarProvider } from "@/components/ui/sidebar";
-import { BookOpen, Bot, Brain, BrainIcon, Earth, FireExtinguisher, Flame, Grid2x2, Home, KanbanSquare, Layers2, LayoutDashboardIcon, LayoutGrid, LayoutList, Rocket, Settings, SidebarIcon, User, UserCircle } from "lucide-react";
+import { BookOpen, Bot, Brain, BrainIcon, Earth, FireExtinguisher, Flame, Grid2x2, Home, HomeIcon, KanbanSquare, Layers2, LayoutDashboardIcon, LayoutGrid, LayoutList, Rocket, Settings, SidebarIcon, User, UserCircle } from "lucide-react";
 import Link from "next/link";
 
 export default function DashboardLayout({
@@ -62,8 +62,8 @@ export default function DashboardLayout({
 
                     <main className="flex flex-1 flex-col gap-1 pb-4 border-b border-primary/15">
                         <Link className="flex gap-2 p-2 hover: bg-white/35 text-sm rounded-lg transition-colors duration-300" href="/dashboard">
-                            <LayoutDashboardIcon color="purple" size={18} strokeWidth={1.9} />
-                            Dashboard
+                            <HomeIcon color="purple" size={18} strokeWidth={1.9} />
+                            Home
                         </Link>
                         <Link className="flex gap-2 p-2  text-sm rounded-lg hover:bg-white/35 transition-colors duration-300" href="/dashboard/a1">
                             <BookOpen size={18} />
