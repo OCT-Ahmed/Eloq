@@ -1,24 +1,43 @@
+import { unit1 } from "@/data/curriculum/beginner-a1/beginner-a1";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { Card } from "@/components/ui/card"; 
+import { ArrowLeft, ArrowRight, ChevronRight } from "lucide-react";
+import Link from "next/link";
 
 const A1 = () => {
     return (
-        <div className="py-4 px-6 flex flex-col gap-4 text-base">
+        <div className="flex flex-col gap-4 text-base h-full w-full overflow-hidden relative">
+             
             {/* Lesson Layout Header */}
-            <header>
-                <Card className="flex flex-col items-start justify-start gap-0 p-4">
-                    <h1 className="font-sans font-semibold text-2xl">
+            <header className="flex-shrink-0">
+                <div className="flex flex-col items-start justify-start gap-0 px-4 ">
+                    <div className="flex items-center justify-center gap-1 text-sm text-zinc-500">
+                        <Link className="" href="/learn">Learn</Link> <span className=""><ChevronRight size={15} /></span>
+                        <Link className="" href="/academic">Academic</Link> <span className=""><ChevronRight size={15} /></span>
+                        <Link className="" href="/levels">Levels</Link> <span className=""><ChevronRight size={15} /></span>
+                        <Link className="" href="/beginner-a1">Beginner A1</Link> <span className=""><ChevronRight size={15} /></span>
+                        <Link className="" href="/unit-1">Unit1</Link> <span className=""><ChevronRight size={15} /></span>
+                        <Link className="" href="/lessons">Lessons</Link>
+                        {/* <Link className="" href="/quiz">Quiz</Link> <span className=""><ChevronRight size={15} /></span> */}
+                        
+                    </div>
+                    <h1 className="font-sans font-semibold text-2xl leading-tight">
                         Unit 1 - Meeting New People
                     </h1>
-                    <p className="">
-                        Learn greetings and introductions.
-                    </p>
-                </Card>
+                </div>
             </header>
             {/* Main Lesson Layout Content */}
-            <main className="h-auto flex items-start justify-center">
-                <Card className="flex flex-col items-start justify-center justify-center w-full bg-white shadow-lg px-4">
+            <main className="flex-1 overflow-y-auto  pr-1 py-2 relative rounded-lg">
+               
+                <Card className="flex flex-col items-stretch justify-start gap-4 w-full bg-white shadow-lg p-10 text-[18px] leading-8 tracking-[-0.01px] ">
+                    <div className="flex flex-col items-start justify-start gap-0">
+                        <h1 className="font-sans font-semibold text-2xl leading-tight">
+                            {unit1.unit_title}
+                        </h1>
+                        <p className="tracking-wide">
+                            Learn greetings and introductions.
+                        </p>
+                    </div>
                     <h1 className="font-semibold text-xl">
                         Conversation 
                     </h1>
@@ -47,22 +66,53 @@ const A1 = () => {
                             </span>
                         </div>
                     </div>
+
+                    <div className="flex flex-col bg-green-200 p-8 rounded-lg">
+                        {
+                            <>
+                                <p>{unit1.unitQuiz.title}</p>
+                                <p>{unit1.unitQuiz.description}</p>
+                                <p>Total questions: {unit1.unitQuiz.total_questions}</p>
+                                <p>Passing scores: {unit1.unitQuiz.passing_score}</p>
+                                <p>{unit1.unitQuiz.questions.map((q) => (
+                                        <>
+                                            <div>
+                                                <p>q{q.id}: {q.type}</p>
+                                                <p>{q.question}</p>
+                                                {   
+                                                    q.pairs &&
+                                                    q.pairs?.map(p => (
+                                                        <div>
+                                                            {p.arabic}
+                                                            {p.english}
+                                                        </div>
+                                                    ))
+                                                }
+                                                <div className="flex gap-3 p-4 rounded-lg bg-blue-600/15">{q.options?.map(op => (<span>{op}</span>))}</div>
+                                            </div>
+                                            <p>{q.correct_answer}</p>
+                                        </>
+                                    ))}
+                                </p>
+                            </>
+                        }
+                    </div>
                 </Card>  
             </main>
             {/* Lesson Layout Footer */}
-            <footer>
+            {/* <footer className="flex-shrink-0">
                 <div className="flex items-center justify-between ">
                     <Button className="text-white bg-eloq-black p-2 rounded rounded-xl flex gap-1">
                         <ArrowLeft />
                         Previous
                     </Button>
-                    {/* RIGHT BUTTON */}
+                    {/* RIGHT BUTTON //
                     <Button className="text-white bg-eloq-black p-2 rounded rounded-xl flex gap-1">
                         Next 
                         <ArrowRight />
                     </Button>
                 </div>
-            </footer>
+            </footer> */}
         </div>
     )
 }
