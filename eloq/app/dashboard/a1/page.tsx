@@ -1,6 +1,6 @@
+import { unit1 } from "@/data/curriculum/beginner-a1/beginner-a1";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { unit1 } from "@/data/curriculum/beginner-a1/unit-1";
+import { Card } from "@/components/ui/card"; 
 import { ArrowLeft, ArrowRight, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
@@ -32,7 +32,7 @@ const A1 = () => {
                 <Card className="flex flex-col items-stretch justify-start gap-4 w-full bg-white shadow-lg p-10 text-[18px] leading-8 tracking-[-0.01px] ">
                     <div className="flex flex-col items-start justify-start gap-0">
                         <h1 className="font-sans font-semibold text-2xl leading-tight">
-                            Unit 1 - Meeting New People
+                            {unit1.unit_title}
                         </h1>
                         <p className="tracking-wide">
                             Learn greetings and introductions.
