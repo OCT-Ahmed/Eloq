@@ -1,18 +1,32 @@
 import { Section } from "@/types/learning";
 import BlockRenderer from "./block-renderer";
+import SectionHeader from "./section-header";
+import { Volume, Volume2 } from "lucide-react";
 
-export default function SectionRenderer({section}:{section:Section}) {
+export default function SectionRenderer({section}:{section:Section}) { 
     return (
-        <section className="w-full h-full grid grid-cols-2">
+        <section className="w-full h-full grid grid-cols-2 mb-2">
+            
+            <SectionHeader title={section.title} type={section.type} lesson={section.lesson} />
+
             {
-                section.blocks.map(block => (
-                    <article key={section.id} className={`mb-2 grid span depend on span value {span: full? one}`}>
-                        {/* <SectionHeader title={section.title} type={section.type} /> */}
-                        <h2 className="font-bold text-xl text-green-700">{section.title}</h2>
+                section.blocks.map((block) => (
+                    <article key={block.id} className={`mb-2 grid span depend on span value {span: full? one}`}>
+                        <div className="flex items-cenetr justify-start gap-3 mb-1">
+                            <p className="font-semibold text-xl text-green-700">
+                                {block.instruction?.id}
+                            </p>
+                            {/* {block.instruction && <Volume2 className="" size={20} /> /* add hasAudio check   */}
+                            <p>
+                                {block.instruction?.text}
+                            </p>
+                        </div>
+                        
                         <BlockRenderer block={block} />
                     </article>
                 ))
             }
+
         </section>
     )
 }
