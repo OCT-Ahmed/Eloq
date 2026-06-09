@@ -11,7 +11,7 @@ export default function SectionRenderer({section}:{section:Section}) {
 
             {
                 section.blocks.map((block) => (
-                    <article key={block.id} className={`mb-2 grid span depend on span value {span: full? one}`}>
+                    <article key={block?.id} className={`mb-2 ${block?.span === "full" ? "col-span-full" : "col-span-1" } `}>
                         <div className="flex items-cenetr justify-start gap-3 mb-1">
                             <p className="font-semibold text-xl text-green-700">
                                 {block.instruction?.id}

@@ -75,6 +75,7 @@ type BaseBlock<T extends string, D> = {
         text: string
     };
     data: D;
+    span?: string;
 };
 
 export type DialougeBlock = BaseBlock<"dialouge", {

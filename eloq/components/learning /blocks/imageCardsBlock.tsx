@@ -8,7 +8,7 @@ interface ImageCardsBlockProps {
 export default function ImageCardsBlock({data}: ImageCardsBlockProps) {
     
     return (
-        <div className="w-full">
+        <div className="flex justify-between items-center gap-2 w-full bg-red-500 ">
             <div className="">
                  <div className="flex items-cenetr justify-start gap-3 mb-1">
                         <p className="font-semibold text-xl text-green-700">
@@ -22,7 +22,7 @@ export default function ImageCardsBlock({data}: ImageCardsBlockProps) {
             </div>
                 { 
                     data?.cards.map((card) => (
-                        <div className="flex flex-col gap-2"> 
+                        <div className=""> 
                             <div className={`${card?.data?.style} w-10 h-10 rounded-xl`}>
                                 <Image src={card?.data?.url} alt={card?.data?.alt ?? ""} fill />
                             </div>

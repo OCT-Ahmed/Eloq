@@ -31,13 +31,33 @@ export const unit_1:UnitType = {
                                     url: "",      
                                     alt: "",
                                     style: "",
-                                    text: "", 
+                                    text: "Hello, I'm Alex", 
+                                },   
+                            },
+                            {
+                                id: "2",
+                                type: "image_card",
+                                data: {
+                                    url: "",      
+                                    alt: "",
+                                    style: "",
+                                    text: "Hello, I'm Maher", 
+                                }, 
+                            },
+                            {
+                                id: "3",
+                                type: "image_card",
+                                data: {
+                                    url: "",      
+                                    alt: "",
+                                    style: "",
+                                    text: "Hello, I'm Layla", 
                                 },
-                                
                             },
                         ],
                         layout: "grid",
-                    }
+                    },
+                    span: "full",
                 },
             ]
         },
