@@ -16,11 +16,12 @@ const A1 = () => {
                     <div className="flex items-center justify-center gap-1 text-sm text-zinc-500">
                         <Link className="" href="/learn">Learn</Link> <span className=""><ChevronRight size={15} /></span>
                         <Link className="" href="/academic">Academic</Link> <span className=""><ChevronRight size={15} /></span>
-                        <Link className="" href="/levels">Levels</Link> <span className=""><ChevronRight size={15} /></span>
-                        <Link className="" href="/beginner-a1">Beginner A1</Link> <span className=""><ChevronRight size={15} /></span>
-                        <Link className="" href="/unit-1">Unit1</Link> <span className=""><ChevronRight size={15} /></span>
-                        <Link className="" href="/lessons">Lessons</Link>
-                        {/* <Link className="" href="/quiz">Quiz</Link> <span className=""><ChevronRight size={15} /></span> */}
+
+                        <Link className="" href="/beginner">Beginner</Link> <span className=""><ChevronRight size={15} /></span>
+                        <Link className="" href="/units">Units</Link> <span className=""><ChevronRight size={15} /></span>
+                        <Link className="" href="/unit-1">Unit 1</Link> <span className=""><ChevronRight size={15} /></span>
+                        <Link className="" href="/lessons">Lessons</Link> <span className=""><ChevronRight size={15} /></span>
+                        <Link className="" href="/meet-people">Meet People</Link> 
                         
                     </div>
                     <h1 className="font-sans font-semibold text-2xl leading-tight">
