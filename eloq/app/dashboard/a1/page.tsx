@@ -34,8 +34,8 @@ const A1 = () => {
                 <Card className="flex flex-col items-stretch justify-start gap-4 w-full bg-white shadow-lg p-10 text-[18px] leading-8 tracking-[-0.01px] ">
                     {
                         unit_1?.sections?.map((section) => (
-                            <div>
-                                <SectionRenderer key={section.id} section={section} />
+                            <div key={section.id}>
+                                <SectionRenderer section={section} />
                             </div>
                         ))
                     }

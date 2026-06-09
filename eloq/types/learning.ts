@@ -122,6 +122,7 @@ export type ImageCardsBlock = BaseBlock<"image_cards", {
         id: string;
         url: string;
     };
+    instruction?: {id:string; text:string};
     cards: ImageCardBlock[];
     layout?: "grid" | "list" | "carousel";
 }>
