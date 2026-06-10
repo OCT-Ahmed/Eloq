@@ -65,7 +65,7 @@ export default function DashboardLayout({
                             <HomeIcon color="purple" size={18} strokeWidth={1.9} />
                             Home
                         </Link>
-                        <Link className="flex gap-2 p-2  text-sm rounded-lg hover:bg-white/35 transition-colors duration-300" href="/dashboard/a1">
+                        <Link className="flex gap-2 p-2  text-sm rounded-lg hover:bg-white/35 transition-colors duration-300" href="/dashboard/learn/academic/beginner/units/unit-1/meet-people">
                             <BookOpen size={18} />
                             Learn
                         </Link>
