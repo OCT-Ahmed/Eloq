@@ -50,7 +50,7 @@ export type BlockType = (
 //  | "instruction"
 //  | "practice"
     | "matching"
-//  | "self_check"
+    | "self_check"
 //  | "question"
 //  | "quiz"
 //  | "reading"
@@ -151,9 +151,9 @@ export type MatchingBlock = BaseBlock<"matching", {
     questions: {
         id: string;
         text: string;
-    };
+    }[];
     answers: {
         id: string;
         text: string;
-    }
+    }[];
 }>
