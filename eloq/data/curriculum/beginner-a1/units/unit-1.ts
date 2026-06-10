@@ -14,9 +14,11 @@ export const unit_1:UnitType = {
                 
                     id: "b1",
                     type: "image_cards",
-                    instruction: {
-                        id: 1,
-                        text: "Read and listen to people saying there names.",
+                    extensions:{
+                        instruction: {
+                            id: 1,
+                            text: "Read and listen to people saying there names.",
+                        },
                     },
                     data: {
                         audioRef: {
@@ -70,10 +72,13 @@ export const unit_1:UnitType = {
                 {
                     id: "b1",
                     type: "dialouge",
-                    instruction: {
+                    extensions:{
+                        instruction: {
                             id: 1,
-                            text: "Read and listen."
+                            text: "Read and listen.",
+                            translation: "إقرء واستمع"
                         },
+                    },
                     data: {
                         lines: [
                             {

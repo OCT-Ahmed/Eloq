@@ -1,8 +1,7 @@
 /* =====================
     Interfaces
         UnitType
-        Section
-        Block
+        Section 
 ===================== */
 export interface UnitType {
     id: number;
@@ -41,40 +40,53 @@ export type SectionType = (
 
 // A-Z Order
 export type BlockType = (
-    | "audio"
+//  | "audio"
     | "dialouge"
     | "fill_blanks"
     | "grammer_point"
-    | "grammer_reference"
-    | "image"
+//  | "grammer_reference"
     | "image_card"
-    | "instruction"
-    | "practice"
-    | "question"
-    | "quiz"
-    | "reading"
-    | "reorder_words"
-    | "vocabulary_grid"
+    | "image_cards"
+//  | "instruction"
+//  | "practice"
+    | "matching"
+//  | "self_check"
+//  | "question"
+//  | "quiz"
+//  | "reading"
+//  | "reorder_words"
+//  | "vocabulary_grid"
     | "word_list"
     )[];
 
 export type Block = 
     | DialougeBlock
     | GrammerPointBlock
-    | FillBlanksBlock
-    | ImageBlock
+    | FillBlanksBlock 
     | ImageCardBlock
     | ImageCardsBlock
+    | WordListBlock
+    | MatchingBlock
 ;
 
 type BaseBlock<T extends string, D> = {
     id: string;
     type: T;
-    instruction?: {
-        id: number;
-        text: string
-    };
     data: D;
+    interactions?: unknown;
+    extensions?: {
+        instruction?: {
+            id: number;
+            text: string;
+            translation?: string;
+        };
+        audio?: {
+            url: string;
+            ref?: string;
+        }
+        explanation?: string;
+    };
+    
     span?: string;
 };
 
@@ -87,25 +99,25 @@ export type DialougeBlock = BaseBlock<"dialouge", {
         id: string;
         speakerId: string;
         speaker: string;
-        text: string
+        text: string;
     }[]
 }>;
 
 export type FillBlanksBlock = BaseBlock<"fill_blanks", {
-    questions: {
+    items: {
         text: string;
-        answer: string
+        answer: string;
     }[]
 }>
 
 export type GrammerPointBlock = BaseBlock<"grammer_point", {
     title: string;
-    rules: string[]
+    rules: string[];
 }>;
 
 export type ImageBlock = BaseBlock<"image", {
     url: string;
-    caption?: string
+    caption?: string;
 }>
 
 export type ImageCardBlock = BaseBlock<"image_card", {
@@ -125,4 +137,23 @@ export type ImageCardsBlock = BaseBlock<"image_cards", {
     instruction?: {id:string; text:string};
     cards: ImageCardBlock[];
     layout?: "grid" | "list" | "carousel";
+}>
+
+export type WordListBlock = BaseBlock<"word_list", {
+    items: {
+        id: string; 
+        primaryText: string; 
+        secondaryText?: string;
+    }[]
+}>
+
+export type MatchingBlock = BaseBlock<"matching", {
+    questions: {
+        id: string;
+        text: string;
+    };
+    answers: {
+        id: string;
+        text: string;
+    }
 }>

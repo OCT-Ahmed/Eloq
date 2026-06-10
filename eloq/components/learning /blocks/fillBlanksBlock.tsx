@@ -1,19 +1,21 @@
-export default function FillBlanksBlock({data}:{data:{
-        questions: {
-            text: string;
-            answer: string;
-        }[]
-    }
-}) {
+import { FillBlanksBlock as FillBlanksBlockType } from "@/types/learning";
+
+interface FillBlanksBlockProps {
+    data: FillBlanksBlockType["data"]
+}
+
+export default function FillBlanksBlock(
+    {data}:FillBlanksBlockProps
+) {
     return (
         <div>
             {
-                data.questions.map(question => (
+                data?.items?.map(item => (
                     <div className="flex gap-1">
                         <p> 
-                            {question.text}
+                            {item.text}
                         </p>
-                        <p>{question.answer}</p>
+                        <p>{item.answer}</p>
                     </div>
                 ))
             }

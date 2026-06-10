@@ -14,11 +14,11 @@ export default function SectionRenderer({section}:{section:Section}) {
                     <article key={block?.id} className={`mb-2 ${block?.span === "full" ? "col-span-full" : "col-span-1" } `}>
                         <div className="flex items-cenetr justify-start gap-3 mb-1">
                             <p className="font-semibold text-xl text-green-700">
-                                {block.instruction?.id}
+                                {block?.extensions?.instruction?.id}
                             </p>
                             {/* {block.instruction && <Volume2 className="" size={20} /> /* add hasAudio check   */}
                             <p>
-                                {block.instruction?.text}
+                                {block?.extensions?.instruction?.text}
                             </p>
                         </div>
                         
