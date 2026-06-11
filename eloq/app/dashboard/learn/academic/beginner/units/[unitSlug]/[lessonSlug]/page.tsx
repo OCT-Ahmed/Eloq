@@ -1,31 +1,58 @@
-import { unit1 } from "@/data/curriculum/beginner-a1/beginner-a1";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card"; 
-import { ArrowLeft, ArrowRight, ChevronRight } from "lucide-react";
-import Link from "next/link";
+import { units } from "@/data/curriculum/beginner-a1/beginner-a1";
 import SectionRenderer from "@/components/learning /section-renderer";
-import { unit_1 } from "@/data/curriculum/beginner-a1/units/unit-1";
+import Breadcrumb from "@/components/navigation/breadcrumb";
+import { Card } from "@/components/ui/card"; 
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { ArrowLeft, ArrowRight, ChevronRight } from "lucide-react";
+import { SectionType, UnitType } from "@/types/learning";
 
-const A1 = () => {
+export default async function LessonPage({
+    params
+}:{
+    params: Promise<{unitSlug: string; lessonSlug: string;}>
+}) {
+    
+    const { unitSlug, lessonSlug } = await params;
+    const unit = units.find(u => u.slug === unitSlug);
+    const section = unit?.sections?.find(sec => sec.slug === lessonSlug)
+
+    const links = [
+    {
+        label: "Learn",
+        slug: "dashboard/learn"
+    },
+    {
+        label: "Academic Path",
+        slug: "academic"
+    },
+    {
+        label: "Beginner Level",
+        slug: "beginner"
+    },
+    {
+        label: "Units",
+        slug: "units",
+    },
+    {
+        label: unit?.title ?? "Unit",
+        slug: unit?.slug ?? "unit",
+    },
+    {
+        label: section?.title ?? "Section",
+        slug: section?.slug ?? "section",
+    },
+]
+
     return (
         <div className="flex flex-col gap-4 text-base h-full w-full overflow-hidden relative">
              
             {/* Lesson Layout Header */}
-            <header className="flex-shrink-0">
-                <div className="flex flex-col items-start justify-start gap-0 px-4 ">
-                    <div className="flex items-center justify-center gap-1 text-sm text-zinc-500">
-                        <Link className="" href="/learn">Learn</Link> <span className=""><ChevronRight size={15} /></span>
-                        <Link className="" href="/academic">Academic</Link> <span className=""><ChevronRight size={15} /></span>
-
-                        <Link className="" href="/beginner">Beginner</Link> <span className=""><ChevronRight size={15} /></span>
-                        <Link className="" href="/units">Units</Link> <span className=""><ChevronRight size={15} /></span>
-                        <Link className="" href="/unit-1">Unit 1</Link> <span className=""><ChevronRight size={15} /></span>
-                        <Link className="" href="/lessons">Lessons</Link> <span className=""><ChevronRight size={15} /></span>
-                        <Link className="" href="/meet-people">Meet People</Link> 
-                        
-                    </div>
+            <header className="flex-shrink-0 w-full">
+                <div className="flex flex-col items-start justify-start gap-0 px-4 col-span-2">
+                    <Breadcrumb links={links} />
                     <h1 className="font-sans font-semibold text-2xl leading-tight">
-                        Unit 1 - Meeting New People
+                        {section?.title}   
                     </h1>
                 </div>
             </header>
@@ -34,11 +61,7 @@ const A1 = () => {
                
                 <Card className="flex flex-col items-stretch justify-start gap-4 w-full bg-white shadow-lg p-10 text-[18px] leading-8 tracking-[-0.01px] ">
                     {
-                        unit_1?.sections?.map((section) => (
-                            <div key={section.id}>
-                                <SectionRenderer section={section} />
-                            </div>
-                        ))
+                       section && <SectionRenderer section={section} />
                     }
                    
                 </Card>  
@@ -60,8 +83,6 @@ const A1 = () => {
         </div>
     )
 }
-
-export default A1;
 
 /* <div className="flex flex-col items-start justify-start gap-0">
                         <h1 className="font-sans font-semibold text-2xl leading-tight">

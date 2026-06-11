@@ -7,6 +7,8 @@ export interface UnitType {
     id: number;
     slug: string;
     title: string;
+    CEFR: string;
+    goals: string[];
     sectionorder?: string[];
     sections: Section[]
 }
@@ -15,6 +17,7 @@ export interface Section {
     id: string;
     type: SectionType;
     title: string;
+    slug: string;
     lesson?: string;
     blocks: Block[]
 }

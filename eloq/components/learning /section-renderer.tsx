@@ -3,10 +3,14 @@ import BlockRenderer from "./block-renderer";
 import SectionHeader from "./section-header";
 import { Volume, Volume2 } from "lucide-react";
 
-export default function SectionRenderer({section}:{section:Section}) { 
+export default function SectionRenderer({
+    section,
+}:{
+    section:Section;
+}) { 
+
     return (
-        <section className="w-full h-full grid grid-cols-2 mb-2">
-            
+        <section className="w-full h-full grid grid-col-1 md:grid-cols-2 md:gap-6 md:space-x-8 mb-2">
             <SectionHeader title={section.title} type={section.type} lesson={section.lesson} />
 
             {
