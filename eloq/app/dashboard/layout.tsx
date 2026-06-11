@@ -14,7 +14,7 @@ export default function DashboardLayout({
                 <Link className="mr-50 cursor-default" href="/">
                     <h1 className="text-xl font-semibold">ELOQ</h1>
                 </Link> 
-                <Link className="text-white/75 hover:text-white p-2 hover:bg-white/5 rounded-lg transition-all duration-300" href="dashboard">Dashboard</Link>
+                <Link className="text-white/75 hover:text-white p-2 hover:bg-white/5 rounded-lg transition-all duration-300" href="/dashboard">Dashboard</Link>
 
                 <div className="w-80">
                     <input className="text-sm p-4 rounded-xl w-full h-8 bg-white/15 backdrop-blur-xl active:border active:border-white/25 actie:border-none focusborder-none" type="text" placeholder="Search for a word, lesson or .." />
@@ -65,7 +65,7 @@ export default function DashboardLayout({
                             <HomeIcon color="purple" size={18} strokeWidth={1.9} />
                             Home
                         </Link>
-                        <Link className="flex gap-2 p-2  text-sm rounded-lg hover:bg-white/35 transition-colors duration-300" href="/dashboard/a1">
+                        <Link className="flex gap-2 p-2  text-sm rounded-lg hover:bg-white/35 transition-colors duration-300" href="/dashboard/learn">
                             <BookOpen size={18} />
                             Learn
                         </Link>
