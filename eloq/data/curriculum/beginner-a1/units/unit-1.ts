@@ -2,13 +2,16 @@ import { UnitType } from "@/types/learning";
 
 export const unit_1:UnitType = {
   id: 1,
-  slug: "hello-unit",
-  title: "UNIT 1: HELLO!",
+  slug: "unit-1",
+  title: "HELLO!",
+  CEFR: "A1", // for the level not the unit
+  goals: ["am/is", "my/your","introdusing others"],
   sections: [
     {
       id: "sec_first_encounters",
       type: "starter",
       title: "First Encounters",
+      slug: "first-encounters",
       lesson: "Greetings & Basics",
       blocks: [
         {
@@ -126,6 +129,7 @@ export const unit_1:UnitType = {
       id: "sec_making_connections",
       type: "speaking",
       title: "Making Connections",
+      slug: "making-connections",
       lesson: "Introducing Others & Personal Info",
       blocks: [
         {
@@ -243,6 +247,7 @@ text: "Match the Question to the Answer"
       id: "sec_objects_numbers",
       type: "vocabulary",
       title: "Objects & Numbers around Us",
+      slug: "objects-numbers-around-us",
       lesson: "Workplace Items & Counting",
       blocks: [
         {
@@ -422,6 +427,7 @@ text: "Match the Question to the Answer"
       id: "sec_milestone_check",
       type: "quiz",
       title: "Milestone Check",
+      slug: "milestone-check",
       lesson: "Unit 1 Assessment",
       blocks: [
         {
