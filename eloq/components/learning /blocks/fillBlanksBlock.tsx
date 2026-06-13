@@ -15,7 +15,7 @@ export default function FillBlanksBlock(
                         <p> 
                             {item.text}
                         </p>
-                        <p>{item.answer}</p>
+                        <p className="hidden">{item.answer}</p>
                     </div>
                 ))
             }

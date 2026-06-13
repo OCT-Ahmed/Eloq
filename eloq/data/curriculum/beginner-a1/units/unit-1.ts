@@ -25,12 +25,12 @@ export const unit_1:UnitType = {
           },
           data: {
             lines: [
-              { id: "l1", speakerId: "samer", speaker: "Samer", text: "Hi there! My name is Samer. What is your name?" },
-              { id: "l2", speakerId: "elena", speaker: "Elena", text: "Hello, Samer. I am Elena. Nice to meet you!" },
-              { id: "l3", speakerId: "samer", speaker: "Samer", text: "Nice to meet you too, Elena. How are you today?" },
-              { id: "l4", speakerId: "elena", speaker: "Elena", text: "I am very well, thank you. And how are you?" },
-              { id: "l5", speakerId: "samer", speaker: "Samer", text: "I am great, thanks! Welcome to London." },
-              { id: "l6", speakerId: "elena", speaker: "Elena", text: "Thank you, Samer!" }
+              { id: "l1", speakerId: "1st", speaker: "Samer", text: "Hi there! My name is Samer. What is your name?" },
+              { id: "l2", speakerId: "2nd", speaker: "Elena", text: "Hello, Samer. I am Elena. Nice to meet you!" },
+              { id: "l3", speakerId: "1st", speaker: "Samer", text: "Nice to meet you too, Elena. How are you today?" },
+              { id: "l4", speakerId: "2nd", speaker: "Elena", text: "I am very well, thank you. And how are you?" },
+              { id: "l5", speakerId: "1st", speaker: "Samer", text: "I am great, thanks! Welcome to London." },
+              { id: "l6", speakerId: "2nd", speaker: "Elena", text: "Thank you, Samer!" }
             ]
           }
         },
@@ -75,12 +75,13 @@ export const unit_1:UnitType = {
             instruction: {
               id: 4,
               text: "Read and Learn"
-            }
+            },
+            title: "Grammer Point"
           },
           data: {
             title: "Using 'am' and 'is'",
-            rules: [
-              "We use am and is to give personal information. Look at the patterns below:",
+            instruction: "We use am and is to give personal information. Look at the patterns below:",
+            rules: [ 
               "I am = I'm (Example: I am a teacher. I'm from Riyadh.)",
               "He is = He's (Example: He is a doctor. He's my friend.)",
               "She is = She's (Example: She is Elena. She's a student.)",
@@ -162,9 +163,9 @@ export const unit_1:UnitType = {
           },
           data: {
             title: "Introducing Others",
-            rules: [
-              "When you introduce another person, use this simple structure:",
-              "This is + [Name]",
+            instruction: "When you introduce another person, use this simple structure:", 
+            rules: [   
+              "This is + [Name]", 
               "Example: This is Tom.",
               "Example: This is Dr. Khaled."
             ]
@@ -172,7 +173,7 @@ export const unit_1:UnitType = {
         },
         {
           id: "b_u1_s2_03",
-          type: "fill_blanks",
+          type: "free_practice",
           extensions: {
             instruction: {
               id: 3,
@@ -180,9 +181,7 @@ export const unit_1:UnitType = {
             }
           },
           data: {
-            items: [
-              { text: "[blank]", answer: "" }
-            ]
+            text_area: "[text area]"
           }
         },
         {
@@ -208,7 +207,7 @@ export const unit_1:UnitType = {
           extensions: {
             instruction: {
               id: 5,
-              text: "Grammar Spot: My vs. Your"
+              text: "Read and notice the difference between my and your"
             }
           },
           data: {
@@ -225,7 +224,7 @@ export const unit_1:UnitType = {
           extensions: {
             instruction: {
               id: 6,
-text: "Match the Question to the Answer"
+              text: "Match the Question to the Answer"
             }
           },
           data: {
