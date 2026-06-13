@@ -46,6 +46,7 @@ export type BlockType = (
 //  | "audio"
     | "dialouge"
     | "fill_blanks"
+    | "free_practice"
     | "grammer_point"
 //  | "grammer_reference"
     | "image_card"
@@ -66,10 +67,11 @@ export type Block =
     | DialougeBlock
     | GrammerPointBlock
     | FillBlanksBlock 
+    | FreePracticeBlock
     | ImageCardBlock
     | ImageCardsBlock
-    | WordListBlock
-    | MatchingBlock
+    | MatchingBlock 
+    | WordListBlock 
 ;
 
 type BaseBlock<T extends string, D> = {
@@ -78,6 +80,7 @@ type BaseBlock<T extends string, D> = {
     data: D;
     interactions?: unknown;
     extensions?: {
+        title?: string;
         instruction?: {
             id: number;
             text: string;
@@ -88,9 +91,9 @@ type BaseBlock<T extends string, D> = {
             ref?: string;
         }
         explanation?: string;
-    };
-    
-    span?: string;
+    }; 
+    span?: string; // controle display [grid or flex? column or row?]
+    style?: string; // social media blob -- etc.. 
 };
 
 export type DialougeBlock = BaseBlock<"dialouge", {
@@ -113,8 +116,13 @@ export type FillBlanksBlock = BaseBlock<"fill_blanks", {
     }[]
 }>
 
+export type FreePracticeBlock = BaseBlock<"free_practice", {
+    text_area: "[text area]"
+}>
+
 export type GrammerPointBlock = BaseBlock<"grammer_point", {
     title: string;
+    instruction?: string;
     rules: string[];
 }>;
 
@@ -140,15 +148,7 @@ export type ImageCardsBlock = BaseBlock<"image_cards", {
     instruction?: {id:string; text:string};
     cards: ImageCardBlock[];
     layout?: "grid" | "list" | "carousel";
-}>
-
-export type WordListBlock = BaseBlock<"word_list", {
-    items: {
-        id: string; 
-        primaryText: string; 
-        secondaryText?: string;
-    }[]
-}>
+}> 
 
 export type MatchingBlock = BaseBlock<"matching", {
     questions: {
@@ -159,4 +159,12 @@ export type MatchingBlock = BaseBlock<"matching", {
         id: string;
         text: string;
     }[];
+}>
+
+export type WordListBlock = BaseBlock<"word_list", {
+    items: {
+        id: string; 
+        primaryText: string; 
+        secondaryText?: string;
+    }[]
 }>

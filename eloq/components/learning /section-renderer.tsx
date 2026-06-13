@@ -10,13 +10,18 @@ export default function SectionRenderer({
 }) { 
 
     return (
-        <section className="w-full h-full grid grid-col-1 md:grid-cols-2 md:gap-6 md:space-x-8 mb-2">
+        <section className="w-full h-full grid grid-col-1 md:grid-cols-1 md:gap-6 md:space-x-8 mb-2">
             <SectionHeader title={section.title} type={section.type} lesson={section.lesson} />
 
             {
                 section.blocks.map((block) => (
-                    <article key={block?.id} className={`mb-2 ${block?.span === "full" ? "col-span-full" : "col-span-1" } `}>
-                        <div className="flex items-cenetr justify-start gap-3 mb-1">
+                    <article 
+                        key={block?.id} 
+                        className={`
+                            mb-2 ${block?.span === "full" ? "col-span-full" : "col-span-1" } 
+                        `}
+                    >
+                        <header className="flex items-cenetr justify-start gap-3 mb-2">
                             <p className="font-semibold text-xl text-green-700">
                                 {block?.extensions?.instruction?.id}
                             </p>
@@ -24,9 +29,10 @@ export default function SectionRenderer({
                             <p>
                                 {block?.extensions?.instruction?.text}
                             </p>
+                        </header>
+                        <div className="ml-6">
+                            <BlockRenderer block={block} />
                         </div>
-                        
-                        <BlockRenderer block={block} />
                     </article>
                 ))
             }
