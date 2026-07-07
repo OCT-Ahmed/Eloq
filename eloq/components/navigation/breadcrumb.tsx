@@ -13,7 +13,7 @@ export default function Breadcrumb({
     let currentPath:string = "";
 
     return (
-        <div className="flex items-start justify-start gap-1 text-sm text-zinc-500 h-5">
+        <div className="flex flex-wrap items-center justify-start gap-1 text-sm text-zinc-500 h-5">
             {
                 links.map((link, index) => {
                     currentPath += `/${link.slug}`

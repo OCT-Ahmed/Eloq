@@ -10,8 +10,8 @@ export default function SectionRenderer({
 }) { 
 
     return (
-        <section className="w-full h-full grid grid-col-1 md:grid-cols-1 md:gap-6 md:space-x-8 mb-2">
-            <SectionHeader title={section.title} type={section.type} lesson={section.lesson} />
+        <section className="w-full h-full flex flex-col items-start justify-start border border-green-700 lg:grid lg:gap-6 lg:space-x-8 mb-2 bg-blue-500 text-muted">
+            <SectionHeader className="" title={section.title} type={section.type} lesson={section.lesson} />
 
             {
                 section.blocks.map((block) => (
