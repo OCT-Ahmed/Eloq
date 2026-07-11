@@ -28,7 +28,7 @@ const links = [
     },
 ]
     return (
-        <div className="flex flex-col items-start justify-start gap-8 w-full h-full">
+        <div className="flex flex-col items-start justify-start gap-8 w-full h-full py-4 px-6">
 
             {/* Lesson Layout Header */}
             <header className="flex-shrink-0">
@@ -40,7 +40,7 @@ const links = [
                 </div>
             </header>
             {/* Main Lesson Layout Content */}
-            <main className="w-full grid grid-cols-1 md:grid-cols-3 md:gap-4 tracking-wide">
+            <main className="w-full grid grid-cols-1 md:grid-cols-3 md:gap-4 tracking-wide pb-28">
                 {
                     unit?.sections?.map((section) => (
                         <Link key={section.id} className="" href={`/dashboard/learn/beginner/${unit.slug}/${section.slug}`}>

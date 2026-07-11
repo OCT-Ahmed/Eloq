@@ -5,6 +5,13 @@ import DesktopAside from '@/components/dashboard/desktopAside'
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarProvider } from "@/components/ui/sidebar";
 import { BookOpen, Bot, Brain, BrainIcon, Earth, FireExtinguisher, Flame, Grid2x2, Home, HomeIcon, KanbanSquare, Layers2, LayoutDashboardIcon, LayoutGrid, LayoutList, Rocket, Settings, SidebarIcon, User, UserCircle, Search } from "lucide-react";
 import Link from "next/link";
+import { Nunito } from 'next/font/google'
+
+const nunito = Nunito({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800', '900'],
+  variable: '--font-nunito',
+})
 
 const links =  [
     {
@@ -17,7 +24,7 @@ const links =  [
       title: "Learn",
       slug: "learn",
       href: "/dashboard/learn",
-      icon: <BookOpen size={24} fill={''} />
+      icon: <BookOpen size={24} />
     },
     {
       title: "Practice",
@@ -52,14 +59,14 @@ export default function DashboardLayout({
 }) {
   return (
     <div 
-      className="flex flex-col items-center justify-stretch w-full h-screen overflow-hidden text-base" 
+      className={`${nunito.variable} flex flex-col items-center justify-stretch w-full h-screen overflow-hidden text-base`}
       id="dashboard-container"
     >
       <DashboardHeader />
       <main className="lg:flex lg:items-stretch lg:justify-start w-full h-[calc(100vh-64px)]">
         <DesktopAside links={links} />
         <BottomMobileNav links={links} />
-        <section className="w-full h-full py-4 px-6 overflow-x-hidden overflow-y-auto lg:overflow-hidden bg-black scrollbar-none lg:scrollbar">
+        <section className="w-full h-full lg:py-4 lg:px-6 overflow-x-hidden overflow-y-auto lg:overflow-hidden bg-background scrollbar-none lg:scrollbar">
           {children}
         </section>
       </main>    

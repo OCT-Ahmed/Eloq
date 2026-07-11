@@ -7,9 +7,7 @@ import Link from 'next/link'
 import { Search, Menu, AlignJustify, MoreVertical, MoreHorizantal } from 'lucide-react'
 
 export default function DashboardHeader() {
-  {/* States */}
   const [isOpen, setIsOpen] = useState(false);
-  {/* Variables */}
   const pathname = usePathname();
   const currentSection = 
     pathname === "/dashboard" ? "ELOQ" : 
@@ -19,16 +17,13 @@ export default function DashboardHeader() {
     pathname.includes("/dashboard/ai") ? "Ai" :
     "";
     
-    {/* Handlers */}
     const showMenu = () => {
       setIsOpen(s => !s);
     }
   return (
-    <header className="flex items-center justify-between gap-2 lg:items-center lg:gap-6 text-white h-18 w-full px-5 py-4 bg-primary shadow-b shadow-2xl dark:bg-black">
+    <header className="flex items-center justify-between gap-2 lg:items-center lg:gap-6 text-base h-18 w-full px-5 py-4 bg-foreground border-b border-border-subtle shadow-sm">
                   
-              {/* LEFT */}
-             
-                <AlignJustify size={24} onClick={showMenu} />
+                <AlignJustify size={24} onClick={showMenu} className="cursor-pointer text-base" />
               <AnimatePresence>
                 {isOpen && (
                 <>
@@ -36,28 +31,25 @@ export default function DashboardHeader() {
                   initial={{opacity: 0}}
                   animate={{opacity: 1}}
                   exit={{opacity: 0}}
-                  className="fixed inset-0 z-1001 dark:bg-black/75"
+                  className="fixed inset-0 z-1001 bg-background/75 backdrop-blur-sm"
                   onClick={() => setIsOpen(false)}
                 ></motion.div>
                   <AsideMenu showMenu={showMenu} />
                 </>
                 )}
               </AnimatePresence>
-              {/* CENTER */}
               <div className="flex flex-col items-center justify-center gap-0 lg:flex-row">
-                <span onClick={showMenu} className={`lg:hidden font-semibold ${ pathname === "/dashboard" ? "" : ""  } text-xl tracking-[1.2px] lg:hidden`}>
+                <span onClick={showMenu} className="lg:hidden font-semibold text-xl tracking-[1.2px] text-base cursor-pointer">
                   { currentSection }
                 </span>
-                <Link className="hidden lg:block text-white/75 hover:text-white p-2 hover:bg-white/5 rounded-lg transition-all duration-300" href="/dashboard">Dashboard</Link>
+                <Link className="hidden lg:block text-muted hover:text-base p-2 hover:bg-background/50 rounded-lg transition-all duration-300" href="/dashboard">Dashboard</Link>
               </div>
-              {/* RIGHT */}
-              <div>
-                  <Search onClick={() => alert('Hi')} size={24} />
+              <div className="flex items-center gap-4">
+                  <Search onClick={() => alert('Hi')} size={24} className="cursor-pointer text-muted hover:text-base" />
                   
                 <div className="hidden lg:block lg:w-80">
-                    <input className="hidden lg:block text-sm p-4 rounded-xl w-full h-8 bg-white/15 backdrop-blur-xl active:border active:border-white/25 actie:border-none focusborder-none" type="text" placeholder="Search for a word, lesson or .." />
+                    <input className="hidden lg:block text-sm p-4 rounded-xl w-full h-8 bg-background border border-border-subtle text-base placeholder:text-muted focus:outline-none" type="text" placeholder="Search for a word, lesson or .." />
                 </div>
-                {/* Add header links array */}
               </div>
             </header>
   )

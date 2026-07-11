@@ -1,28 +1,46 @@
 @import "tailwindcss";
 
-/* 1. تعريف المتغيرات الأصلية داخل النطاق العام مباشرة لسرعة القراءة */
+/* ==========================================================================
+   1. المتغيرات الأصلية كاملة (مع الحفاظ على أسماء مشروعك بنسبة 100%)
+   ========================================================================== */
 :root {
-  --background: #f4f6f9;
+  /* الوضع الفاتح الافتراضي للموقع */
+  --background: #f8fafc;
   --foreground: #ffffff;
-  --primary: #111827;
-  --base: #1B1B32;
-  --muted: #ffffffab;
-  --eloq-purple: #460546;
-  --eloq-soft-purple:  rgba(161, 20, 161, 0.603);
+  --primary: #111827;            /* اسمك الأصلي */
+  --base: #0f172a;
+  --muted: #64748b;
+  --eloq-purple: #7c3aed;
+  --eloq-soft-purple: rgba(124, 58, 237, 0.08);
+  --eloq-black: #000000;         /* اسمك الأصلي */
   
-  --eloq-black: black;
+  /* إضافات ذكية تدعم التمارين والحدود الفخمة */
+  --eloq-green: #059669;   
+  --eloq-soft-green: rgba(5, 150, 105, 0.08);
+  --border-subtle: rgba(15, 23, 42, 0.06);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #171717;
-    --base: #f8f8f8;
-    --muted: rgba(255, 255, 255, 0.56);
+    /* الوضع الداكن الحيوي - قراءة مريحة وغير كئيبة */
+    --background: #090b14;       /* كحلي ليلي عميق */
+    --foreground: #141827;       /* أسطح الكروت والبطاقات */
+    --primary: #f8fafc;          /* ينعكس ليصبح فاتحاً ناصعاً في الدارك مود */
+    --base: #f1f5f9;             /* نصوص القراءة الأساسية */
+    --muted: #94a3b8;            /* النصوص الثانوية والفرعية */
+    --eloq-purple: #a855f7;      /* بنفسجي مضيء وناعم */
+    --eloq-soft-purple: rgba(168, 85, 247, 0.15);
+    --eloq-black: #030408;       /* أسود ناعم مائل للكحلي بدلاً من القاتم الميت */
+    
+    --eloq-green: #10b981;
+    --eloq-soft-green: rgba(16, 185, 129, 0.15);
+    --border-subtle: rgba(255, 255, 255, 0.06);
   }
 }
 
-/* 2. ربط المتغيرات بـ Tailwind CSS v4 دون إلغاء الألوان الافتراضية */
+/* ==========================================================================
+   2. ربط المتغيرات بـ Tailwind CSS v4 دون إلغاء أي كلاس قديم
+   ========================================================================== */
 @theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -32,75 +50,55 @@
   --color-eloq-purple: var(--eloq-purple);
   --color-eloq-soft-purple: var(--eloq-soft-purple);
   --color-eloq-black: var(--eloq-black);
-
-
   
-  --font-sans: var(--font-geist-sans);
+  /* ربط الإضافات الجديدة لتايلوند */
+  --color-eloq-green: var(--eloq-green);
+  --color-eloq-soft-green: var(--eloq-soft-green);
+  --color-border-subtle: var(--border-subtle);
+
+  /* الخطوط القياسية لمشروعك */
+  --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
-  --font-nunito: var(--font-nunito);
-  --font-lato: var(--font-lato);
-  --font-inter: var(--font-inter);
+  /*--font-inter: var(--font-inter);*/
 }
 
-/* 3. تطبيق القواعد العامة على العناصر باستخدام ميزة @utility أو القواعد القياسية لتايلوند */
+/* ==========================================================================
+   3. القواعد العامة والسكرول بار التفاعلي
+   ========================================================================== */
 @layer base {
   body {
     background-color: var(--background);
     color: var(--base);
     font-size: 16px;
-    font-family: var(--font-inter) sans-serif;
+    
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 
-  /* == SCROLLBAR == */
-  /* Width */
+  /* == تخصيص السكرول بار المتناغم مع الدارك مود الجديد == */
   ::-webkit-scrollbar {
-    width: 12px;
+    width: 10px;
     height: 8px;
   }
 
-    /* Track */
   ::-webkit-scrollbar-track {
     background: transparent;
   }
 
-    /* Thumb */
   ::-webkit-scrollbar-thumb {
-    background: #9233eabb;
+    background: var(--eloq-soft-purple);
     border-radius: 999px;
     border: 2px solid transparent;
     background-clip: content-box;
-    transition: background 0.2 ease;
   }
 
-  /* Hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: #A855F7;
+    background: var(--eloq-purple);
     background-clip: content-box;
   }
 
-  /* Active / Dragging  */
-  ::-webkit-scrollbar-thumb:active {
-    background: #9333ea;
-    background-clip: content-box;
-  }
-
-  /* Remove arrows */
   ::-webkit-scrollbar-button {
     display: none;
     width: 0;
     height: 0;
   }
-
-  /* Corner */
-  ::-webkit-scrollbar-corner {
-    background: transparent;
-  }
-
-  /* Firefox suuply */
-  /* * {
-    scrollbar-width: thin;
-    scrollbar-color: #9333EA transparent;
-    scrollba
-  } */
 }
-

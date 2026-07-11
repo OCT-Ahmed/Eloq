@@ -18,7 +18,7 @@ export default async function LevelPage({
         },
     ]
     return (
-        <div className="w-full flex flex-col items-start justify-cneter gap-8">
+        <div className="w-full flex flex-col items-start justify-cneter gap-8 py-4 px-6">
           {/* Main Lesson Layout Content */}
           <main className="w-full flex flex-col items-start justify-start gap-8">
             <section className="flex flex-col w-full items-stretch justify-start gap-5 md:gap-5 lg:gap-8">
