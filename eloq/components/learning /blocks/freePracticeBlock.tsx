@@ -10,7 +10,7 @@ export default function FreePracticeBlock(
 ) {
     return (
         <div>
-            <Textarea className="text-md border-2 border-eloq-purple focus:border-2 focus:border-eloq-primary" placeholder="Write here">
+            <Textarea className="text-md h-80 border-2 border-eloq-purple focus:border-2 focus:border-eloq-primary outline-none" placeholder="Write here">
             </Textarea>
         </div>
     )

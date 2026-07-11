@@ -7,6 +7,8 @@ import FreePracticeBlock from "./blocks/freePracticeBlock";
 import WordListBlock from "./blocks/wordListBlock";
 import MatchingBlock from "./blocks/matchingBlock";
 
+// pass the whole block "block={block}" to the block component instead of passing the data "block={block.data}"
+
 export default function BlockRenderer({block}: {block:Block}) {
     switch(block.type) {
         case "dialouge":
@@ -25,7 +27,7 @@ export default function BlockRenderer({block}: {block:Block}) {
             }
         case "fill_blanks":
             return (
-                <FillBlanksBlock data={block.data} />
+                <FillBlanksBlock id={block.id} data={block.data} />
             )
         case "free_practice":
             return (
