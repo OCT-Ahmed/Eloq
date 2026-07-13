@@ -1,6 +1,8 @@
 "use client"
 import { useState, useEffect } from "react"
 import { supabase } from "@/lib/supabase/client"
+import SignupForm from "@/features/auth/components/SignupForm"
+import LoginForm from "@/features/auth/components/LoginForm"
 
 const Test = () => {
   const [d, setD] = useState<any[]>([]);
@@ -44,6 +46,8 @@ const Test = () => {
             }}>
         Push User
       </button>
+      <SignupForm />
+      <LoginForm />
     </div>
   )
 }

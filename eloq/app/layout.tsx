@@ -45,10 +45,12 @@ export default function RootLayout({
       className={`${inter.variable} ${geistSans.variable} ${geistMono.variable} ${nunito.variable} ${lato.variable} h-full antialiased`}
     >
 
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col h-screen overflow-hidden">
               <div className="flex gap-8 p-4">
         <Link href="/">Home</Link>
         <Link href="/test">Test</Link>
+        <Link href="/signup">Sign Up</Link>
+        <Link href="/login">Login</Link>
       </div>
         {children}
       </body>
