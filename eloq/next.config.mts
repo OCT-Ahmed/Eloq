@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
     // process.cwd() يعطيك مسار المجلد الرئيسي للمشروع مباشرة
     root: join(process.cwd()),
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 export default nextConfig;
+

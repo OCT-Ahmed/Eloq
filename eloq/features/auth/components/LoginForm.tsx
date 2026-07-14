@@ -1,11 +1,15 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { login } from "../actions/login"
 import { loginSchema } from "../validation/login.schema"
 
 export default function LoginForm() {
+  useEffect(() => {
+    alert("JS Loaded")
+  }, [])
+  
   // °° INPUTS STATE
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -45,10 +49,9 @@ alert(JSON.stringify(authData.session, null, 2));
     <motion.form
       onSubmit={handleSubmit}
       className="flex flex-col items-center justify-center gap-4 lg:gap-6 w-full md:w-[65%] lg:w-[50%] md:p-6 md:bg-background/5 md:border md:border-white/5 md:rounded-lg"
-      initial={{
-        opacity: 0,
-        y: 50,
-      }}
+      initial={
+        false
+      }
       animate={{
         opacity: 1,
         y: 0,
@@ -61,7 +64,7 @@ alert(JSON.stringify(authData.session, null, 2));
         damping: 20,
       }}
     >
-
+      
       <motion.input
         name="email"
         type="email"
@@ -109,6 +112,7 @@ alert(JSON.stringify(authData.session, null, 2));
       <Button
         type="submit"
         className="w-full p-3 py-5 font-medium text-md bg-eloq-purple hover:bg-eloq-purple/75 rounded-lg"
+        onClick={() => alert("Clicked")}
       >
         Login
       </Button>
