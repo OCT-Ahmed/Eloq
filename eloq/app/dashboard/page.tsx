@@ -1,14 +1,20 @@
+import { createClient } from "@/lib/supabase/server"
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight, User, Flame, Info } from "lucide-react";
 import Link from "next/link";
 
-const DashboardHome = () => {
+const DashboardHome = async () => {
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.getUser();
     return (
         <div className="w-full h-full flex flex-col items-stretch py-4 px-6">
             <h1 className="text-2xl font-semibold text-base">
-                Welcome Back, Ahmed
+                Welcome Back,{"" ? "User" : "No"}
             </h1>
+              <pre>
+    {JSON.stringify({ data, error }, null, 2)}
+  </pre>
            <p className="mb-6 text-muted italic">Ready for day 12 of your streak?</p>
            <div className=" w-full lg:w-fit lg:h-fit lg:p-[3px] hover:bg-eloq-purple/25 rounded-xl transition-all duration-300">
                                  <header className="flex items-start justify-start gap-2 pb-4 border-b border-border-subtle mb-6">
@@ -21,7 +27,7 @@ const DashboardHome = () => {
                             <div className="flex items-center gap-1">
 
                                 <h1 className="font-semibold text-base">
-                                    Ahmed Khyr
+                       {"" ? user.name : "Ahmed Khyr"} 
                                 </h1>
                                 <div className="relative flex"> 
                                     <Flame fill="darkorange" color="orange" size={15} strokeWidth={1} />
