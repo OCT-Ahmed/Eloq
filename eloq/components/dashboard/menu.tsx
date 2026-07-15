@@ -1,4 +1,6 @@
 'use client'
+import { supabase } from "@/lib/supabase/client"
+import { logout } from "@/features/auth/actions/logout"
 import { AnimatePresence, motion} from 'framer-motion'
 import Link from 'next/link'
 import { AlignJustify, User, Flame, Home, Layout, HelpCircle, Trophy, Mail, MessageSquare, Users, Settings, LogOut } from 'lucide-react'
@@ -19,6 +21,8 @@ export default function AsideMenu({
 }: {
   showMenu: () => {},
 }) {
+  const { data: { user }} = supabase.auth.getUser()
+  
   return (
       <motion.aside 
         initial={{x: -300, opacity:0.8}}
@@ -40,7 +44,7 @@ export default function AsideMenu({
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="font-semibold text-base">Ahmed Khyr</h1>
+              <h1 className="font-semibold text-base">{user?.user_metadata?.full_name}</h1>
               <div className="flex items-center bg-amber-500/10 px-1.5 py-0.5 rounded-md gap-0.5"> 
                 <Flame fill="darkorange" color="orange" size={14} strokeWidth={1.5} />
                 <span className="font-mono font-bold text-[11px] text-amber-500">12</span>
@@ -67,13 +71,14 @@ export default function AsideMenu({
           </div>
         
         <div className="border-t border-border-subtle pt-4">
-          <motion.div 
+          <motion.button 
             whileHover={{ x: 5 }}
             className="flex items-center gap-2 text-red-500 hover:text-red-400 cursor-pointer text-sm p-2 rounded-lg"
+            onClick={logout}
           >
             <LogOut size={18} />
             <span>Log Out</span>
-          </motion.div>
+          </motion.button>
         </div>
       </motion.aside>
   )
