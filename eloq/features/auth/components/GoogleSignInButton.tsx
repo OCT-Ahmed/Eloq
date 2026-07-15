@@ -1,0 +1,38 @@
+"use client"
+
+import { loginWithGoogle } from "../services/auth.service"
+import { Button } from "@/components/ui/button"
+
+export default function GoogleSignInButton({
+  setErrorMessage,
+}: {
+  setErrorMessage: (message: string | null) => void
+}) {
+
+  async function handleLoginWithGoogle() {
+    try {
+      const { error } = await loginWithGoogle()
+
+      if (error) {
+        setErrorMessage(error.message)
+      }
+
+    } catch (error) {
+      console.error(error)
+
+      if (error instanceof Error) {
+        setErrorMessage(error.message)
+      }
+    }
+  }
+
+  return (
+    <Button
+      type="button"
+      className="w-full p-3 py-5 font-medium text-md bg-eloq-purple hover:bg-eloq-purple/75 rounded-lg"
+      onClick={handleLoginWithGoogle}
+    >
+      Login With Google
+    </Button>
+  )
+}
