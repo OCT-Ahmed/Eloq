@@ -1,4 +1,5 @@
 'use client'
+import { useState, useEffect } from "react"
 import { supabase } from "@/lib/supabase/client"
 import { logout } from "@/features/auth/actions/logout"
 import { AnimatePresence, motion} from 'framer-motion'
@@ -21,7 +22,15 @@ export default function AsideMenu({
 }: {
   showMenu: () => {},
 }) {
-  const { data: { user }} = supabase.auth.getUser()
+  const [user, setUser] = useState<any>(null)
+  useEffect(() => {
+    async function getUser() {
+      const { data } = await supabase.auth.getUser()
+      setUser(data.user)
+    }
+
+    getUser()
+  }, [])
   
   return (
       <motion.aside 
@@ -74,7 +83,13 @@ export default function AsideMenu({
           <motion.button 
             whileHover={{ x: 5 }}
             className="flex items-center gap-2 text-red-500 hover:text-red-400 cursor-pointer text-sm p-2 rounded-lg"
-            onClick={logout}
+            onClick={async () => {
+  try {
+    await logout()
+  } catch (error) {
+    console.error(error)
+  }
+            }}
           >
             <LogOut size={18} />
             <span>Log Out</span>
