@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation"
 import { signup } from "../actions/signup"
 import { signupSchema } from "../validation/signup.schema"
 import { motion } from "framer-motion"
+import GoogleSignInButton from "../components/GoogleSignInButton"
 import { Button } from "@/components/ui/button"
 import OrSeparator from "../components/OrSeparator"
 
@@ -185,6 +186,7 @@ export default function SignupForm() {
       </Button>
       <OrSeparator />
       {/* OAuth */}
+      <GoogleSignInButton setErrorMessage={setErrorMessage} />
     </motion.form>
   )
 }
