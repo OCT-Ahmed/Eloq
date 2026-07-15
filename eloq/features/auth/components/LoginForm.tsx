@@ -1,28 +1,37 @@
 "use client"
-import { useState, useEffect } from "react"
-import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { login } from "../actions/login"
 import { loginSchema } from "../validation/login.schema"
+import { motion } from "framer-motion"
+import GoogleSignInButton from "../components/GoogleSignInButton"
+import { Button } from "@/components/ui/button"
+import OrSeparator from "../components/OrSeparator"
 
 export default function LoginForm() {
-  useEffect(() => {
-    alert("JS Loaded")
-  }, [])
-  
+  const router = useRouter()
   // °° INPUTS STATE
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  // °° FORM STATES
-  const [ errorMessage, setErrorMessage ] = useState("")
+  // °° STATES
+  const [isLoading, setIsLoading] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
+  const [emailErrorMessage, setEmailErrorMessage] = useState("")
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState("")
   // °° VARIABLES
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL!;
   const successMessage = "Logged in successfully!"
   const failMessage = "Something went wrong."
+
   // °° SUBMIT HANDLER
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     
     try {
+      setIsLoading(true)
+      setEmailErrorMessage("")
+      setPasswordErrorMessage("")
+      setErrorMessage("")
       const result = loginSchema.safeParse({
         email,
         password,
@@ -30,93 +39,119 @@ export default function LoginForm() {
     
       if (!result.success) {
         console.log(result.error.flatten())
+        // handle fields errors
+        const errors = result.error.flatten().fieldErrors
+        setEmailErrorMessage(errors.email?.[0])
+        setPasswordErrorMessage(errors.password?.[0])
         return
       }
       const loginData = result.data;
-     // await login(loginData)
       const authData = await login(loginData);
-alert(JSON.stringify(authData.session, null, 2));
+    
       alert(successMessage)
+      router.push(`${SITE_URL}/dashboard`)
       setErrorMessage("")
+      
     } catch (error) {
       console.error(error)
       setErrorMessage(failMessage)
+    } finally {
+      setIsLoading(false)
     }
   }
-
-
+  
   return (
     <motion.form
       onSubmit={handleSubmit}
       className="flex flex-col items-center justify-center gap-4 lg:gap-6 w-full md:w-[65%] lg:w-[50%] md:p-6 md:bg-background/5 md:border md:border-white/5 md:rounded-lg"
-      initial={
-        false
-      }
+      initial={false}
       animate={{
         opacity: 1,
         y: 0,
       }}
       transition={{
-      duration: 0.8,
-      ease: "easeOut",
+        duration: 0.8,
+        ease: "easeOut",
         type: "spring",
         stiffness: 200,
         damping: 20,
       }}
     >
       
-      <motion.input
-        name="email"
-        type="email"
-        value={email}
-        placeholder="Write your email"
-        className="w-full p-3 text-md bg-foreground font-medium border-2 rounded-lg outline-none caret-eloq-purple"
-        onChange={(e) => setEmail(e.target.value)}
-        whileFocus={{
-          scale: 1.02,
-          borderColor: "purple",
-        }}
-        transition={{ 
-        type: "spring", 
-        stiffness: 300, 
-        damping: 20 
-      }}
-      initial={{borderColor: "transparent"}}
-      />
+      {/* حقل البريد الإلكتروني */}
+      <div className="flex flex-col w-full gap-1">
+        <motion.input
+          name="email"
+          type="email"
+          value={email}
+          placeholder="Write your email"
+          className="w-full p-3 text-md bg-foreground font-medium border-2 rounded-lg outline-none caret-eloq-purple"
+          onChange={(e) => setEmail(e.target.value)}
+          whileFocus={{
+            scale: 1.02,
+            borderColor: "purple",
+          }}
+          transition={{ 
+            type: "spring", 
+            stiffness: 300, 
+            damping: 20 
+          }}
+          initial={{borderColor: "transparent"}}
+        />
+        {emailErrorMessage && (
+          <span className="text-sm text-red-400">
+            {emailErrorMessage}
+          </span>
+        )}
+      </div>
 
-      <motion.input
-        name="password"
-        type="password"
-        value={password}
-        placeholder="Write your password"
-        className="w-full p-3 text-md bg-foreground font-medium border-2 rounded-lg outline-none caret-eloq-purple"
-        onChange={(e) => setPassword(e.target.value)}
-        whileFocus={{
-          scale: 1.02,
-          borderColor: "purple",
-        }}
-        transition={{ 
-        type: "spring", 
-        stiffness: 300, 
-        damping: 20 
-      }}
-      initial={{borderColor: "transparent"}}
-      />
+      {/* حقل كلمة السر */}
+      <div className="flex flex-col w-full gap-1">
+        <motion.input
+          name="password"
+          type="password"
+          value={password}
+          placeholder="Write your password"
+          className="w-full p-3 text-md bg-foreground font-medium border-2 rounded-lg outline-none caret-eloq-purple"
+          onChange={(e) => setPassword(e.target.value)}
+          whileFocus={{
+            scale: 1.02,
+            borderColor: "purple",
+          }}
+          transition={{ 
+            type: "spring", 
+            stiffness: 300, 
+            damping: 20 
+          }}
+          initial={{borderColor: "transparent"}}
+        />
+        {passwordErrorMessage && (
+          <span className="text-sm text-red-400">
+            {passwordErrorMessage}
+          </span>
+        )}
+      </div>
+
       {/* ERROR MESSAGE FIELD */}
       {errorMessage && (
-        <span>
-          {errorMessage}
-        </span>
-        )}
+        <div className="w-full py-1 px-3 bg-red-400/15 border border-red-400/25 rounded-lg">
+          <span className="text-sm text-red-500">
+            {errorMessage}
+          </span>
+        </div>
+      )}
+
       {/* SUBMIT BUTTON*/}
       <Button
         type="submit"
         className="w-full p-3 py-5 font-medium text-md bg-eloq-purple hover:bg-eloq-purple/75 rounded-lg"
-        onClick={() => alert("Clicked")}
       >
-        Login
+        {isLoading ? "..." : "Login"}
       </Button>
       {/* or seprator */}
+      <OrSeparator />
+      {/* OAuth */}
+      <GoogleSignInButton setErrorMessage={setErrorMessage} />
     </motion.form>
   )
 }
