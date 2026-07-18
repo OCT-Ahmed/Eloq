@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server"
+import { useAuth } from "@/features/auth"
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight, User, Flame, Info } from "lucide-react";

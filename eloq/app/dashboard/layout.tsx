@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import DashboardHeader from '@/components/dashboard/dashboardHeader'
 import BottomMobileNav from '@/components/dashboard/bottomMobileNav'
 import DesktopAside from '@/components/dashboard/desktopAside'
+import { useAuth } from "@/features/auth"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarProvider } from "@/components/ui/sidebar";
 import { BookOpen, Bot, Brain, BrainIcon, Earth, FireExtinguisher, Flame, Grid2x2, Home, HomeIcon, KanbanSquare, Layers2, LayoutDashboardIcon, LayoutGrid, LayoutList, Rocket, Settings, SidebarIcon, User, UserCircle, Search } from "lucide-react";
 import Link from "next/link";
@@ -57,6 +58,7 @@ export default function DashboardLayout({
 }:{
     children: React.ReactNode,
 }) {
+
   return (
     <div 
       className={`${nunito.variable} flex flex-col items-center justify-stretch w-full h-screen overflow-hidden text-base`}

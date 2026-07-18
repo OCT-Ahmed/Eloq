@@ -1,6 +1,8 @@
 'use client'
 import { useState, useEffect } from "react"
 import { supabase } from "@/lib/supabase/client"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/features/auth"
 import { logout } from "@/features/auth/actions/logout"
 import { AnimatePresence, motion} from 'framer-motion'
 import Link from 'next/link'
@@ -22,15 +24,11 @@ export default function AsideMenu({
 }: {
   showMenu: () => {},
 }) {
-  const [user, setUser] = useState<any>(null)
-  useEffect(() => {
-    async function getUser() {
-      const { data } = await supabase.auth.getUser()
-      setUser(data.user)
-    }
+  // •• Hooks
+  const router = useRouter()
+  // •• States
+  const { user, isLoading } = useAuth()
 
-    getUser()
-  }, [])
   
   return (
       <motion.aside 
@@ -46,7 +44,9 @@ export default function AsideMenu({
         className="fixed z-10001 left-0 top-0 bottom-0 flex flex-col items-stretch justify-start gap-8 w-[75%] md:w-[35%] lg:hidden bg-foreground/95 px-6 py-[24px] backdrop-blur-lg h-full border-r border-border-subtle"
       >
         <AlignJustify size={24} onClick={showMenu} className="col-span-2 text-base cursor-pointer" />
-        
+        { isLoading ? (
+        <div className="w-full h-18 animate-pulse bg-muted"></div>
+        ) : (
         <div className="flex items-center gap-3 border-b border-border-subtle pb-8 mb-0 col-span-full">
           <div className="bg-eloq-purple p-2 h-12 w-12 rounded-full flex items-center justify-center shadow-lg shadow-eloq-purple/10">
             <User color="white" size={24} />
@@ -64,7 +64,7 @@ export default function AsideMenu({
             </span>
           </div>
         </div>
-        
+        )}
         <div className="grid grid-cols-2 gap-3 flex-1 content-start">
           {menuItems.map((item, index) => (
             <motion.div 
@@ -84,11 +84,12 @@ export default function AsideMenu({
             whileHover={{ x: 5 }}
             className="flex items-center gap-2 text-red-500 hover:text-red-400 cursor-pointer text-sm p-2 rounded-lg"
             onClick={async () => {
-  try {
-    await logout()
-  } catch (error) {
-    console.error(error)
-  }
+              try {
+                await logout()
+                router.replace("/")
+              } catch (error) {
+                console.error(error)
+              }
             }}
           >
             <LogOut size={18} />

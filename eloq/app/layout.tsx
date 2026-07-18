@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter, Lato, Nunito } from "next/font/google";
 import "./globals.css";
+import { AuthInitializer } from "@/features/auth"
+import Header from "@/components/layout/Header"
 import Link from 'next/link'
 
 const inter = Inter({
@@ -39,6 +41,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
   return (
     <html
       lang="en"
@@ -46,12 +49,8 @@ export default function RootLayout({
     >
 
       <body className="min-h-full flex flex-col h-screen overflow-hidden">
-              <div className="flex gap-8 p-4">
-        <Link href="/">Home</Link>
-        <Link href="/test">Test</Link>
-        <Link href="/signup">Sign Up</Link>
-        <Link href="/login">Login</Link>
-      </div>
+        <Header />
+      <AuthInitializer />
         {children}
       </body>
     </html>
