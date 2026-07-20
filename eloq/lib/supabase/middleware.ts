@@ -28,6 +28,16 @@ export async function updateSession(request: NextRequest) {
   
   const {data: {user}} = await supabase.auth.getUser()
   
+  const loginRoutes = ["/login", "/signup"]
+  
+  const isLoggedIn = loginRoutes.some((route) => request.nextUrl.pathname.startsWith(route))
+  
+  if (isLoggedIn && user) {
+    return NextResponse.redirect(
+      new URL("/dashboard", request.url)
+    )
+  }
+  
   const protectedRoutes = [
     "/dashboard",
     "/profile",

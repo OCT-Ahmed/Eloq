@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server"
 import { useAuth } from "@/features/auth"
+import { UserCard } from "@/features/profile"
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight, User, Flame, Info } from "lucide-react";
@@ -17,29 +18,9 @@ const DashboardHome = async () => {
     {JSON.stringify({ data, error }, null, 2)}
   </pre>*/}
            <p className="mb-6 text-muted italic">Ready for day 12 of your streak?</p>
-           <div className=" w-full lg:w-fit lg:h-fit lg:p-[3px] hover:bg-eloq-purple/25 rounded-xl transition-all duration-300">
-                                 <header className="flex items-start justify-start gap-2 pb-4 border-b border-border-subtle mb-6">
-                        {/* <Rocket color="purple" /> */}
-                        <div className="bg-eloq-purple p-2 h-10 w-10 rounded-full">
-                           <User color="none" /> 
-                        </div>
-
-                        <div>
-                            <div className="flex items-center gap-1">
-
-                                <h1 className="font-semibold text-base">
-                       {data?.user ? data?.user?.user_metadata?.full_name : "ELOQ User"} 
-                                </h1>
-                                <div className="relative flex"> 
-                                    <Flame fill="darkorange" color="orange" size={15} strokeWidth={1} />
-                                    <span className="font-mono font-semibold text-[10px] text-base">12</span>
-                                </div>
-                            </div>
-                            <span className="text-[11px] bg-background border border-border-subtle rounded-full p-1 px-2 font-mono text-muted">
-                                Intermediate
-                            </span>
-                        </div>
-
+           <div className="w-full lg:w-fit lg:h-fit lg:p-[3px] hover:bg-eloq-purple/25 rounded-xl transition-all duration-300">
+                                 <header className="w-full flex items-start justify-start mb-6">
+                      <UserCard />
                         {/* add sidebar links array */}
                     </header>
                 {/* Continue Progress Section */}
