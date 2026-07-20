@@ -19,8 +19,9 @@ AI-powered language learning platform.
 ## Current Progress
 
 - [x] Dashboard layout
-- [] Auth system
+- [x] Auth system
 - [x] Lesson viewer
+- [x] profile viewer
 - [ ] AI pronunciation
 
 ## Run Locally
