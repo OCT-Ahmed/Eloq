@@ -29,7 +29,7 @@ export interface Section {
         Block
         BaseBlock
 ===================== */
-export type SectionType = (
+export type SectionType = 
   | "starter"
   | "grammar"
   | "vocabulary"
@@ -38,133 +38,184 @@ export type SectionType = (
   | "reading"
   | "writing"
   | "quiz"
-  | "everyday_english"
-);
+  | "everyday_english";
 
 // A-Z Order
-export type BlockType = (
+export type BlockType = 
 //  | "audio"
-    | "dialouge"
+    | "dialogue"
     | "fill_blanks"
     | "free_practice"
-    | "grammer_point"
+    | "grammar_point"
 //  | "grammer_reference"
     | "image_card"
     | "image_cards"
 //  | "instruction"
 //  | "practice"
     | "matching"
-    | "self_check"
 //  | "question"
 //  | "quiz"
 //  | "reading"
-//  | "reorder_words"
+    | "reorder_words"
+    | "self_check"
 //  | "vocabulary_grid"
-    | "word_list"
-    )[];
+    | "word_list";
 
 export type Block = 
     | DialougeBlock
-    | GrammerPointBlock
+    | GrammarPointBlock
     | FillBlanksBlock 
     | FreePracticeBlock
     | ImageCardBlock
     | ImageCardsBlock
-    | MatchingBlock 
-    | WordListBlock 
-;
+    | MatchingBlock
+    | ReorderWordsBlock
+    | WordListBlock;
 
-type BaseBlock<T extends string, D> = {
+export interface ExtensionType {
+  title?: string;
+  instruction?: {
+    id?: string | number;
+    text: string;
+    translation?: string;
+  };
+  audio?: {
+    url: string;
+    ref?: string;
+  };
+  tip?: {
+    icon?: string;
+    text: string;
+  };
+  explanation?: string;
+}
+
+type BaseBlock<T extends BlockType, D> = {
+  id: string;
+  type: T;
+  data: D;
+  interactions?: Record<string, unknown>;
+  extensions?: ExtensionType;
+  span?: string;  // e.g., "col-span-12", "grid"
+  style?: string; // e.g., custom theme or background
+};
+
+type BaseBlock<T extends BlockType, D> = {
     id: string;
     type: T;
     data: D;
-    interactions?: unknown;
-    extensions?: {
-        title?: string;
-        instruction?: {
-            id: number;
-            text: string;
-            translation?: string;
-        };
-        audio?: {
-            url: string;
-            ref?: string;
-        }
-        explanation?: string;
-    }; 
+    interactions?: Record<string, unknown;
+    extensions?: ExtensionType;
     span?: string; // controle display [grid or flex? column or row?]
-    style?: string; // social media blob -- etc.. 
+    style?: string; // custom theme or background: social media blob -- etc.. 
 };
 
-export type DialougeBlock = BaseBlock<"dialouge", {
+/* =====================
+    Specific Block Definitions
+===================== */
+
+export type DialogueBlock = BaseBlock<
+  "dialogue",
+  {
     image?: {
-        url: string;
-        desc?: string;
+      url: string;
+      desc?: string;
     };
     lines: {
-        id: string;
-        speakerId: string;
-        speaker: string;
-        text: string;
-    }[]
-}>;
+      id: string;
+      speakerId?: string;
+      speaker: string;
+      text: string;
+      audioUrl?: string;
+    }[];
+  }
+>;
 
-export type FillBlanksBlock = BaseBlock<"fill_blanks", {
-    items: {
-        text: string;
-        answer: string;
-    }[]
-}>
-
-export type FreePracticeBlock = BaseBlock<"free_practice", {
-    text_area: "[text area]"
-}>
-
-export type GrammerPointBlock = BaseBlock<"grammer_point", {
+export type GrammarPointBlock = BaseBlock<
+  "grammar_point",
+  {
     title: string;
-    instruction?: string;
     rules: string[];
-}>;
+    examples?: string[];
+  }
+>;
 
-export type ImageBlock = BaseBlock<"image", {
-    url: string;
-    caption?: string;
-}>
-
-export type ImageCardBlock = BaseBlock<"image_card", {
-    url: string;
-    alt?: string;
-    style?: string;
-    text: string;
-    caption?: string;
-    pronunciation?: string;
-}>
-
-export type ImageCardsBlock = BaseBlock<"image_cards", {
-    audioRef?: {
-        id: string;
-        url: string;
-    };
-    instruction?: {id:string; text:string};
-    cards: ImageCardBlock[];
-    layout?: "grid" | "list" | "carousel";
-}> 
-
-export type MatchingBlock = BaseBlock<"matching", {
-    questions: {
-        id: string;
-        text: string;
-    }[];
-    answers: {
-        id: string;
-        text: string;
-    }[];
-}>
-
-export type WordListBlock = BaseBlock<"word_list", {
+export type FillBlanksBlock = BaseBlock<
+  "fill_blanks",
+  {
     items: {
-        id: string; 
-        primaryText: string; 
-        secondaryText?: string;
-    }[]
-}>
+      id: string;
+      text: string; // "My name [blank] Alex."
+      answer: string; // "is"
+      options?: string[]; // للخيارات المتعددة إذا وجدت
+    }[];
+  }
+>;
+
+export type ReorderWordsBlock = BaseBlock<
+  "reorder_words",
+  {
+    items: {
+      id: string;
+      words: string[]; // ["is", "My", "Alex", "name"]
+      correctOrder: string[]; // ["My", "name", "is", "Alex"]
+    }[];
+  }
+>;
+
+export type MatchingBlock = BaseBlock<
+  "matching",
+  {
+    questions: { id: string; text: string }[];
+    answers: { id: string; text: string }[];
+    correctPairs: { questionId: string; answerId: string }[]; // أساسي جدا للتحقق!
+  }
+>;
+
+export type FreePracticeBlock = BaseBlock<
+  "free_practice",
+  {
+    prompt?: string;
+    placeholder?: string;
+    maxLength?: number;
+    allowAudioRecord?: boolean;
+  }
+>;
+
+export type ImageBlock = BaseBlock<
+  "image",
+  {
+    url: string;
+    caption?: string;
+    alt?: string;
+  }
+>;
+
+export interface ImageCardItem {
+  id: string;
+  url: string;
+  text: string;
+  caption?: string;
+  pronunciation?: string;
+  audioUrl?: string;
+}
+
+export type ImageCardsBlock = BaseBlock<
+  "image_cards",
+  {
+    cards: ImageCardItem[];
+    layout?: "grid" | "list" | "carousel";
+  }
+>;
+
+export type WordListBlock = BaseBlock<
+  "word_list",
+  {
+    items: {
+      id: string;
+      primaryText: string;
+      secondaryText?: string;
+      audioUrl?: string;
+    }[];
+  }
+>;

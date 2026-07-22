@@ -35,13 +35,13 @@ export default function FillBlanksBlock({
       const newStatus = [...status];
       if (!newStatus[text_index]) {newStatus[text_index] = [];}
       
-      if (user_answer.length < 1) {
+      if (user_answer.trim().length < 1) {
         newStatus[text_index][blank_index] = "unAnswered"
         setStatus(newStatus)
-      } else if (user_answer === correct_answer) {
+      } else if (user_answer.trim() === correct_answer) {
         newStatus[text_index][blank_index] = "correctAnswer"
         setStatus(newStatus)
-      } else if (user_answer !== correct_answer) {
+      } else if (user_answer.trim() !== correct_answer) {
         newStatus[text_index][blank_index] = "wrongAnswer"
         setStatus(newStatus)
       } 
@@ -52,7 +52,8 @@ export default function FillBlanksBlock({
                 data?.items?.map((item, i) => (
                     <div key={i} className="flex gap-1 text-base">
                         <p> 
-                            {item.text.split("[blank]").map((part, index, arr) => {
+      {item?.text?.split(/\[blank_\d+\]|\[blank\]|___/g)
+.map((part, index, arr) => {
                         const newAnswers = [...userAnswers];
                         const currentAnswer = newAnswers[i]?.[index];
                         const currentStatus = status[i]?.[index];
