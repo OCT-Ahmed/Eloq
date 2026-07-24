@@ -40,7 +40,7 @@ export default async function LessonPage({
                 {/* Top Shadow  */}
                 <div className="pointer-events-none absolute top-0 left-0 right-0 h-6 bg-gradient-to-b from-background to-transparent z-10" />
 
-                <main className="h-full overflow-y-auto pt-4 pb-24 scrollbar-none md:scrollbar-default">
+                <main className="h-full overflow-y-auto pt-4 pb-50 scrollbar-none md:scrollbar-default">
                     <Card className="flex flex-col items-stretch justify-start gap-5 w-full text-yellow/-500/25 bg-foreground shadow-lg pr-4 p-3 lg:p-10 text-[18px] leading-8 tracking-[-0.01px] rounded-xl border-none sm:border">
                         {
                            section && <SectionRenderer section={section} />

@@ -1,7 +1,7 @@
 import { Block } from "@/types/learning";
-import DialougeBlock from "./blocks/dialogueBlock";
+import DialogueBlock from "./blocks/dialogueBlock";
 import FillBlanksBlock from "./blocks/fillBlanksBlock";
-import GrammerPointBlock from "./blocks/grammarPointBlock";
+import GrammarPointBlock from "./blocks/grammarPointBlock";
 import ImageCardsBlock from "./blocks/imageCardsBlock";
 import FreePracticeBlock from "./blocks/freePracticeBlock";
 import WordListBlock from "./blocks/wordListBlock";

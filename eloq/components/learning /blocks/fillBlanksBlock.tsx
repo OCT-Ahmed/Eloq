@@ -35,13 +35,13 @@ export default function FillBlanksBlock({
       const newStatus = [...status];
       if (!newStatus[text_index]) {newStatus[text_index] = [];}
       
-      if (user_answer.trim().length < 1) {
+      if (user_answer.length < 1) {
         newStatus[text_index][blank_index] = "unAnswered"
         setStatus(newStatus)
-      } else if (user_answer.trim() === correct_answer) {
+      } else if (user_answer === correct_answer) {
         newStatus[text_index][blank_index] = "correctAnswer"
         setStatus(newStatus)
-      } else if (user_answer.trim() !== correct_answer) {
+      } else if (user_answer !== correct_answer) {
         newStatus[text_index][blank_index] = "wrongAnswer"
         setStatus(newStatus)
       } 

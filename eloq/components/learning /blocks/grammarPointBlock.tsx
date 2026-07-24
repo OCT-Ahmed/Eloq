@@ -18,7 +18,7 @@ export default function GrammarPointBlock({
                 {data.instruction}
             </p>}
             {
-                data.rules.map((rule, i) => (
+                data?.rules?.map((rule, i) => (
                     <div key={i} className="flex gap-1 text-base">
                         <p> 
                             {rule}
