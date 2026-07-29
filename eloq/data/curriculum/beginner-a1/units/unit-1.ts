@@ -1,7 +1,7 @@
 import { UnitType } from "@/types/learning";
 
 export const unit_1: UnitType = {
-  id: 1,
+  id: "1",
   slug: "unit-1",
   title: "First Connections",
   CEFR: "A1",

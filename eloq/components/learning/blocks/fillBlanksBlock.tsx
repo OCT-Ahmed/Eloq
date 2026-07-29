@@ -14,7 +14,7 @@ interface FillBlanksBlockProps {
       },
       get(key:string) {
         const value = localStorage.getItem(key);
-          return value ? JSON.parse(value) : null;
+          return value ? JSON.parse(value) : nul ;
       }
     }*/
 
@@ -47,7 +47,7 @@ export default function FillBlanksBlock({
       } 
     }
     return (
-        <div>
+        <div> 
             {
                 data?.items?.map((item, i) => (
                     <div key={i} className="flex gap-1 text-base">
@@ -70,7 +70,7 @@ export default function FillBlanksBlock({
                         if (!newAnswers[i]) {
                         newAnswers[i] = []
                         }
-                        newAnswers[i][index] = e.target.value.trim();
+                        newAnswers[i][index] = e.target.value;
                         setUserAnswers(newAnswers);   
                           }}
                         onBlur={() => {

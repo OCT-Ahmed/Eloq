@@ -91,16 +91,6 @@ export interface ExtensionType {
 }
 
 type BaseBlock<T extends BlockType, D> = {
-  id: string;
-  type: T;
-  data: D;
-  interactions?: Record<string, unknown>;
-  extensions?: ExtensionType;
-  span?: string;  // e.g., "col-span-12", "grid"
-  style?: string; // e.g., custom theme or background
-};
-
-type BaseBlock<T extends BlockType, D> = {
     id: string;
     type: T;
     data: D;
@@ -216,6 +206,17 @@ export type WordListBlock = BaseBlock<
       primaryText: string;
       secondaryText?: string;
       audioUrl?: string;
+    }[];
+  }
+>;
+
+export type ReorderWordsBlock = BaseBlock<
+  "reorder_words",
+  {
+    items: {
+      id: string;
+      words: string[];
+      correctOrder: string[];
     }[];
   }
 >;
