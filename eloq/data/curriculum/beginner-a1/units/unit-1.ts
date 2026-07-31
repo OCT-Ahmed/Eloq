@@ -27,8 +27,8 @@ export const unit_1: UnitType = {
     {
       id: "sec_l1",
       type: "starter",
-      title: "First Encounters",
-      slug: "first-encounters",
+      title: "Greetings & Basics",
+      slug: "greetings-and-basics",
       lesson: "Lesson 1",
       blocks: [
         // Block 1: Main Dialogue
