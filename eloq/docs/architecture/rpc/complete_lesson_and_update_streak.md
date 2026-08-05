@@ -70,13 +70,13 @@ Input Parameters
 
 The RPC receives:
 
-Parameter| Type| Description
-"p_student_id"| UUID| Student identifier
-"p_lesson_id"| UUID| Lesson identifier
-"p_unit_id"| UUID| Unit identifier
-"p_level_id"| UUID| Level identifier
-"p_started_at"| TIMESTAMPTZ| Time when the student started the lesson
-"p_blocks_data"| JSONB| Student responses for every submitted block
+Parameter | Type| Description
+"p_student_id" | UUID | Student identifier
+"p_lesson_id" | UUID | Lesson identifier
+"p_unit_id" | UUID | Unit identifier
+"p_level_id" | UUID | Level identifier
+"p_started_at" | TIMESTAMPTZ | Time when the student started the lesson
+"p_blocks_data" | JSONB | Student responses for every submitted block
 
 Example:
 
