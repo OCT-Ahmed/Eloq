@@ -1,28 +1,29 @@
 import { Block } from "@/types/learning";
-import DialougeBlock from "./blocks/dialougeBlock";
+import DialogueBlock from "./blocks/dialogueBlock";
 import FillBlanksBlock from "./blocks/fillBlanksBlock";
-import GrammerPointBlock from "./blocks/grammerPointBlock";
+import GrammarPointBlock from "./blocks/grammarPointBlock";
 import ImageCardsBlock from "./blocks/imageCardsBlock";
 import FreePracticeBlock from "./blocks/freePracticeBlock";
 import WordListBlock from "./blocks/wordListBlock";
 import MatchingBlock from "./blocks/matchingBlock";
+import ReorderWordsBlock from "./blocks/reorderWordsBlock"
 
 // pass the whole block "block={block}" to the block component instead of passing the data "block={block.data}"
 
 export default function BlockRenderer({block}: {block:Block}) {
     switch(block.type) {
-        case "dialouge":
+        case "dialogue":
             return (
-                <DialougeBlock data={block.data} />
+                <DialogueBlock data={block.data} />
             )
-        case "grammer_point": 
+        case "grammar_point": 
             if (block.extensions?.title) {
                 return (
-                    <GrammerPointBlock data={block.data} title={block.extensions?.title} />
+                    <GrammarPointBlock data={block.data} title={block.extensions?.title} />
                 )
             } else {
                 return (
-                    <GrammerPointBlock data={block.data} />
+                    <GrammarPointBlock data={block.data} />
                 )
             }
         case "fill_blanks":
@@ -43,8 +44,12 @@ export default function BlockRenderer({block}: {block:Block}) {
             )
         case "matching":
             return (
-                <MatchingBlock data={block.data} />
+              <MatchingBlock data={block.data} />
             )
+        case "reorder_words":
+          return (
+            <ReorderWordsBlock data={block.data} />
+          )
         default: 
             return null
     }

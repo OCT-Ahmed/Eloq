@@ -37,10 +37,11 @@ const links = [
                     <h1 className="font-sans font-semibold text-2xl leading-tight">
                         Lessons
                     </h1>
+                    
                 </div>
             </header>
             {/* Main Lesson Layout Content */}
-            <main className="w-full grid grid-cols-1 md:grid-cols-3 md:gap-4 tracking-wide pb-28">
+            <main className="w-full grid grid-cols-1 md:grid-cols-3 md:gap-4 tracking-wide pb-60">
                 {
                     unit?.sections?.map((section) => (
                         <Link key={section.id} className="" href={`/dashboard/learn/beginner/${unit.slug}/${section.slug}`}>

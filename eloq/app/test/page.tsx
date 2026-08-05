@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import { supabase } from "@/lib/supabase/client"
 import SignupForm from "@/features/auth/components/SignupForm"
 import LoginForm from "@/features/auth/components/LoginForm"
+import { uploadUnit } from "@/scripts/seed-unit"
 
 const Test = () => {
   const [d, setD] = useState<any[]>([]);
@@ -31,6 +32,13 @@ const Test = () => {
     }
   return (
     <div className="p-6 border border-white/15 w-[80%] rounded-xl bg-white/5 mx-auto my-auto text-center">
+      <h1>Upload Unit</h1>
+      <button
+        className="p-4 border bg-eloq-purple"
+        onClick={uploadUnit}
+      >
+        Upload Unit 1
+      </button>
       <h1>Supabase Test</h1>
       <p>users count: {d.length} {d[0]?.name}</p>
       {/*<p className="grid gris-col-2">{d.map(dd => (<span>{dd.name} {dd.email}</span>))}</p>*/}
