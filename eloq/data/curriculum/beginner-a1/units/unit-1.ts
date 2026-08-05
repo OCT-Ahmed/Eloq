@@ -3,7 +3,7 @@ import { UnitType } from "@/types/learning";
 export const unit_1: UnitType = {
   id: "1",
   slug: "unit-1",
-  title: "First Connections",
+  title: "Say Hi",
   CEFR: "A1",
   goals: [
     "Greet people and introduce yourself confidently",
@@ -171,8 +171,8 @@ export const unit_1: UnitType = {
     {
       id: "sec_l2",
       type: "speaking",
-      title: "Meeting the Team",
-      slug: "meeting-the-team",
+      title: "Introductions & Personal Info",
+      slug: "introductions-and-personal-info",
       lesson: "Lesson 2",
       blocks: [
         // Block 1: Main Dialogue
@@ -426,8 +426,8 @@ export const unit_1: UnitType = {
     {
       id: "sec_l4",
       type: "vocabulary",
-      title: "My Workspace & Numbers",
-      slug: "workspace-and-numbers",
+      title: "Common Objects & Numbers",
+      slug: "common-objects-and-numbers",
       lesson: "Lesson 4",
       blocks: [
         // Block 1: Visual Vocabulary
@@ -560,8 +560,8 @@ export const unit_1: UnitType = {
     {
       id: "sec_l5",
       type: "quiz",
-      title: "Unit 1 Practice & Review",
-      slug: "unit-1-review",
+      title: "Unit 1 Assessment",
+      slug: "unit-1-assessment",
       lesson: "Lesson 5",
       blocks: [
         // Block 1: Matching
