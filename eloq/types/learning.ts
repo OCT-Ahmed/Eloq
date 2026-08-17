@@ -20,7 +20,7 @@ export interface UnitOverview {
 }
 
 
-export interface Unit {
+export interface UnitType {
   id: string;
   title: LocalizedText;
   slug: string;
@@ -125,6 +125,7 @@ export type Block =
   | ImageCardBlock
   | ImageCardsBlock
   | MatchingBlock
+  | MultipleChoiceBlock
   | ReadingBlock
   | ReorderWordsBlock
   | SelfCheckBlock
@@ -211,7 +212,18 @@ export interface ImageContent {
 
   style?: StyleConfig;
 }
+export interface ImageCardItem {
+  id: string;
+  image: ImageContent;
+  label?: string;
+}
 
+export type ImageCardsBlock = BaseBlock<
+  "image_cards",
+  {
+    items: ImageCardItem[];
+  }
+>;
 
 // •• Extensions
 
@@ -312,7 +324,6 @@ export type ImageCardBlock = BaseBlock<
   "image_card",
   {
     image?: ImageContent;
-
     text?: string;
   }
 >;
@@ -320,18 +331,16 @@ export type ImageCardBlock = BaseBlock<
 
 // •• Image Cards
 
-export type ImageCardsBlock = BaseBlock<
+/*export type ImageCardsBlock = BaseBlock<
   "image_cards",
   {
     items: {
       id: string;
-
       image: ImageContent;
-
       text?: string;
     }[];
   }
->;
+>;*/
 
 
 // •• Matching
@@ -533,5 +542,24 @@ export type TableBlock = BaseBlock<
     }[];
 
     points?: number;
+  }
+>;
+
+export interface MultipleChoiceOption {
+  id: string;
+  text: LocalizedText;
+}
+
+export interface MultipleChoiceItem {
+  id: string;
+  question: LocalizedText;
+  options: MultipleChoiceOption[];
+  correctAnswer: string;
+}
+
+export type MultipleChoiceBlock = BaseBlock<
+  "multiple_choice",
+  {
+    items: MultipleChoiceItem[];
   }
 >;
