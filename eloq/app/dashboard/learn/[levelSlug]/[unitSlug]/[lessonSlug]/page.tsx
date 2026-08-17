@@ -1,7 +1,7 @@
 import { units } from "@/data/curriculum/beginner-a1/beginner-a1";
 import SectionRenderer from "@/components/learning/section-renderer";
 import Breadcrumb from "@/components/navigation/breadcrumb";
-import { Card } from "@/components/ui/card"; 
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, ChevronRight } from "lucide-react";

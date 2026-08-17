@@ -10,6 +10,7 @@ export default function Header() {
   return (
     <div className="flex gap-8 p-4">
         <Link href="/">Home</Link>
+        <Link href="/admin">Admin</Link>
         <Link href="/test">Test</Link>
         {isLoading && (
         <div className="w-25 h-10 bg-muted"></div>
