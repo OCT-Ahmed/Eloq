@@ -41,7 +41,7 @@ export async function updateSession(request: NextRequest) {
   const protectedRoutes = [
     "/dashboard",
     "/profile",
-    "settings",
+    "/settings",
     ]
   
   const isProtected = 

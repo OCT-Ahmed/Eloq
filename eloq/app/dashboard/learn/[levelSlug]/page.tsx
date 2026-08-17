@@ -35,7 +35,7 @@ export default async function LevelPage({
                 </div>
                 {/* Items */}
               
-                { units.map(unit => (
+                { units?.map(unit => (
                 <Link 
                   key={unit.id}
                   className="" 
@@ -45,7 +45,7 @@ export default async function LevelPage({
                     <Card className="relative flex flex-col items-start justify-start gap-2 py-4 l px-8 bg-foreground backdrop-blur-lg rounded-lg lg:rounded-lg hover:shadow-eloq-purple/25 hover:shadow-xl transition-all duration-300 cursor-default">
                         <h2 className="flex flex-wrap items-center tracking-wide justify-start w-full text-xl font-medium">
                             Unit {unit.id}
-                            <span className="block font-bold text-2xl text-green-700 mr-2 ml-2">{unit.title}</span>
+                            <span className="block font-bold text-2xl text-green-700 mr-2 ml-2">{unit.title.en ?? ""}</span>
                         </h2>
                         <div className="hidden py-2 px-4 bg-green-700/15 border border-green-700/35 rounded-xl">
                             <div className="hidden font-medium text-sm tracking-wide">

@@ -1,222 +1,565 @@
-/* =====================
-    Interfaces
-        UnitType
-        Section 
-===================== */
+// •• Unit
+
+export interface UnitOverview {
+  summary?: LocalizedText;
+  learningObjectives?: LocalizedText[];
+  keyVocabulary?: string[];
+  grammarFocus?: string[];
+
+  skills?: (
+    | "reading"
+    | "writing"
+    | "listening"
+    | "speaking"
+    | "grammar"
+    | "vocabulary"
+    | "pronunciation"
+  )[];
+
+  prerequisites?: string[];
+}
+
+
 export interface UnitType {
-    id: number;
-    slug: string;
-    title: string;
-    CEFR: string;
-    goals: string[];
-    sectionorder?: string[];
-    sections: Section[]
+  id: string;
+  title: LocalizedText;
+  slug: string;
+  overview?: UnitOverview;
+  lessons: Lesson[];
 }
 
-export interface Section {
-    id: string;
-    type: SectionType;
-    title: string;
-    slug: string;
-    lesson?: string;
-    blocks: Block[]
+
+// •• Lesson
+
+export interface LessonRules {
+  maxErrors?: number;
+
+  passingScorePercentage?: number;
+
+  completionRule?: {
+    type:
+      | "all_required_blocks"
+      | "minimum_score"
+      | "custom";
+  };
+
+  scoringRule?: {
+    type:
+      | "sum"
+      | "percentage"
+      | "weighted";
+  };
 }
 
-/* =====================
-    Types
-        SectionType
-        BlockType
-        Block
-        BaseBlock
-===================== */
-export type SectionType = 
-  | "starter"
-  | "grammar"
-  | "vocabulary"
-  | "listening"
-  | "speaking"
+
+export interface LessonRewards {
+  completionXp?: number;
+  maxXp?: number;
+  bonusRules?: {
+    type:
+      | "perfect"
+      | "no_errors"
+      | "fast_completion"
+      | "custom";
+    
+    xp: number;
+  }[];
+}
+
+
+export interface Lesson {
+  id: string;
+  title: LocalizedText;
+  slug: string;
+  description?: LocalizedText;
+  rules?: LessonRules;
+  rewards?: LessonRewards;
+  blocks: Block[];
+}
+
+
+/* ======
+Block
+====== */
+
+// •• Block Types
+
+export type BlockType =
+  | "dialogue"
+  | "fill_blanks"
+  | "free_practice"
+  | "grammar_point"
+  | "image_card"
+  | "image_cards"
+  | "matching"
   | "reading"
-  | "writing"
-  | "quiz"
-  | "everyday_english";
+  | "reorder_words"
+  | "self_check"
+  | "word_list";
 
-// A-Z Order
-export type BlockType = 
-//  | "audio"
-    | "dialogue"
-    | "fill_blanks"
-    | "free_practice"
-    | "grammar_point"
-//  | "grammer_reference"
-    | "image_card"
-    | "image_cards"
-//  | "instruction"
-//  | "practice"
-    | "matching"
-//  | "question"
-//  | "quiz"
-//  | "reading"
-    | "reorder_words"
-    | "self_check"
-//  | "vocabulary_grid"
-    | "word_list";
 
-export type Block = 
-    | DialougeBlock
-    | GrammarPointBlock
-    | FillBlanksBlock 
-    | FreePracticeBlock
-    | ImageCardBlock
-    | ImageCardsBlock
-    | MatchingBlock
-    | ReorderWordsBlock
-    | WordListBlock;
+// •• Base Block
+
+export type BaseBlock<T extends BlockType, D> = {
+  id: string;
+  type: T;
+  purpose?: string;
+  // -- TODO: Rename `data` to `content` in a future schema revision.
+  data: D;
+  interactions?: Record<string, unknown>;
+  extensions?: ExtensionType;
+  media?: ImageContent[];
+  span?: string;
+  style?: StyleConfig;
+  isActive?: boolean;
+};
+
+
+// •• Block
+
+export type Block =
+  | DialogueBlock
+  | FillBlanksBlock
+  | FreePracticeBlock
+  | GrammarPointBlock
+  | ImageCardBlock
+  | ImageCardsBlock
+  | MatchingBlock
+  | MultipleChoiceBlock
+  | ReadingBlock
+  | ReorderWordsBlock
+  | SelfCheckBlock
+  | WordListBlock;
+
+
+/* ======
+Shared Block Features
+====== */
+
+// •• Localization
+
+export interface LocalizedText {
+  ar?: string;
+  en?: string;
+
+  [language: string]: string | undefined;
+}
+
+
+// •• Styling
+
+export interface StyleConfig {
+  description?: string;
+  className?: string;
+  tailwindClass?: string;
+  svg?: unknown;
+}
+
+
+// •• Interactive Text
+
+export interface Blank {
+  answers: string[];
+  points?: number;
+}
+
+
+// •• Word Bank
+
+export interface WordBankItem {
+  word: string;
+  maxUses?: number;
+}
+
+export interface WordBank {
+  items: WordBankItem[];
+
+  allowReuse?: boolean;
+}
+
+
+// •• Media
+
+export interface ImageContent {
+  id?: string;
+
+  url: string;
+
+  alt?: string;
+
+  description?: string;
+
+  purpose?: string;
+
+  position?: {
+    type:
+      | "inline"
+      | "side"
+      | "top"
+      | "bottom"
+      | "background"
+      | "floating";
+
+    targetId?: string;
+
+    align?:
+      | "start"
+      | "center"
+      | "end";
+
+    order?: number;
+  };
+
+  style?: StyleConfig;
+}
+export interface ImageCardItem {
+  id: string;
+  image: ImageContent;
+  label?: string;
+}
+
+export type ImageCardsBlock = BaseBlock<
+  "image_cards",
+  {
+    items: ImageCardItem[];
+  }
+>;
+
+// •• Extensions
 
 export interface ExtensionType {
-  title?: string;
-  instruction?: {
-    id?: string | number;
-    text: string;
-    translation?: string;
+  title?: {
+    text: LocalizedText;
+    style?: StyleConfig;
   };
+
+  instruction?: {
+    id?: string;
+    text: LocalizedText;
+    style?: StyleConfig;
+  };
+  
+  translation?: LocalizedText;
   audio?: {
     url: string;
     ref?: string;
   };
+
   tip?: {
     icon?: string;
-    text: string;
+    text: LocalizedText;
   };
-  explanation?: string;
-}
 
-type BaseBlock<T extends BlockType, D> = {
-    id: string;
-    type: T;
-    data: D;
-    interactions?: Record<string, unknown;
-    extensions?: ExtensionType;
-    span?: string; // controle display [grid or flex? column or row?]
-    style?: string; // custom theme or background: social media blob -- etc.. 
+  explanation?: LocalizedText;
 };
 
-/* =====================
-    Specific Block Definitions
-===================== */
+
+/* ======
+Block Types
+====== */
+
+// •• Dialogue
 
 export type DialogueBlock = BaseBlock<
   "dialogue",
   {
-    image?: {
-      url: string;
-      desc?: string;
-    };
+    image?: ImageContent;
+
     lines: {
       id: string;
+
       speakerId?: string;
+
       speaker: string;
+
       text: string;
+
       audioUrl?: string;
     }[];
   }
 >;
 
-export type GrammarPointBlock = BaseBlock<
-  "grammar_point",
-  {
-    title: string;
-    rules: string[];
-    examples?: string[];
-  }
->;
+
+// •• Fill Blanks
 
 export type FillBlanksBlock = BaseBlock<
   "fill_blanks",
   {
     items: {
       id: string;
-      text: string; // "My name [blank] Alex."
-      answer: string; // "is"
-      options?: string[]; // للخيارات المتعددة إذا وجدت
+
+      text: string;
+
+      answer: string | string[];
+
+      points?: number;
     }[];
   }
 >;
 
-export type ReorderWordsBlock = BaseBlock<
-  "reorder_words",
-  {
-    items: {
-      id: string;
-      words: string[]; // ["is", "My", "Alex", "name"]
-      correctOrder: string[]; // ["My", "name", "is", "Alex"]
-    }[];
-  }
->;
 
-export type MatchingBlock = BaseBlock<
-  "matching",
-  {
-    questions: { id: string; text: string }[];
-    answers: { id: string; text: string }[];
-    correctPairs: { questionId: string; answerId: string }[]; // أساسي جدا للتحقق!
-  }
->;
+// •• Free Practice
 
 export type FreePracticeBlock = BaseBlock<
   "free_practice",
   {
-    prompt?: string;
-    placeholder?: string;
-    maxLength?: number;
-    allowAudioRecord?: boolean;
+    text?: string;
   }
 >;
 
-export type ImageBlock = BaseBlock<
-  "image",
+
+// •• Grammar Point
+
+export type GrammarPointBlock = BaseBlock<
+  "grammar_point",
   {
-    url: string;
-    caption?: string;
-    alt?: string;
+    text?: string;
   }
 >;
 
-export interface ImageCardItem {
-  id: string;
-  url: string;
-  text: string;
-  caption?: string;
-  pronunciation?: string;
-  audioUrl?: string;
-}
 
-export type ImageCardsBlock = BaseBlock<
+// •• Image Card
+
+export type ImageCardBlock = BaseBlock<
+  "image_card",
+  {
+    image?: ImageContent;
+    text?: string;
+  }
+>;
+
+
+// •• Image Cards
+
+/*export type ImageCardsBlock = BaseBlock<
   "image_cards",
-  {
-    cards: ImageCardItem[];
-    layout?: "grid" | "list" | "carousel";
-  }
->;
-
-export type WordListBlock = BaseBlock<
-  "word_list",
   {
     items: {
       id: string;
-      primaryText: string;
-      secondaryText?: string;
-      audioUrl?: string;
+      image: ImageContent;
+      text?: string;
+    }[];
+  }
+>;*/
+
+
+// •• Matching
+
+export type MatchingBlock = BaseBlock<
+  "matching",
+  {
+    items: {
+      id: string;
+
+      left: string;
+
+      right: string;
+
+      points?: number;
     }[];
   }
 >;
+
+
+// •• Reading
+
+export type ReadingBlock = BaseBlock<
+  "reading",
+  {
+    paragraphs: {
+      id: string;
+
+      text: string;
+    }[];
+  }
+>;
+
+
+// •• Reorder Words
 
 export type ReorderWordsBlock = BaseBlock<
   "reorder_words",
   {
     items: {
       id: string;
+
       words: string[];
+
       correctOrder: string[];
+
+      points?: number;
     }[];
+  }
+>;
+
+
+// •• Self Check
+
+export type SelfCheckBlock = BaseBlock<
+  "self_check",
+  {
+    text?: string;
+  }
+>;
+
+
+// •• Word List
+
+export type WordListBlock = BaseBlock<
+  "word_list",
+  {
+    words: {
+      id: string;
+
+      word: string;
+
+      definition?: string;
+
+      example?: string;
+    }[];
+  }
+>;
+
+// •• Short Answers
+
+export type ShortAnswersBlock = BaseBlock<
+  "short_answers",
+  {
+    items: {
+      id: string;
+
+      question: string;
+
+      placeholder?: string;
+
+      explanation?: LocalizedText;
+
+      exampleAnswers?: string[];
+    }[];
+  }
+>;
+
+
+// •• Multiple Choice
+
+export type MultipleChoiceBlock = BaseBlock<
+  "multiple_choice",
+  {
+    items: {
+      id: string;
+
+      question: string;
+
+      options: string[];
+
+      correctAnswerIndex: number;
+
+      points?: number;
+
+      explanation?: LocalizedText;
+
+      optionExplanations?: Record<number, LocalizedText>;
+    }[];
+  }
+>;
+
+
+// •• Writing
+
+export type WritingBlock = BaseBlock<
+  "writing",
+  {
+    prompt: string;
+
+    placeholder?: string;
+
+    minWords?: number;
+
+    maxWords?: number;
+
+    exampleAnswer?: string;
+
+    explanation?: LocalizedText;
+  }
+>;
+
+
+// •• Free Practice
+
+export type FreePracticeBlock = BaseBlock<
+  "free_practice",
+  {
+    prompt: string;
+
+    hints?: string[];
+
+    targetVocabulary?: string[];
+
+    targetGrammar?: string[];
+
+    timeLimitSeconds?: number;
+
+    explanation?: LocalizedText;
+  }
+>;
+
+
+// •• Grammar Point
+
+export type GrammarPointBlock = BaseBlock<
+  "grammar_point",
+  {
+    title?: string;
+
+    explanation: string;
+
+    examples?: {
+      text: string;
+
+      translation?: string;
+    }[];
+
+    notes?: string[];
+  }
+>;
+
+
+// •• Table
+
+export type TableBlock = BaseBlock<
+  "table",
+  {
+    columns: {
+      id: string;
+
+      title: string;
+    }[];
+
+    rows: {
+      id: string;
+
+      cells: string[];
+    }[];
+
+    points?: number;
+  }
+>;
+
+export interface MultipleChoiceOption {
+  id: string;
+  text: LocalizedText;
+}
+
+export interface MultipleChoiceItem {
+  id: string;
+  question: LocalizedText;
+  options: MultipleChoiceOption[];
+  correctAnswer: string;
+}
+
+export type MultipleChoiceBlock = BaseBlock<
+  "multiple_choice",
+  {
+    items: MultipleChoiceItem[];
   }
 >;
