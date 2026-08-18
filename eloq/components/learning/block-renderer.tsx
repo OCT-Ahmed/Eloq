@@ -6,7 +6,7 @@ import ImageCardsBlock from "./blocks/imageCardsBlock";
 import FreePracticeBlock from "./blocks/freePracticeBlock";
 import WordListBlock from "./blocks/wordListBlock";
 import MatchingBlock from "./blocks/matchingBlock";
-import MultipleChoiceBlock from "./blocks/multipleChoiceBlock";
+import MultipleChoiceBlock from "./blocks/MultipleChoiceBlock";
 import ReorderWordsBlock from "./blocks/reorderWordsBlock"
 
 // pass the whole block "block={block}" to the block component instead of passing the data "block={block.data}"
@@ -45,11 +45,15 @@ export default function BlockRenderer({block}: {block:Block}) {
             )
         case "matching":
             return (
-              <MatchingBlock data={block.data} />
+              <MatchingBlock 
+              id={block.id}
+              data={block.data} />
             )
         case "reorder_words":
           return (
-            <ReorderWordsBlock data={block.data} />
+            <ReorderWordsBlock 
+            id={block.id}
+            data={block.data} />
           )
         case "multiple_choice":
           return (

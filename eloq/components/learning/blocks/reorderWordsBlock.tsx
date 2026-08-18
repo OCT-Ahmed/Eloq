@@ -1,7 +1,9 @@
 "use client";
 
 import { RotateCcw } from "lucide-react";
-import { ReorderWordsBlock as ReorderWordsBlockType } from "@/types/learning";
+import {
+  ReorderWordsBlock as ReorderWordsBlockType,
+} from "@/types/learning";
 import { useLearningAnswersStore } from "@/store/learningAnswersStore";
 
 interface ReorderWordsBlockProps {
@@ -9,67 +11,63 @@ interface ReorderWordsBlockProps {
   data: ReorderWordsBlockType["data"];
 }
 
-type UserSelections = Record<string, string[]>;
+type BlockAnswers = Record<string, unknown>;
 
 export default function ReorderWordsBlock({
   id,
   data,
 }: ReorderWordsBlockProps) {
-  const userSelections = useLearningAnswersStore(
-    (state) => state.answers[id] ?? {}
-  ) as UserSelections;
+  const blockAnswers = useLearningAnswersStore(
+    (state) => state.answers[id]
+  ) as BlockAnswers | undefined;
 
-  const setBlockAnswer = useLearningAnswersStore(
-    (state) => state.setBlockAnswer
+  const updateBlockAnswer = useLearningAnswersStore(
+    (state) => state.updateBlockAnswer
   );
 
-  // Add a word to the student's sentence.
   const handleSelectWord = (
     itemId: string,
     word: string
   ) => {
     const currentSelected =
-      userSelections[itemId] ?? [];
+      (blockAnswers?.[itemId] as string[]) ?? [];
 
-    setBlockAnswer(id, itemId, [
+    updateBlockAnswer(id, itemId, [
       ...currentSelected,
       word,
     ]);
   };
 
-  // Remove a selected word and return it to the word bank.
   const handleRemoveWord = (
     itemId: string,
     wordIndex: number
   ) => {
     const currentSelected =
-      userSelections[itemId] ?? [];
+      (blockAnswers?.[itemId] as string[]) ?? [];
 
-    const updatedSelected = currentSelected.filter(
-      (_, index) => index !== wordIndex
-    );
+    const updatedSelected =
+      currentSelected.filter(
+        (_, index) => index !== wordIndex
+      );
 
-    setBlockAnswer(
+    updateBlockAnswer(
       id,
       itemId,
       updatedSelected
     );
   };
 
-  // Reset one sentence.
   const handleReset = (itemId: string) => {
-    setBlockAnswer(id, itemId, []);
+    updateBlockAnswer(id, itemId, []);
   };
 
   return (
     <div className="flex w-full flex-col gap-6 rounded-2xl border border-border-subtle bg-foreground p-5 shadow-sm">
-      {/* Questions */}
       <div className="flex w-full flex-col gap-6">
         {data?.items?.map((item, index) => {
           const selected =
-            userSelections[item.id] ?? [];
+            (blockAnswers?.[item.id] as string[]) ?? [];
 
-          // Remove already selected words from the bank.
           const availableWords = [
             ...(item.words ?? []),
           ];
@@ -91,7 +89,6 @@ export default function ReorderWordsBlock({
               key={item.id}
               className="flex flex-col gap-3 rounded-xl border border-border-subtle bg-background p-4"
             >
-              {/* Sentence header */}
               <div className="flex items-center justify-between text-xs font-medium text-muted">
                 <span>
                   Sentence {index + 1}
@@ -109,7 +106,6 @@ export default function ReorderWordsBlock({
                 </button>
               </div>
 
-              {/* Student's sentence */}
               <div className="flex min-h-[52px] flex-wrap items-center gap-2 rounded-lg border-2 border-dashed border-border-subtle bg-foreground/50 p-2.5">
                 {selected.length === 0 ? (
                   <span className="px-2 text-xs text-muted/60">
@@ -137,7 +133,6 @@ export default function ReorderWordsBlock({
                 )}
               </div>
 
-              {/* Word bank */}
               <div className="flex min-h-[40px] flex-wrap items-center gap-2 pt-1">
                 {availableWords.map(
                   (word, wordIndex) => (

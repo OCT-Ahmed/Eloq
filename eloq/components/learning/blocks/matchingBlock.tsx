@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { MatchingBlock as MatchingBlockType } from "@/types/learning";
+import {
+  MatchingBlock as MatchingBlockType,
+} from "@/types/learning";
 import { useLearningAnswersStore } from "@/store/learningAnswersStore";
 
 interface MatchingBlockProps {
@@ -11,18 +13,21 @@ interface MatchingBlockProps {
 
 type Connections = Record<string, string>;
 
+type BlockAnswers = Record<string, unknown>;
+
 type ConnectionLine = {
   leftId: string;
   rightId: string;
   path: string;
 };
 
-// Shuffle items without changing their original IDs.
 function shuffle<T>(items: T[]): T[] {
   const array = [...items];
 
   for (let i = array.length - 1; i > 0; i--) {
-    const randomIndex = Math.floor(Math.random() * (i + 1));
+    const randomIndex = Math.floor(
+      Math.random() * (i + 1)
+    );
 
     [array[i], array[randomIndex]] = [
       array[randomIndex],
@@ -37,7 +42,6 @@ export default function MatchingBlock({
   id,
   data,
 }: MatchingBlockProps) {
-  // Display order.
   const [leftItems, setLeftItems] = useState<
     MatchingBlockType["data"]["items"]
   >([]);
@@ -46,14 +50,16 @@ export default function MatchingBlock({
     MatchingBlockType["data"]["items"]
   >([]);
 
-  // Student's current connections.
-  const connections = useLearningAnswersStore(
-    (state) => state.answers[id] ?? {}
-  ) as Connections;
+  const blockAnswers = useLearningAnswersStore(
+    (state) => state.answers[id]
+  ) as BlockAnswers | undefined;
 
-  const setBlockAnswer = useLearningAnswersStore(
-    (state) => state.setBlockAnswer
+  const updateBlockAnswer = useLearningAnswersStore(
+    (state) => state.updateBlockAnswer
   );
+
+  const connections =
+    (blockAnswers?.connections as Connections) ?? {};
 
   const [selectedLeft, setSelectedLeft] =
     useState<string | null>(null);
@@ -61,8 +67,8 @@ export default function MatchingBlock({
   const [selectedRight, setSelectedRight] =
     useState<string | null>(null);
 
-  // DOM references used to calculate SVG line positions.
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef =
+    useRef<HTMLDivElement>(null);
 
   const leftRefs = useRef<
     Record<string, HTMLButtonElement | null>
@@ -72,9 +78,10 @@ export default function MatchingBlock({
     Record<string, HTMLButtonElement | null>
   >({});
 
-  const [lines, setLines] = useState<ConnectionLine[]>([]);
+  const [lines, setLines] = useState<
+    ConnectionLine[]
+  >([]);
 
-  // Shuffle both columns when the block loads.
   useEffect(() => {
     if (!data?.items) return;
 
@@ -82,7 +89,6 @@ export default function MatchingBlock({
     setRightItems(shuffle(data.items));
   }, [data]);
 
-  // Recalculate SVG lines after the layout changes.
   useEffect(() => {
     const updateLines = () => {
       const container = containerRef.current;
@@ -154,9 +160,13 @@ export default function MatchingBlock({
       setLines(newLines);
     };
 
-    const frame = requestAnimationFrame(updateLines);
+    const frame =
+      requestAnimationFrame(updateLines);
 
-    window.addEventListener("resize", updateLines);
+    window.addEventListener(
+      "resize",
+      updateLines
+    );
 
     return () => {
       cancelAnimationFrame(frame);
@@ -167,7 +177,6 @@ export default function MatchingBlock({
     };
   }, [connections, leftItems, rightItems]);
 
-  // Create or replace a connection.
   const createConnection = (
     leftId: string,
     rightId: string
@@ -176,21 +185,21 @@ export default function MatchingBlock({
       ...connections,
     };
 
-    // A left item can only have one connection.
     delete newConnections[leftId];
 
-    // A right item can only have one connection.
     Object.entries(newConnections).forEach(
       ([existingLeftId, existingRightId]) => {
         if (existingRightId === rightId) {
-          delete newConnections[existingLeftId];
+          delete newConnections[
+            existingLeftId
+          ];
         }
       }
     );
 
     newConnections[leftId] = rightId;
 
-    setBlockAnswer(
+    updateBlockAnswer(
       id,
       "connections",
       newConnections
@@ -200,46 +209,59 @@ export default function MatchingBlock({
     setSelectedRight(null);
   };
 
-  // Select a left item.
-  const handleLeftClick = (leftId: string) => {
+  const handleLeftClick = (
+    leftId: string
+  ) => {
     if (selectedLeft === leftId) {
       setSelectedLeft(null);
       return;
     }
 
     if (selectedRight) {
-      createConnection(leftId, selectedRight);
+      createConnection(
+        leftId,
+        selectedRight
+      );
       return;
     }
 
     setSelectedLeft(leftId);
   };
 
-  // Select a right item.
-  const handleRightClick = (rightId: string) => {
+  const handleRightClick = (
+    rightId: string
+  ) => {
     if (selectedRight === rightId) {
       setSelectedRight(null);
       return;
     }
 
     if (selectedLeft) {
-      createConnection(selectedLeft, rightId);
+      createConnection(
+        selectedLeft,
+        rightId
+      );
       return;
     }
 
     setSelectedRight(rightId);
   };
 
-  const isLeftConnected = (leftId: string) =>
-    leftId in connections;
+  const isLeftConnected = (
+    leftId: string
+  ) => leftId in connections;
 
-  const isRightConnected = (rightId: string) =>
+  const isRightConnected = (
+    rightId: string
+  ) =>
     Object.values(connections).includes(rightId);
 
   return (
     <div className="w-full">
-      <div ref={containerRef} className="relative w-full overflow-hidden rounded-2xl border border-border-subtle bg-foreground p-3 pt-10 shadow-md sm:p-4 sm:pt-10">
-        {/* SVG connection layer. */}
+      <div
+        ref={containerRef}
+        className="relative w-full overflow-hidden rounded-2xl border border-border-subtle bg-foreground p-3 pt-10 shadow-md sm:p-4 sm:pt-10"
+      >
         <svg className="pointer-events-none absolute inset-0 z-10 h-full w-full overflow-visible">
           {lines.map((line) => (
             <path
@@ -253,9 +275,7 @@ export default function MatchingBlock({
           ))}
         </svg>
 
-        {/* Matching columns. */}
         <div className="relative z-20 grid grid-cols-2 gap-3 sm:gap-6 md:gap-10">
-          {/* Left column. */}
           <div className="flex flex-col gap-3">
             {leftItems.map((item, index) => {
               const connected =
@@ -293,7 +313,6 @@ export default function MatchingBlock({
             })}
           </div>
 
-          {/* Right column. */}
           <div className="flex flex-col gap-3">
             {rightItems.map((item, index) => {
               const connected =

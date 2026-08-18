@@ -8,28 +8,35 @@ interface FillBlanksBlockProps {
   data: FillBlanksBlockType["data"];
 }
 
+type BlockAnswers = Record<string, unknown>;
+
 export default function FillBlanksBlock({
   id,
   data,
 }: FillBlanksBlockProps) {
   const blockAnswers = useLearningAnswersStore(
-    (state) => state.answers[id] ?? {}
-  );
+    (state) => state.answers[id]
+  ) as BlockAnswers | undefined;
 
-  const setBlockAnswer = useLearningAnswersStore(
-    (state) => state.setBlockAnswer
+  const updateBlockAnswer = useLearningAnswersStore(
+    (state) => state.updateBlockAnswer
   );
 
   return (
     <div className="flex flex-col gap-4 w-full">
       {data?.items?.map((item) => {
-        const answers = blockAnswers[item.id] ?? [];
+        const answers =
+          (blockAnswers?.[item.id] as string[]) ?? [];
 
         return (
-          <div key={item.id} className="flex gap-1 text-base leading-relaxed">
+          <div
+            key={item.id}
+            className="flex gap-1 text-base leading-relaxed"
+          >
             <p>
-              {item.text.split(/\[blank_\d+\]|\[blank\]|___/g).map(
-                (part, index, parts) => (
+              {item.text
+                .split(/\[blank_\d+\]|\[blank\]|___/g)
+                .map((part, index, parts) => (
                   <span key={index}>
                     {part}
 
@@ -41,16 +48,20 @@ export default function FillBlanksBlock({
                         onChange={(event) => {
                           const newAnswers = [...answers];
 
-                          newAnswers[index] = event.target.value;
+                          newAnswers[index] =
+                            event.target.value;
 
-                          setBlockAnswer(id, item.id, newAnswers);
+                          updateBlockAnswer(
+                            id,
+                            item.id,
+                            newAnswers
+                          );
                         }}
                         className="mx-1 mt-[-44px] w-20 border-b-2 border-muted bg-transparent px-1 font-medium outline-none"
                       />
                     )}
                   </span>
-                )
-              )}
+                ))}
             </p>
           </div>
         );
