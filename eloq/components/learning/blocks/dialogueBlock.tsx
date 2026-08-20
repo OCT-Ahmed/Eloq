@@ -1,9 +1,10 @@
-import { FileText } from "lucide-react";
 import Image from "next/image";
-import { DialogueBlock as DialogueBlockType } from "@/types/learning";
+import { DialogueBlock as DialogueBlockType, type LocalizedText } from "@/types/learning";
+import { Explanation } from "../Explanation";
 
 interface DialogueBlockProps {
   data: DialogueBlockType["data"];
+  explanation?: LocalizedText;
 }
 
 // Colors assigned to speakers based on their first appearance.
@@ -14,7 +15,7 @@ const speakerColors = [
   "text-blue-600",
 ];
 
-export default function DialogueBlock({ data }: DialogueBlockProps) {
+export default function DialogueBlock({ data, explanation }: DialogueBlockProps) {
   if (!data) return null;
 
   // Store the assigned color for each speaker.
@@ -37,11 +38,11 @@ export default function DialogueBlock({ data }: DialogueBlockProps) {
   return (
     <div className="w-full">
       <div className="relative flex flex-col gap-4 w-full bg-foreground p-4 pt-8 pr-8 border border-border-subtle rounded-xl shadow-md">
-        <FileText
-          className="absolute top-2 right-2 text-muted"
-          size={20}
-        />
-
+        {explanation && (
+          <Explanation
+            explanation={explanation.en || "No Explanation"}
+          />
+        )}
         {/* Render optional dialogue image */}
         {data.image?.url && (
           <div className="relative w-full h-48 rounded-lg overflow-hidden mb-2">

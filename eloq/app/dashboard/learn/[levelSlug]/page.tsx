@@ -1,4 +1,9 @@
+//import { useState } from "react";
 import { units } from "@/data/curriculum/beginner-a1/beginner-a1";
+import {
+  fetchLevelBySlug,
+  fetchUnits,
+} from "@/features/learning";
 import Breadcrumb from "@/components/navigation/breadcrumb";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
@@ -9,16 +14,27 @@ export default async function LevelPage({
 }:{
     params: Promise<{levelSlug: string}>
 }) {
+  //const [unitLevels, setUnitLevels] = useState<unknown>([]);
+  
     const { levelSlug } = await params;
+    const { data:levelData } = await fetchLevelBySlug(levelSlug);
+    const result = await fetchUnits(levelData.id);
+    if (result.error) {throw result.error.message}
+    const levelUnits = result?.data ?? [];
+   /* if (result.ok) {
+      setUnitLevels(result.data);
+    } else {
+      console.log("Error", result.error);
+    }*/
     
     const links = [
-        {
-            label: "Learn",
-            slug: "dashboard/learn"
-        },
+      {
+        label: "Learn",
+        slug: "dashboard/learn"
+      },
     ]
     return (
-        <div className="w-full flex flex-col items-start justify-cneter gap-8 py-4 px-6">
+        <div className="w-full flex flex-col items-start justify-cneter gap-8 py-4 pb-60 px-6">
           {/* Main Lesson Layout Content */}
           <main className="w-full flex flex-col items-start justify-start gap-8">
             <section className="flex flex-col w-full items-stretch justify-start gap-5 md:gap-5 lg:gap-8">
@@ -33,19 +49,22 @@ export default async function LevelPage({
                         className="absolute right-1 top-1 text-muted"
                       />
                 </div>
+                <div>
+                  {JSON.stringify(result)}
+                </div>
                 {/* Items */}
               
-                { units?.map(unit => (
+                { levelUnits?.map(unit => (
                 <Link 
                   key={unit.id}
                   className="" 
                   href={`/dashboard/learn/${levelSlug}/${unit.slug}`}
                 >
                     <div className="w-full md:w-fit h-fit p-[3px] hover:bg-eloq-purple/25 bg-purple-700 rounded-[10px] lg:rounded-xl transition-all duration-300">
-                    <Card className="relative flex flex-col items-start justify-start gap-2 py-4 l px-8 bg-foreground backdrop-blur-lg rounded-lg lg:rounded-lg hover:shadow-eloq-purple/25 hover:shadow-xl transition-all duration-300 cursor-default">
+                    <Card className="relative flex flex-col items-start justify-start gap-2 py-4 l px-6 bg-foreground backdrop-blur-lg rounded-lg lg:rounded-lg hover:shadow-eloq-purple/25 hover:shadow-xl transition-all duration-300 cursor-default">
                         <h2 className="flex flex-wrap items-center tracking-wide justify-start w-full text-xl font-medium">
-                            Unit {unit.id}
-                            <span className="block font-bold text-2xl text-green-700 mr-2 ml-2">{unit.title.en ?? ""}</span>
+                            Unit {unit.order_idx / 10}
+                            <span className="block font-bold text-xl text-green-700 mr-2 ml-2">{unit.title_en ?? "Unit Title"}</span>
                         </h2>
                         <div className="hidden py-2 px-4 bg-green-700/15 border border-green-700/35 rounded-xl">
                             <div className="hidden font-medium text-sm tracking-wide">

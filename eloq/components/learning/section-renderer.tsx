@@ -42,6 +42,7 @@ export default function SectionRenderer({
               <header className="flex items-start gap-3 w-full">
                 <span className="shrink-0 select-none font-bold text-lg sm:text-xl text-eloq-green">
                   {index + 1}
+                  {block.id}
                 </span>
 
                 <div className="flex items-start gap-2 text-white sm:text-lg font-bold leading-normal text-foreground">

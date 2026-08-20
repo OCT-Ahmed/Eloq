@@ -181,6 +181,10 @@ export const unit_1: UnitType = {
                 en: "Listen to and read this dialogue between Alex and Sarah.",
                 ar: "استمع إلى هذا الحوار بين أليكس وسارة واقرأه بتمعن.",
               },
+            explanation: {
+              en: "What is your name = to know someone's name",
+              ar: "what is your name = نستخدمها للسؤال عن اسم الشخص"
+            }
             },
           },
 

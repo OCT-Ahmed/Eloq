@@ -15,7 +15,7 @@ export default function BlockRenderer({block}: {block:Block}) {
     switch(block.type) {
         case "dialogue":
             return (
-                <DialogueBlock data={block.data} />
+                <DialogueBlock data={block.data} explanation={block.extensions?.explanation} />
             )
         case "grammar_point": 
             if (block.extensions?.title) {

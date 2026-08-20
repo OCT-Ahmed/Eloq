@@ -1,5 +1,12 @@
 import { units } from "@/data/curriculum/beginner-a1/beginner-a1";
+import {
+  fetchLevelBySlug,
+  fetchUnitBySlug,
+  fetchLessonBySlug,
+  fetchBlocks
+} from "@/features/learning";
 import SectionRenderer from "@/components/learning/section-renderer";
+import type { Lesson } from "@/types/learning"
 import Breadcrumb from "@/components/navigation/breadcrumb";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,20 +20,86 @@ export default async function LessonPage({
 }:{
     params: Promise<{unitSlug: string; lessonSlug: string;}>
 }) {
-    const { unitSlug, lessonSlug } = await params;
+    const { 
+      levelSlug, 
+      unitSlug, 
+      lessonSlug 
+    } = await params;
 
-    const unit = units.find(u => u.slug === unitSlug);
-
-    const lesson = unit?.lessons?.find(
-        lesson => lesson.slug === lessonSlug
-    );
+    const {
+      data:{
+        id:levelId
+      }
+    } = await fetchLevelBySlug(levelSlug);
     
+    const {
+      data: {
+        id: unitId
+      }, 
+      data: unitData
+    } = await fetchUnitBySlug(
+      unitSlug, 
+      levelId
+    );
+
+    const { data:lessonData } = await fetchLessonBySlug(
+      lessonSlug, 
+      unitId
+    );
+    // change the name to dbLesson
+    const { data:dbBlocks } = await fetchBlocks(lessonData.id)
+    
+    /*
+     Lesson {
+  id: string;
+  title: LocalizedText;
+  slug: string;
+  description?: LocalizedText;
+  rules?: LessonRules;
+  rewards?: LessonRewards;
+  blocks: Block[];
+}
+    */
+    /*
+    BaseBlock<T extends BlockType, D> = {
+  id: string;
+  type: T;
+  purpose?: string;
+  // -- TODO: Rename `data` to `content` in a future schema revision.
+  data: D;
+  interactions?: Record<string, unknown>;
+  extensions?: ExtensionType;
+  media?: ImageContent[];
+  span?: string;
+  style?: StyleConfig;
+  isActive?: boolean;
+};
+    */
+    const lesson: Lesson = {
+      id: lessonData.id,
+      unitId,
+      levelId,
+      title: {
+        en: lessonData.title_en,
+      },
+      slug: lessonData.slug,
+      blocks: [
+        ...(dbBlocks.map(block => ({
+            id: block.id,
+            type: block.type,
+            data: block.content,
+            extensions: block.extensions,
+            isActive: block.is_active,
+          })
+        )),
+      ],
+    };
     const links = [
         { label: "Learn", slug: "dashboard/learn" },
         { label: "Beginner Level", slug: "beginner" },
         { 
-            label: unit?.title.en ?? "Unit", 
-            slug: unit?.slug ?? "unit" 
+            label: unitData?.title_en ?? "Unit", 
+            slug: unitData?.slug ?? "unit" 
         },
         { 
             label: lesson?.title.en ?? "Lesson", 

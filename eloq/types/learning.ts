@@ -19,7 +19,7 @@ export interface UnitOverview {
   prerequisites?: string[];
 }
 
-
+content://com.termux.documents/tree/%2Fdata%2Fdata%2Fcom.termux%2Ffiles%2Fhome%2FEloq::/data/data/com.termux/files/home/Eloq/eloq/types/learning.ts
 export interface UnitType {
   id: string;
   title: LocalizedText;
@@ -69,6 +69,8 @@ export interface LessonRewards {
 
 export interface Lesson {
   id: string;
+  unitId:  string;
+  levelId: string;
   title: LocalizedText;
   slug: string;
   description?: LocalizedText;
@@ -548,13 +550,6 @@ export type TableBlock = BaseBlock<
 export interface MultipleChoiceOption {
   id: string;
   text: LocalizedText;
-}
-
-export interface MultipleChoiceItem {
-  id: string;
-  question: LocalizedText;
-  options: MultipleChoiceOption[];
-  correctAnswer: string;
 }
 
 export type MultipleChoiceBlock = BaseBlock<
