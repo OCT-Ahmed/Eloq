@@ -1,6 +1,8 @@
 "use client";
 
-import { FillBlanksBlock as FillBlanksBlockType } from "@/types/learning";
+import {
+  FillBlanksBlock as FillBlanksBlockType,
+} from "@/types/learning";
 import { useLearningAnswersStore } from "@/store/learningAnswersStore";
 
 interface FillBlanksBlockProps {
@@ -15,7 +17,10 @@ export default function FillBlanksBlock({
   data,
 }: FillBlanksBlockProps) {
   const blockAnswers = useLearningAnswersStore(
-    (state) => state.answers[id]
+    (state) =>
+      state.answersByLesson[
+        state.activeLessonId ?? ""
+      ]?.[id]
   ) as BlockAnswers | undefined;
 
   const updateBlockAnswer = useLearningAnswersStore(

@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Volume2 } from "lucide-react";
 import { Lesson } from "@/types/learning";
 import BlockRenderer from "./block-renderer";
 import SectionHeader from "./section-header";
 import CompleteLessonButton from "./CompleteLessonButton";
+import { useLearningAnswersStore } from "@/store/learningAnswersStore";
 
 export default function SectionRenderer({
   lesson,
@@ -18,6 +19,15 @@ export default function SectionRenderer({
   const [startedAt] = useState(() =>
     new Date().toISOString()
   );
+
+  const initializeLesson =
+    useLearningAnswersStore(
+      (state) => state.initializeLesson
+    );
+
+  useEffect(() => {
+    initializeLesson(lesson.id);
+  }, [lesson.id, initializeLesson]);
 
   return (
     <section className="w-full flex flex-col gap-6 pt-4 pb-24 text-base">
@@ -32,7 +42,8 @@ export default function SectionRenderer({
         {lesson.blocks.map((block, index) => {
           if (block.isActive === false) return null;
 
-          const instruction = block.extensions?.instruction;
+          const instruction =
+            block.extensions?.instruction;
 
           return (
             <article

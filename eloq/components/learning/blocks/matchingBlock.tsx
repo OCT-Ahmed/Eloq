@@ -51,7 +51,10 @@ export default function MatchingBlock({
   >([]);
 
   const blockAnswers = useLearningAnswersStore(
-    (state) => state.answers[id]
+    (state) =>
+      state.answersByLesson[
+        state.activeLessonId ?? ""
+      ]?.[id]
   ) as BlockAnswers | undefined;
 
   const updateBlockAnswer = useLearningAnswersStore(
@@ -91,7 +94,8 @@ export default function MatchingBlock({
 
   useEffect(() => {
     const updateLines = () => {
-      const container = containerRef.current;
+      const container =
+        containerRef.current;
 
       if (!container) return;
 
@@ -108,7 +112,10 @@ export default function MatchingBlock({
           const rightElement =
             rightRefs.current[rightId];
 
-          if (!leftElement || !rightElement) {
+          if (
+            !leftElement ||
+            !rightElement
+          ) {
             return;
           }
 
@@ -170,12 +177,17 @@ export default function MatchingBlock({
 
     return () => {
       cancelAnimationFrame(frame);
+
       window.removeEventListener(
         "resize",
         updateLines
       );
     };
-  }, [connections, leftItems, rightItems]);
+  }, [
+    connections,
+    leftItems,
+    rightItems,
+  ]);
 
   const createConnection = (
     leftId: string,
@@ -189,7 +201,9 @@ export default function MatchingBlock({
 
     Object.entries(newConnections).forEach(
       ([existingLeftId, existingRightId]) => {
-        if (existingRightId === rightId) {
+        if (
+          existingRightId === rightId
+        ) {
           delete newConnections[
             existingLeftId
           ];
@@ -222,6 +236,7 @@ export default function MatchingBlock({
         leftId,
         selectedRight
       );
+
       return;
     }
 
@@ -241,6 +256,7 @@ export default function MatchingBlock({
         selectedLeft,
         rightId
       );
+
       return;
     }
 
@@ -254,7 +270,9 @@ export default function MatchingBlock({
   const isRightConnected = (
     rightId: string
   ) =>
-    Object.values(connections).includes(rightId);
+    Object.values(connections).includes(
+      rightId
+    );
 
   return (
     <div className="w-full">
@@ -277,77 +295,89 @@ export default function MatchingBlock({
 
         <div className="relative z-20 grid grid-cols-2 gap-3 sm:gap-6 md:gap-10">
           <div className="flex flex-col gap-3">
-            {leftItems.map((item, index) => {
-              const connected =
-                isLeftConnected(item.id);
+            {leftItems.map(
+              (item, index) => {
+                const connected =
+                  isLeftConnected(item.id);
 
-              const selected =
-                selectedLeft === item.id;
+                const selected =
+                  selectedLeft === item.id;
 
-              return (
-                <button
-                  key={item.id}
-                  ref={(element) => {
-                    leftRefs.current[item.id] =
-                      element;
-                  }}
-                  type="button"
-                  onClick={() =>
-                    handleLeftClick(item.id)
-                  }
-                  className={`min-h-12 w-full rounded-xl border px-3 py-3 text-left text-sm font-medium shadow-sm transition-all duration-200 sm:px-4 sm:text-base ${
-                    selected
-                      ? "border-amber-500 bg-amber-500/10 ring-2 ring-amber-500/20"
-                      : connected
-                        ? "border-amber-500/60 bg-amber-500/5"
-                        : "border-border-subtle bg-background hover:border-amber-500/60"
-                  }`}
-                >
-                  <span className="mr-2 font-bold text-eloq-purple">
-                    {index + 1}.
-                  </span>
+                return (
+                  <button
+                    key={item.id}
+                    ref={(element) => {
+                      leftRefs.current[
+                        item.id
+                      ] = element;
+                    }}
+                    type="button"
+                    onClick={() =>
+                      handleLeftClick(
+                        item.id
+                      )
+                    }
+                    className={`min-h-12 w-full rounded-xl border px-3 py-3 text-left text-sm font-medium shadow-sm transition-all duration-200 sm:px-4 sm:text-base ${
+                      selected
+                        ? "border-amber-500 bg-amber-500/10 ring-2 ring-amber-500/20"
+                        : connected
+                          ? "border-amber-500/60 bg-amber-500/5"
+                          : "border-border-subtle bg-background hover:border-amber-500/60"
+                    }`}
+                  >
+                    <span className="mr-2 font-bold text-eloq-purple">
+                      {index + 1}.
+                    </span>
 
-                  {item.left}
-                </button>
-              );
-            })}
+                    {item.left}
+                  </button>
+                );
+              }
+            )}
           </div>
 
           <div className="flex flex-col gap-3">
-            {rightItems.map((item, index) => {
-              const connected =
-                isRightConnected(item.id);
+            {rightItems.map(
+              (item, index) => {
+                const connected =
+                  isRightConnected(item.id);
 
-              const selected =
-                selectedRight === item.id;
+                const selected =
+                  selectedRight === item.id;
 
-              return (
-                <button
-                  key={item.id}
-                  ref={(element) => {
-                    rightRefs.current[item.id] =
-                      element;
-                  }}
-                  type="button"
-                  onClick={() =>
-                    handleRightClick(item.id)
-                  }
-                  className={`min-h-12 w-full rounded-xl border px-3 py-3 text-left text-sm font-medium shadow-sm transition-all duration-200 sm:px-4 sm:text-base ${
-                    selected
-                      ? "border-amber-500 bg-amber-500/10 ring-2 ring-amber-500/20"
-                      : connected
-                        ? "border-amber-500/60 bg-amber-500/5"
-                        : "border-border-subtle bg-background hover:border-amber-500/60"
-                  }`}
-                >
-                  <span className="mr-2 font-bold text-primary">
-                    {String.fromCharCode(65 + index)}
-                  </span>
+                return (
+                  <button
+                    key={item.id}
+                    ref={(element) => {
+                      rightRefs.current[
+                        item.id
+                      ] = element;
+                    }}
+                    type="button"
+                    onClick={() =>
+                      handleRightClick(
+                        item.id
+                      )
+                    }
+                    className={`min-h-12 w-full rounded-xl border px-3 py-3 text-left text-sm font-medium shadow-sm transition-all duration-200 sm:px-4 sm:text-base ${
+                      selected
+                        ? "border-amber-500 bg-amber-500/10 ring-2 ring-amber-500/20"
+                        : connected
+                          ? "border-amber-500/60 bg-amber-500/5"
+                          : "border-border-subtle bg-background hover:border-amber-500/60"
+                    }`}
+                  >
+                    <span className="mr-2 font-bold text-primary">
+                      {String.fromCharCode(
+                        65 + index
+                      )}
+                    </span>
 
-                  {item.right}
-                </button>
-              );
-            })}
+                    {item.right}
+                  </button>
+                );
+              }
+            )}
           </div>
         </div>
       </div>

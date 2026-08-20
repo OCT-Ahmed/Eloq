@@ -18,7 +18,10 @@ export default function ReorderWordsBlock({
   data,
 }: ReorderWordsBlockProps) {
   const blockAnswers = useLearningAnswersStore(
-    (state) => state.answers[id]
+    (state) =>
+      state.answersByLesson[
+        state.activeLessonId ?? ""
+      ]?.[id]
   ) as BlockAnswers | undefined;
 
   const updateBlockAnswer = useLearningAnswersStore(
@@ -47,7 +50,8 @@ export default function ReorderWordsBlock({
 
     const updatedSelected =
       currentSelected.filter(
-        (_, index) => index !== wordIndex
+        (_, index) =>
+          index !== wordIndex
       );
 
     updateBlockAnswer(
@@ -57,104 +61,130 @@ export default function ReorderWordsBlock({
     );
   };
 
-  const handleReset = (itemId: string) => {
-    updateBlockAnswer(id, itemId, []);
+  const handleReset = (
+    itemId: string
+  ) => {
+    updateBlockAnswer(
+      id,
+      itemId,
+      []
+    );
   };
 
   return (
     <div className="flex w-full flex-col gap-6 rounded-2xl border border-border-subtle bg-foreground p-5 shadow-sm">
       <div className="flex w-full flex-col gap-6">
-        {data?.items?.map((item, index) => {
-          const selected =
-            (blockAnswers?.[item.id] as string[]) ?? [];
+        {data?.items?.map(
+          (item, index) => {
+            const selected =
+              (blockAnswers?.[
+                item.id
+              ] as string[]) ?? [];
 
-          const availableWords = [
-            ...(item.words ?? []),
-          ];
+            const availableWords = [
+              ...(item.words ?? []),
+            ];
 
-          selected.forEach((selectedWord) => {
-            const wordIndex =
-              availableWords.indexOf(selectedWord);
+            selected.forEach(
+              (selectedWord) => {
+                const wordIndex =
+                  availableWords.indexOf(
+                    selectedWord
+                  );
 
-            if (wordIndex !== -1) {
-              availableWords.splice(
-                wordIndex,
-                1
-              );
-            }
-          });
+                if (wordIndex !== -1) {
+                  availableWords.splice(
+                    wordIndex,
+                    1
+                  );
+                }
+              }
+            );
 
-          return (
-            <div
-              key={item.id}
-              className="flex flex-col gap-3 rounded-xl border border-border-subtle bg-background p-4"
-            >
-              <div className="flex items-center justify-between text-xs font-medium text-muted">
-                <span>
-                  Sentence {index + 1}
-                </span>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleReset(item.id)
-                  }
-                  className="flex items-center gap-1 transition-colors hover:text-eloq-purple"
-                >
-                  <RotateCcw size={14} />
-                  <span>Restart</span>
-                </button>
-              </div>
-
-              <div className="flex min-h-[52px] flex-wrap items-center gap-2 rounded-lg border-2 border-dashed border-border-subtle bg-foreground/50 p-2.5">
-                {selected.length === 0 ? (
-                  <span className="px-2 text-xs text-muted/60">
-                    Tap on the words to reorder
-                    the sentence
+            return (
+              <div
+                key={item.id}
+                className="flex flex-col gap-3 rounded-xl border border-border-subtle bg-background p-4"
+              >
+                <div className="flex items-center justify-between text-xs font-medium text-muted">
+                  <span>
+                    Sentence {index + 1}
                   </span>
-                ) : (
-                  selected.map(
-                    (word, wordIndex) => (
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleReset(item.id)
+                    }
+                    className="flex items-center gap-1 transition-colors hover:text-eloq-purple"
+                  >
+                    <RotateCcw
+                      size={14}
+                    />
+
+                    <span>
+                      Restart
+                    </span>
+                  </button>
+                </div>
+
+                <div className="flex min-h-[52px] flex-wrap items-center gap-2 rounded-lg border-2 border-dashed border-border-subtle bg-foreground/50 p-2.5">
+                  {selected.length ===
+                  0 ? (
+                    <span className="px-2 text-xs text-muted/60">
+                      Tap on the words to
+                      reorder the sentence
+                    </span>
+                  ) : (
+                    selected.map(
+                      (
+                        word,
+                        wordIndex
+                      ) => (
+                        <button
+                          key={`${word}-${wordIndex}`}
+                          type="button"
+                          onClick={() =>
+                            handleRemoveWord(
+                              item.id,
+                              wordIndex
+                            )
+                          }
+                          className="rounded-md bg-eloq-purple px-3 py-1.5 text-sm font-medium text-white shadow-sm transition-all hover:bg-eloq-purple/80 active:scale-95"
+                        >
+                          {word}
+                        </button>
+                      )
+                    )
+                  )}
+                </div>
+
+                <div className="flex min-h-[40px] flex-wrap items-center gap-2 pt-1">
+                  {availableWords.map(
+                    (
+                      word,
+                      wordIndex
+                    ) => (
                       <button
                         key={`${word}-${wordIndex}`}
                         type="button"
                         onClick={() =>
-                          handleRemoveWord(
+                          handleSelectWord(
                             item.id,
-                            wordIndex
+                            word
                           )
                         }
-                        className="rounded-md bg-eloq-purple px-3 py-1.5 text-sm font-medium text-white shadow-sm transition-all hover:bg-eloq-purple/80 active:scale-95"
+                        className="rounded-md border border-border-subtle bg-foreground px-3 py-1.5 text-sm font-medium text-foreground shadow-sm transition-all hover:border-eloq-purple active:scale-95"
                       >
                         {word}
                       </button>
                     )
-                  )
-                )}
+                  )}
+                </div>
               </div>
-
-              <div className="flex min-h-[40px] flex-wrap items-center gap-2 pt-1">
-                {availableWords.map(
-                  (word, wordIndex) => (
-                    <button
-                      key={`${word}-${wordIndex}`}
-                      type="button"
-                      onClick={() =>
-                        handleSelectWord(
-                          item.id,
-                          word
-                        )
-                      }
-                      className="rounded-md border border-border-subtle bg-foreground px-3 py-1.5 text-sm font-medium text-foreground shadow-sm transition-all hover:border-eloq-purple active:scale-95"
-                    >
-                      {word}
-                    </button>
-                  )
-                )}
-              </div>
-            </div>
-          );
-        })}
+            );
+          }
+        )}
       </div>
     </div>
   );

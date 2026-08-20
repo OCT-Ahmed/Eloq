@@ -3,7 +3,29 @@ import { create } from "zustand";
 type BlockAnswers = Record<string, unknown>;
 
 interface LearningAnswersState {
-  answers: Record<string, BlockAnswers>;
+  /**
+   * Answers are permanently separated by lessonId.
+   *
+   * lessonId
+   *   └── blockId
+   *         └── answers
+   */
+  answersByLesson: Record<
+    string,
+    Record<string, BlockAnswers>
+  >;
+
+  activeLessonId: string | null;
+
+  /**
+   * Make a lesson the currently active lesson.
+   *
+   * IMPORTANT:
+   * We do NOT delete its previous answers.
+   * If the student comes back to the lesson,
+   * their answers are still available.
+   */
+  initializeLesson: (lessonId: string) => void;
 
   setBlockAnswers: (
     blockId: string,
@@ -16,60 +38,148 @@ interface LearningAnswersState {
     answer: unknown
   ) => void;
 
-  getBlockAnswers: (blockId: string) => BlockAnswers;
+  getBlockAnswers: (
+    blockId: string
+  ) => BlockAnswers;
 
-  clearBlockAnswers: (blockId: string) => void;
+  clearBlockAnswers: (
+    blockId: string
+  ) => void;
+
+  clearLessonAnswers: (
+    lessonId: string
+  ) => void;
 
   clearAllAnswers: () => void;
 }
 
-export const useLearningAnswersStore = create<LearningAnswersState>(
-  (set, get) => ({
-    answers: {},
+export const useLearningAnswersStore =
+  create<LearningAnswersState>((set, get) => ({
+    answersByLesson: {},
 
-    // Replace all answers for one block
-    setBlockAnswers: (blockId, answers) => {
+    activeLessonId: null,
+
+    initializeLesson: (lessonId) => {
       set((state) => ({
-        answers: {
-          ...state.answers,
-          [blockId]: answers,
+        activeLessonId: lessonId,
+
+        answersByLesson: {
+          ...state.answersByLesson,
+
+          // Create the lesson bucket if it does not exist.
+          // If it already exists, preserve its answers.
+          [lessonId]:
+            state.answersByLesson[lessonId] ?? {},
         },
       }));
     },
 
-    // Update one answer inside a block
-    updateBlockAnswer: (blockId, answerKey, answer) => {
+    setBlockAnswers: (blockId, answers) => {
+      const lessonId = get().activeLessonId;
+
+      if (!lessonId) return;
+
       set((state) => ({
-        answers: {
-          ...state.answers,
-          [blockId]: {
-            ...state.answers[blockId],
-            [answerKey]: answer,
+        answersByLesson: {
+          ...state.answersByLesson,
+
+          [lessonId]: {
+            ...(state.answersByLesson[lessonId] ?? {}),
+
+            [blockId]: answers,
           },
         },
       }));
     },
 
-    // Get answers belonging to one block
-    getBlockAnswers: (blockId) => {
-      return get().answers[blockId] ?? {};
+    updateBlockAnswer: (
+      blockId,
+      answerKey,
+      answer
+    ) => {
+      const lessonId = get().activeLessonId;
+
+      if (!lessonId) return;
+
+      set((state) => ({
+        answersByLesson: {
+          ...state.answersByLesson,
+
+          [lessonId]: {
+            ...(state.answersByLesson[lessonId] ?? {}),
+
+            [blockId]: {
+              ...(state.answersByLesson[lessonId]?.[
+                blockId
+              ] ?? {}),
+
+              [answerKey]: answer,
+            },
+          },
+        },
+      }));
     },
 
-    // Remove one block's answers
+    getBlockAnswers: (blockId) => {
+      const lessonId = get().activeLessonId;
+
+      if (!lessonId) {
+        return {};
+      }
+
+      return (
+        get().answersByLesson[lessonId]?.[blockId] ??
+        {}
+      );
+    },
+
     clearBlockAnswers: (blockId) => {
+      const lessonId = get().activeLessonId;
+
+      if (!lessonId) return;
+
       set((state) => {
-        const newAnswers = { ...state.answers };
-        delete newAnswers[blockId];
+        const lessonAnswers = {
+          ...(state.answersByLesson[lessonId] ?? {}),
+        };
+
+        delete lessonAnswers[blockId];
 
         return {
-          answers: newAnswers,
+          answersByLesson: {
+            ...state.answersByLesson,
+
+            [lessonId]: lessonAnswers,
+          },
         };
       });
     },
 
-    // Clear the whole lesson's current answers
-    clearAllAnswers: () => {
-      set({ answers: {} });
+    clearLessonAnswers: (lessonId) => {
+      set((state) => {
+        const newAnswers = {
+          ...state.answersByLesson,
+        };
+
+        delete newAnswers[lessonId];
+
+        return {
+          answersByLesson: newAnswers,
+
+          // If this was the currently active lesson,
+          // remove the active reference too.
+          activeLessonId:
+            state.activeLessonId === lessonId
+              ? null
+              : state.activeLessonId,
+        };
+      });
     },
-  })
-);
+
+    clearAllAnswers: () => {
+      set({
+        answersByLesson: {},
+        activeLessonId: null,
+      });
+    },
+  }));

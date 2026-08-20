@@ -14,7 +14,9 @@ interface CompleteLessonButtonProps {
   levelId: string;
   startedAt: string;
   onSuccess?: (
-    result: Awaited<ReturnType<typeof completeLessonAction>>
+    result: Awaited<
+      ReturnType<typeof completeLessonAction>
+    >
   ) => void;
 }
 
@@ -36,8 +38,13 @@ export default function CompleteLessonButton({
   const [debugLesson, setDebugLesson] =
     useState<unknown>(null);
 
+  /*
+   * IMPORTANT:
+   * Get ONLY answers belonging to the current lesson.
+   */
   const answers = useLearningAnswersStore(
-    (state) => state.answers
+    (state) =>
+      state.answersByLesson[lessonId] ?? {}
   );
 
   async function handleComplete() {
@@ -46,33 +53,38 @@ export default function CompleteLessonButton({
     setLoading(true);
 
     try {
-      const blocksData: BlockData[] = Object.entries(
-        answers
-      ).map(([blockId, savedResponses]) => ({
-        block_id: blockId,
-        saved_responses: savedResponses,
-      }));
+      const blocksData: BlockData[] =
+        Object.entries(answers).map(
+          ([blockId, savedResponses]) => ({
+            block_id: blockId,
+            saved_responses: savedResponses,
+          })
+        );
 
-      // كل ما سيتم إرساله للـ Server Action / RPC
+      // Everything being sent to Server Action / RPC
       setDebugPayload({
         lessonId,
         unitId,
         levelId,
         startedAt,
         answers,
-        submittedBlockIds: Object.keys(answers),
+        submittedBlockIds:
+          Object.keys(answers),
+        submittedBlockCount:
+          Object.keys(answers).length,
         blocksData,
       });
 
-      const result = await completeLessonAction({
-        lessonId,
-        unitId,
-        levelId,
-        startedAt,
-        blocksData,
-      });
+      const result =
+        await completeLessonAction({
+          lessonId,
+          unitId,
+          levelId,
+          startedAt,
+          blocksData,
+        });
 
-      // القيمة الكاملة التي رجعت من RPC عبر Server Action
+      // Full result returned from RPC
       setRpcResult(result);
 
       if (!result.success) {
@@ -87,7 +99,10 @@ export default function CompleteLessonButton({
       const data = result.data;
 
       if (!data) {
-        alert("لم تصل نتيجة صالحة من الخادم.");
+        alert(
+          "لم تصل نتيجة صالحة من الخادم."
+        );
+
         return;
       }
 
@@ -138,13 +153,33 @@ export default function CompleteLessonButton({
   }
 
   function showDebugLesson() {
+    const state =
+      useLearningAnswersStore.getState();
+
+    const lessonAnswers =
+      state.answersByLesson[lessonId] ?? {};
+
     setDebugLesson({
       lessonId,
       unitId,
       levelId,
-      answers,
-      submittedBlockIds: Object.keys(answers),
-      submittedBlockCount: Object.keys(answers).length,
+
+      activeLessonId:
+        state.activeLessonId,
+
+      answers: lessonAnswers,
+
+      submittedBlockIds:
+        Object.keys(lessonAnswers),
+
+      submittedBlockCount:
+        Object.keys(lessonAnswers).length,
+
+      allStoredLessons:
+        Object.keys(state.answersByLesson),
+
+      allStoredAnswers:
+        state.answersByLesson,
     });
   }
 
@@ -199,7 +234,7 @@ export default function CompleteLessonButton({
             </button>
           </div>
 
-          <pre className="max-h-[500px] overflow-auto whitespace-pre-wrap break-all rounded-lg bg-black/50 p-4 text-xs leading-6 text-white">
+          <pre className="max-h-[700px] overflow-auto whitespace-pre-wrap break-all rounded-lg bg-black/50 p-4 text-xs leading-6 text-white">
             {JSON.stringify(
               debugLesson,
               null,
