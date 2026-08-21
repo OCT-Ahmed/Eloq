@@ -1,70 +1,74 @@
-import { units } from "@/data/curriculum/beginner-a1/beginner-a1";
-import SectionRenderer from "@/components/learning /section-renderer";
+import {
+  fetchLevelBySlug,
+  fetchUnitBySlug,
+  fetchLessons,
+} from "@/features/learning";
 import Breadcrumb from "@/components/navigation/breadcrumb";
-import { Card } from "@/components/ui/card";
-import { unit_1 } from "@/data/curriculum/beginner-a1/units/unit-1";
-import Link from "next/link";
+import InteractiveUnitPath from "@/components/learning/InteractiveUnitPath";
+import { BookOpen } from "lucide-react";
 
 export default async function UnitPage({
-    params
-}:{
-    params: Promise<{unitSlug: string}>
+  params,
+}: {
+  params: Promise<{
+    levelSlug: string;
+    unitSlug: string;
+  }>;
 }) {
+  const { unitSlug, levelSlug } = await params;
 
-    const { unitSlug } = await params;
-    const unit = units.find(u => u.slug === unitSlug);
-const links = [
-    {
-        label: "Learn",
-        slug: "dashboard/learn"
-    },
-    {
-        label: "Beginner Level",
-        slug: "beginner"
-    },
-    {
-        label: unit?.title ?? "Unit",
-        slug: unit?.slug ?? "unit",
-    },
-]
-    return (
-        <div className="flex flex-col items-start justify-start gap-8 w-full h-full py-4 px-6">
+  const {
+    data: { id: levelId },
+  } = await fetchLevelBySlug(levelSlug);
 
-            {/* Lesson Layout Header */}
-            <header className="flex-shrink-0">
-                <div className="flex flex-col items-start justify-start gap-0 px-4 ">
-                    {links && <Breadcrumb links={links} />}
-                    <h1 className="font-sans font-semibold text-2xl leading-tight">
-                        Lessons
-                    </h1>
-                    
-                </div>
-            </header>
-            {/* Main Lesson Layout Content */}
-            <main className="w-full grid grid-cols-1 md:grid-cols-3 md:gap-4 tracking-wide pb-60">
-                {
-                    unit?.sections?.map((section) => (
-                        <Link key={section.id} className="" href={`/dashboard/learn/beginner/${unit.slug}/${section.slug}`}>
-                            <div className="w-full h-fit p-[3px] hover:bg-eloq-purple/25 rounded-xl transition-all duration-300">
-                            <Card className="relative flex flex-col items-start justify-start gap-2 py-4 pb-8 px-8 md:min-h-50 bg-foreground rounded-lg hover:shadow-eloq-purple/25 hover:shadow-xl transition-all duration-300">
-                                <div className="z-100 w-full">
-                                <h2 className="tracking-wide w-full text-xl font-medium pb-1 mb-3 border-b-[1px] border-zinc-300">
-                                    {section.title ?? ""}
-                                </h2>
-                                <p className="font-medium text-md text-primary/75 mb-1">{section.lesson ?? ""}</p>
-                                <div className="z-100 tracking-wide w-fit py-[1px] px-2 bg-green-700/15 border border-green-700/35 rounded-full">
-                                <p className="font-medium text-xs">
-                                    {section.type}
-                                </p>
-                                </div>
-                                </div>
-                                <div className="absolute z-10 -left-20 -top-25  w-50 h-50 bg-green-500 rounded-full"></div>
-                            </Card>
-                            </div>
-                        </Link>
-                    ))
-                }
-            </main> 
+  const { data: unitData } = await fetchUnitBySlug(unitSlug, levelId);
+  if (!unitData) {
+    throw new Error("Check fetchUnitBySlug function");
+  }
+
+  const result = await fetchLessons(unitData?.id);
+  const unitLessons = result?.data ?? [];
+
+  const unitTitle = unitData?.title_en ?? "Unit Lessons";
+
+  const links = [
+    { label: "Dashboard", href: "/dashboard" },
+    { label: "Learn", href: "/dashboard/learn" },
+    { label: levelSlug, href: `/dashboard/learn/${levelSlug}` },
+    { label: unitTitle, href: `/dashboard/learn/${levelSlug}/${unitData?.slug}` },
+  ];
+
+  return (
+    <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-4 pt-1 pb-16 sm:px-6">
+      {/* Breadcrumb Navigation */}
+      <nav aria-label="Breadcrumb" className="pt-1">
+        <Breadcrumb links={links} />
+      </nav>
+
+      {/* Header */}
+      <header className="flex flex-col gap-1 text-center items-center">
+        <div className="flex items-center gap-2 text-eloq-purple">
+          <BookOpen className="h-5 w-5" />
+          <span className="text-xs font-bold uppercase tracking-wider">
+            Learning Path
+          </span>
         </div>
-    )
+        <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+          {unitTitle}
+        </h1>
+        <p className="text-xs sm:text-sm text-muted">
+          Tap a node on the path to open lesson details and start.
+        </p>
+      </header>
+
+      {/* Dynamic Interactive Path */}
+      <main className="w-full pt-4">
+        <InteractiveUnitPath
+          lessons={unitLessons}
+          levelSlug={levelSlug}
+          unitSlug={unitData.slug}
+        />
+      </main>
+    </div>
+  );
 }
