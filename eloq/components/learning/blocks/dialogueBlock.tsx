@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { DialogueBlock as DialogueBlockType, type LocalizedText } from "@/types/learning";
-import { Explanation } from "../Explanation";
+import { Explanation } from "../../Explanation";
 
 interface DialogueBlockProps {
   data: DialogueBlockType["data"];
