@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { DialogueBlock as DialogueBlockType, type LocalizedText } from "@/types/learning";
-import { Explanation } from "../../Explanation";
+// import { Explanation } from "../../Explanation";
 
 interface DialogueBlockProps {
   data: DialogueBlockType["data"];
@@ -37,11 +37,11 @@ export default function DialogueBlock({ data, explanation }: DialogueBlockProps)
   return (
     <div className="w-full">
       <div className="relative flex flex-col gap-4 w-full bg-background p-4 pt-8 pr-8 border border-border-subtle rounded-xl shadow-md">
-        {explanation && (
+        {/*explanation && (
           <Explanation
             explanation={explanation.en || "No Explanation"}
           />
-        )}
+        )*/}
 
         {/* صوة الحوار إن وجدت */}
         {data.image?.url && (
