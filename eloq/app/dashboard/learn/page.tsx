@@ -1,141 +1,171 @@
-import {
-  fetchLevelBySlug,
-  fetchLevels,
-} from "@/features/learning";
+import { fetchLevels } from "@/features/learning";
 import Breadcrumb from "@/components/navigation/breadcrumb";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
-import { ArrowRight, Info } from "lucide-react";
+import { ArrowRight, Compass, Layers, Sparkles, TestTube } from "lucide-react";
+
+// نصوص محفزة ومحددة لكل مستوى تساعد الطالب على تحديد مستواه
+const LEVEL_META: Record<string, { desc: string }> = {
+  a1: {
+    desc: "Start from scratch! Build confidence with everyday phrases & core grammar.",
+  },
+  a2: {
+    desc: "Speak with ease! Express routine ideas, ask questions, and travel freely.",
+  },
+  b1: {
+    desc: "Unlock real fluency! Discuss topics, share opinions, and speak comfortably.",
+  },
+  b2: {
+    desc: "Master debates & work! Express complex ideas with natural spontaneity.",
+  },
+  c1: {
+    desc: "Near-native precision! Craft nuanced arguments and excel professionally.",
+  },
+};
+
+const DEFAULT_LEVEL_META = {
+  desc: "Master practical skills with step-by-step guided lessons tailored for you.",
+};
 
 export default async function Learn() {
   const links = [
-    {
-      label: "Learn",
-      slug: "dashboard/learn",
-    },
+    { label: "Dashboard", href: "/dashboard" },
+    { label: "Learn", href: "/dashboard/learn" },
   ];
 
   const result = await fetchLevels();
   if (!result.ok) {
-    console.error(result.error)
+    console.error(result.error);
   }
   const levels = result.data ?? [];
 
   return (
-    <div className="w-full flex flex-col items-start justify-center gap-8 py-4 px-6">
-      {/* Main Lesson Layout Content */}
-      <main className="w-full flex flex-col items-start justify-start gap-8">
+    <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4 pt-1 pb-8 sm:px-6">
+      {/* Breadcrumb Navigation */}
+      <nav aria-label="Breadcrumb" className="pt-1">
+        <Breadcrumb items={links} />
+      </nav>
 
-        {/* Paths */}
-        <section className="flex flex-col w-full items-stretch justify-start gap-5 md:gap-5 lg:gap-8">
-
-          {/* Title */}
-          <div className="relative w-full flex items-center justify-start gap-1 text-muted">
-            <h1 className="text-lg lg:font-medium">
-              Paths
-            </h1>
-
-            <ArrowRight size={18} />
-
-            <Info
-              size={18}
-              className="absolute right-1 top-1 text-muted"
-            />
+      <main className="flex w-full flex-col gap-6">
+        {/* Section 1: Learning Paths */}
+        <section className="flex flex-col gap-3">
+          <div className="flex items-center gap-2 text-foreground">
+            <Compass className="h-5 w-5 text-eloq-purple" />
+            <h1 className="text-xl font-bold tracking-tight">Learning Paths</h1>
           </div>
 
-          {/* Items */}
-          {/*<Link className="" href={`/dashboard/learn/academic/beginner`}>*/}
-          <div className="w-full md:w-fit h-fit p-[3px] hover:bg-eloq-purple/25 bg-eloq-purple rounded-[10px] lg:rounded-xl transition-all duration-300">
-            <Card className="relative flex flex-col items-start justify-start gap-2 py-4 px-8 bg-foreground backdrop-blur-lg rounded-lg lg:rounded-lg hover:shadow-eloq-purple/25 hover:shadow-xl transition-all duration-300 cursor-default border-border-subtle">
-
-              <h2 className="flex flex-wrap items-center tracking-wide justify-start w-full text-xl font-medium">
-                <span className="block font-bold text-2xl text-eloq-green mr-2">
-                  General
-                </span>
-              </h2>
-
-              <div className="hidden py-2 px-4 bg-eloq-green/15 border border-eloq-green/35 rounded-xl">
-                <div className="hidden font-medium text-sm tracking-wide">
-                  Original learning proccess taking you from any point to a
-                  place higher, improving your overall-skills.
+          {/* Compact Enticing General Path Card */}
+          <Link
+            href="/dashboard/learn/general"
+            className="group relative block overflow-hidden rounded-2xl border border-border-subtle bg-card p-4 sm:p-5 shadow-soft transition-all duration-300 hover:border-eloq-purple/50 hover:shadow-float"
+          >
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              {/* Badge & Enticing Single Phrase */}
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1 rounded-md bg-eloq-green/10 px-2.5 py-0.5 text-xs font-bold text-eloq-green">
+                    <Sparkles className="h-3 w-3" />
+                    General Track
+                  </span>
                 </div>
+                <h2 className="text-lg font-bold text-foreground transition-colors group-hover:text-eloq-purple sm:text-xl">
+                  General English
+                </h2>
+                <p className="text-xs sm:text-sm font-medium text-muted">
+                   Your all-in-one path to confidence—master everyday English effortlessly!
+                </p>
               </div>
 
-              <div className="hidden absolute left-0 right-0 bottom-0 w-full h-2 bg-eloq-green" />
-            </Card>
-          </div>
-          {/*</Link>*/}
+              {/* Action CTA */}
+              <div className="mt-1 sm:mt-0 flex shrink-0 items-center gap-1.5 text-xs sm:text-sm font-bold text-eloq-purple transition-all group-hover:translate-x-1">
+                <span>Explore Path</span>
+                <ArrowRight className="h-4 w-4" />
+              </div>
+            </div>
+
+            {/* Bottom Accent Bar */}
+            <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-eloq-purple via-eloq-green to-eloq-purple opacity-90" />
+          </Link>
         </section>
 
-        {/* Path Levels */}
-        <section className="w-full flex flex-col items-start justify-start gap-5 md:gap-5 lg:gap-8">
-
-          {/* Title */}
-          <div className="flex items-center justify-center gap-1 text-muted">
-            <h1 className="text-lg lg:font-medium">
-              Levels
-            </h1>
-
-            <ArrowRight size={18} />
+        {/* Section 2: Path Levels */}
+        <section className="flex flex-col gap-3">
+          <div className="flex items-center gap-2 text-foreground">
+            <Layers className="h-5 w-5 text-eloq-purple" />
+            <h2 className="text-lg font-semibold">Available Levels</h2>
           </div>
 
-          {/* Items */}
-          <div className="w-full overflow-x-auto scrollbar-none">
-            <div className="flex items-center justify-start gap-4 w-max pr-10">
+          {/* Scrollable Container with exact padding prevents clipping */}
+          <div className="-mx-2 px-2 py-2 overflow-x-auto scrollbar-none">
+            <div className="flex items-stretch gap-4 w-max px-1 py-1">
+              {levels.length > 0 ? (
+                levels.map((level) => {
+                  const key = (level.cefr || level.slug || "").toLowerCase();
+                  const meta = LEVEL_META[key] || DEFAULT_LEVEL_META;
 
-              {levels.length > 0 &&
-                levels.map((level) => (
-                  <Link
-                    key={level.slug}
-                    href={`/dashboard/learn/${level.slug}`}
-                    className="flex-shrink-0"
-                  >
-                    <Card className="min-w-36 h-16 flex flex-col items-start justify-start p-4 bg-foreground border border-border-subtle rounded-xl shadow-sm transition-all duration-300 hover:shadow-md gap-0">
-                      <h1 className="text-base font-semibold">
-                        {level?.name ?? "no content"}
-                      </h1>
-                     {level.cefr && <span className="py-1 px-2 text-xs bg-eloq-purple/5 backdrop-blur-lg border-eloq-purple rounded-full">
-                        {level.cefr}
-                      </span>
-                     }
-                    </Card>
-                  </Link>
-                ))}
+                  return (
+                    <Link
+                      key={level.slug}
+                      href={`/dashboard/learn/${level.slug}`}
+                      className="group block shrink-0"
+                    >
+                      <Card className="relative flex h-full w-72 flex-col justify-between border border-border-subtle bg-card p-4 rounded-2xl shadow-soft transition-all duration-300 hover:-translate-y-1 hover:border-eloq-purple/50 hover:shadow-float">
+                        {/* Header & Level Info */}
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-base font-bold text-foreground transition-colors group-hover:text-eloq-purple">
+                              {level?.name ?? "Level"}
+                            </span>
+                            {level.cefr && (
+                              <span className="rounded-full bg-eloq-purple/10 px-2.5 py-0.5 text-xs font-bold text-eloq-purple border border-eloq-purple/20">
+                                {level.cefr}
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Level Hook / Summary */}
+                          <p className="text-xs text-muted leading-relaxed">
+                            {meta.desc}
+                          </p>
+                        </div>
+
+                        {/* Card Footer CTA */}
+                        <div className="mt-4 flex items-center justify-between border-t border-border-subtle/50 pt-3 text-xs font-semibold text-muted transition-colors group-hover:text-eloq-purple">
+                          <span>Start Learning</span>
+                          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                        </div>
+                      </Card>
+                    </Link>
+                  );
+                })
+              ) : (
+                <div className="text-sm text-muted py-2">No levels available.</div>
+              )}
             </div>
           </div>
         </section>
 
-        {/* Tests */}
-        <section className="flex flex-col items-start justify-start gap-5 md:gap-5 lg:gap-8">
-
-          {/* Title */}
-          <div className="flex items-center justify-center gap-1 text-muted">
-            <h1 className="text-lg lg:font-medium">
-              Tests
-            </h1>
-
-            <ArrowRight size={18} />
+        {/* Section 3: Tests */}
+        <section className="flex flex-col gap-3">
+          <div className="flex items-center gap-2 text-foreground">
+            <TestTube className="h-5 w-5 text-eloq-purple" />
+            <h2 className="text-lg font-semibold">Placement & Tests</h2>
           </div>
 
-          {/* Items */}
-          {/*}<Link href="/dashboard/learn/beginner" className="">*/}
-          <div className="flex items-center justify-start gap-4 md:gap-6 lg:gap-8 pr-10 lg:pb-2 overflow-x-auto w-screen scrollbar-none">
-            {
-              ["tests"].map((level) => (
-                <Card
-                  key={level}
-                  className="min-w-36 h-16 flex-shrink-0 flex flex-col items-start justify-start p-4 bg-foreground border border-border-subtle rounded-xl shadow-sm opacity-60"
-                >
-                  <h1 className="text-lg font-semibold text-muted">
-                    Soon
-                  </h1>
-                </Card>
-              ))
-            }
+          <div className="-mx-2 px-2 py-2 overflow-x-auto scrollbar-none">
+            <div className="flex items-center gap-4 w-max px-1 py-1">
+              <Card className="flex h-20 min-w-[220px] flex-col justify-center rounded-2xl border border-dashed border-border-subtle bg-card/40 p-4 opacity-70">
+                <span className="text-xs font-semibold uppercase tracking-wider text-muted">Placement Test</span>
+                <span className="text-sm font-bold text-muted">Coming Soon</span>
+              </Card>
+
+              <Card className="flex h-20 min-w-[220px] flex-col justify-center rounded-2xl border border-dashed border-border-subtle bg-card/40 p-4 opacity-70">
+                <span className="text-xs font-semibold uppercase tracking-wider text-muted">Certificates</span>
+                <span className="text-sm font-bold text-muted">Coming Soon</span>
+              </Card>
+            </div>
           </div>
-          {/*</Link>*/}
         </section>
-
       </main>
     </div>
   );
