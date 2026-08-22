@@ -1,8 +1,6 @@
 "use client";
 
-import {
-  FillBlanksBlock as FillBlanksBlockType,
-} from "@/types/learning";
+import { FillBlanksBlock as FillBlanksBlockType } from "@/types/learning";
 import { useLearningAnswersStore } from "@/store/learningAnswersStore";
 
 interface FillBlanksBlockProps {
@@ -12,15 +10,10 @@ interface FillBlanksBlockProps {
 
 type BlockAnswers = Record<string, unknown>;
 
-export default function FillBlanksBlock({
-  id,
-  data,
-}: FillBlanksBlockProps) {
+export default function FillBlanksBlock({ id, data }: FillBlanksBlockProps) {
   const blockAnswers = useLearningAnswersStore(
     (state) =>
-      state.answersByLesson[
-        state.activeLessonId ?? ""
-      ]?.[id]
+      state.answersByLesson[state.activeLessonId ?? ""]?.[id]
   ) as BlockAnswers | undefined;
 
   const updateBlockAnswer = useLearningAnswersStore(
@@ -30,13 +23,12 @@ export default function FillBlanksBlock({
   return (
     <div className="flex flex-col gap-4 w-full">
       {data?.items?.map((item) => {
-        const answers =
-          (blockAnswers?.[item.id] as string[]) ?? [];
+        const answers = (blockAnswers?.[item.id] as string[]) ?? [];
 
         return (
           <div
             key={item.id}
-            className="flex gap-1 text-base leading-relaxed"
+            className="text-base sm:text-lg leading-loose text-foreground"
           >
             <p>
               {item.text
@@ -52,17 +44,10 @@ export default function FillBlanksBlock({
                         value={answers[index] ?? ""}
                         onChange={(event) => {
                           const newAnswers = [...answers];
-
-                          newAnswers[index] =
-                            event.target.value;
-
-                          updateBlockAnswer(
-                            id,
-                            item.id,
-                            newAnswers
-                          );
+                          newAnswers[index] = event.target.value;
+                          updateBlockAnswer(id, item.id, newAnswers);
                         }}
-                        className="mx-1 mt-[-44px] w-20 border-b-2 border-muted bg-transparent px-1 font-medium outline-none"
+                        className="mx-1.5 w-24 sm:w-28 rounded-lg border-b-2 border-border-subtle bg-card px-2 py-0.5 text-center font-semibold text-eloq-purple outline-none transition-all focus:border-eloq-purple focus:bg-eloq-purple/5"
                       />
                     )}
                   </span>

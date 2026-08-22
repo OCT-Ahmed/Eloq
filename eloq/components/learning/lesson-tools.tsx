@@ -10,21 +10,19 @@ import {
   Sparkles,
   Sun,
   Volume2,
-  VolumeX,
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAudioStore } from "@/store/useAudioStore";
 import { LessonAudioPlayer } from "./LessonAudioPlayer";
 import LessonAssistantModal from "./LessonAssistantModal";
 import LessonVideoModal from "./LessonVideoModal";
 
-interface LessonToolbarProps {
-  audioUrl?: string; // Prop اختياري من سوبابيس/R2
-}
-
-export default function LessonToolbar({ audioUrl }: LessonToolbarProps) {
+export default function LessonToolbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [showAudioPlayer, setShowAudioPlayer] = useState(false);
+
+  const { isPlaying, audioUrl } = useAudioStore();
 
   const [isDark, setIsDark] = useState(false);
   const [lang, setLang] = useState<"ar" | "en">("ar");
@@ -38,15 +36,16 @@ export default function LessonToolbar({ audioUrl }: LessonToolbarProps) {
   };
 
   const itemClass =
-    "grid size-10 shrink-0 place-items-center rounded-full text-foreground/80 transition active:scale-90 hover:bg-muted/60 disabled:opacity-40 disabled:pointer-events-none";
+    "grid size-10 shrink-0 place-items-center rounded-full text-foreground/80 transition active:scale-90 hover:bg-muted/60";
 
   return (
     <>
       <div className="fixed right-4 bottom-16 z-40 flex items-center justify-end">
         {isOpen ? (
-          <div className="flex max-w-[calc(100vw-2rem)] items-center gap-1 overflow-x-auto rounded-full border border-border bg-background/95 p-1.5 shadow-2xl backdrop-blur transition-all duration-300">
+          /* تم تغيير overflow-x-auto إلى overflow-visible لمنع قص المنبثق */
+          <div className="relative flex items-center gap-1 rounded-full border border-border bg-background/95 p-1.5 shadow-2xl backdrop-blur transition-all duration-300 overflow-visible">
             
-            {/* زر المساعد الذكي */}
+            {/* المساعد الذكي */}
             <button
               type="button"
               title="المساعد الذكي"
@@ -56,19 +55,22 @@ export default function LessonToolbar({ audioUrl }: LessonToolbarProps) {
               <Sparkles size={18} />
             </button>
 
-            {/* حاوية زر الصوت مع المكون المنبثق */}
+            {/* زر الصوت والنافذة المنبثقة */}
             <div className="relative">
               <button
                 type="button"
-                title="الصوت"
-                disabled={!audioUrl} // تعطيل سلس إذا لم يُمرر صوت
+                title="مشغل الصوت"
                 onClick={() => setShowAudioPlayer((prev) => !prev)}
-                className={cn(itemClass, showAudioPlayer && "bg-muted")}
+                className={cn(
+                  itemClass,
+                  (showAudioPlayer || isPlaying) &&
+                    "bg-purple-600 text-white hover:bg-purple-700"
+                )}
               >
-                {audioUrl ? <Volume2 size={18} /> : <VolumeX size={18} />}
+                <Volume2 size={18} />
               </button>
 
-              {/* انبعاث مكون التشغيل بـ framer-motion فوق الزر */}
+              {/* النافذة المنبثقة */}
               <AnimatePresence>
                 {showAudioPlayer && (
                   <motion.div
@@ -76,15 +78,21 @@ export default function LessonToolbar({ audioUrl }: LessonToolbarProps) {
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.85, y: 6 }}
                     transition={{ type: "spring", stiffness: 500, damping: 28 }}
-                    className="absolute bottom-full mb-3 right-0 z-50"
+                    className="absolute bottom-full mb-3 right-1/2 translate-x-1/2 z-50 min-w-[220px]"
                   >
-                    <LessonAudioPlayer src={audioUrl} />
+                    {audioUrl ? (
+                      <LessonAudioPlayer />
+                    ) : (
+                      <div className="rounded-2xl border border-border bg-background/95 p-3 text-center text-xs font-medium text-muted-foreground shadow-xl backdrop-blur">
+                        لا يوجد صوت يعزف حالياً
+                      </div>
+                    )}
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
 
-            {/* زر فيديو الدرس */}
+            {/* فيديو الدرس */}
             <button
               type="button"
               title="فيديو الدرس"
@@ -94,7 +102,7 @@ export default function LessonToolbar({ audioUrl }: LessonToolbarProps) {
               <Play size={18} />
             </button>
 
-            {/* زر الوضع المظلم */}
+            {/* الوضع المظلم */}
             <button
               type="button"
               title="الوضع المظلم"
@@ -104,7 +112,7 @@ export default function LessonToolbar({ audioUrl }: LessonToolbarProps) {
               {isDark ? <Sun size={18} /> : <Moon size={18} />}
             </button>
 
-            {/* زر لغة الشرح */}
+            {/* لغة الشرح */}
             <button
               type="button"
               title="لغة الشرح"
@@ -117,7 +125,7 @@ export default function LessonToolbar({ audioUrl }: LessonToolbarProps) {
               </span>
             </button>
 
-            {/* زر الإغلاق */}
+            {/* إغلاق */}
             <button
               type="button"
               title="إغلاق الأدوات"
@@ -142,7 +150,6 @@ export default function LessonToolbar({ audioUrl }: LessonToolbarProps) {
         )}
       </div>
 
-      {/* النوافذ المنبثقة */}
       {showAssistant && <LessonAssistantModal onClose={() => setShowAssistant(false)} />}
       {showVideo && <LessonVideoModal onClose={() => setShowVideo(false)} />}
     </>

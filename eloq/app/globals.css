@@ -1,104 +1,596 @@
 @import "tailwindcss";
+/* @import "tw-animate-css"; */
+
+@custom-variant dark (&:is(.dark *));
 
 /* ==========================================================================
-   1. المتغيرات الأصلية كاملة (مع الحفاظ على أسماء مشروعك بنسبة 100%)
+   ELOQ Global Design System
+   Tailwind CSS v4
    ========================================================================== */
+
+/* ==========================================================================
+   1. Light Theme
+   --------------------------------------------------------------------------
+   The light theme follows the current Lovable-inspired visual foundation.
+   All color values use OKLCH for predictable color manipulation.
+   ========================================================================== */
+
 :root {
-  /* الوضع الفاتح الافتراضي للموقع */
-  --background: #f8fafc;
-  --foreground: #ffffff;
-  --primary: #111827;            /* اسمك الأصلي */
-  --base: #0f172a;
-  --muted: #64748b;
-  --eloq-purple: #7c3aed;
-  --eloq-soft-purple: rgba(124, 58, 237, 0.08);
-  --eloq-black: #000000;         /* اسمك الأصلي */
-  
-  /* إضافات ذكية تدعم التمارين والحدود الفخمة */
-  --eloq-green: #059669;   
-  --eloq-soft-green: rgba(5, 150, 105, 0.08);
-  --border-subtle: rgba(15, 23, 42, 0.06);
+  color-scheme: light;
+
+  /* Main application surfaces */
+  --background: oklch(0.9842 0.0034 247.8575);
+  --foreground: oklch(0.2077 0.0398 265.7549);
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2077 0.0398 265.7549);
+
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2077 0.0398 265.7549);
+
+  /* Main semantic colors */
+  --primary: oklch(0.2101 0.0318 264.6645);
+  --primary-foreground: oklch(1 0 0);
+
+  --secondary: oklch(0.9683 0.0069 247.8956);
+  --secondary-foreground: oklch(0.2077 0.0398 265.7549);
+
+  --muted: #9CA3AF;
+  --muted-foreground: oklch(0.5544 0.0407 257.4166);
+
+  --accent: oklch(0.9683 0.0069 247.8956);
+  --accent-foreground: oklch(0.2077 0.0398 265.7549);
+
+  /* Borders and form controls */
+  --border: oklch(0.929 0.013 255.508);
+  --input: oklch(0.929 0.013 255.508);
+  --ring: oklch(0.5413 0.2466 293.009);
+
+  /* Brand colors */
+  --eloq-purple: oklch(0.5413 0.2466 293.009);
+  --eloq-soft-purple: oklch(0.5413 0.2466 293.009 / 8%);
+
+  --eloq-orange: oklch(0.6461 0.1943 41.1158);
+  --eloq-soft-orange: oklch(0.6461 0.1943 41.1158 / 10%);
+
+  --eloq-green: oklch(0.596 0.1274 163.2254);
+  --eloq-soft-green: oklch(0.596 0.1274 163.2254 / 8%);
+
+  --eloq-black: oklch(0 0 0);
+
+  /* Utility aliases */
+  --base: oklch(0.2077 0.0398 265.7549);
+  --border-subtle: oklch(0.2077 0.0398 265.7549 / 6%);
+
+  /* Learning states */
+  --success: oklch(0.596 0.1274 163.2254);
+  --success-foreground: oklch(1 0 0);
+
+  --tip: oklch(0.6658 0.1574 58.3183);
+  --tip-foreground: oklch(0.25 0.05 55);
+
+  --danger: oklch(0.5771 0.2152 27.325);
+  --danger-foreground: oklch(1 0 0);
+
+  --note: oklch(0.9619 0.058 95.6174);
+  --note-foreground: oklch(0.35 0.06 70);
+
+  /* Learning surfaces */
+  --surface: oklch(0.9842 0.0034 247.8575);
+  --surface-raised: oklch(1 0 0);
+
+  /* Dialogue / speaker colors */
+  --speaker-1: oklch(0.5413 0.2466 293.009);
+  --speaker-2: oklch(0.6461 0.1943 41.1158);
+  --speaker-3: oklch(0.596 0.1274 163.2254);
+  --speaker-4: oklch(0.5461 0.2152 262.8809);
+
+  /* Elevation */
+  --shadow-soft:
+    0 1px 2px oklch(0.2077 0.0398 265.7549 / 5%),
+    0 8px 24px -12px oklch(0.2077 0.0398 265.7549 / 18%);
+
+  --shadow-float:
+    0 6px 30px -8px oklch(0.2077 0.0398 265.7549 / 22%);
+
+  --radius: 0.625rem;
 }
+
+
+/* ==========================================================================
+   2. Dark Theme
+   --------------------------------------------------------------------------
+   This preserves the current ELOQ dark visual identity.
+   ========================================================================== */
+
+.dark {
+  color-scheme: dark;
+
+  --background: oklch(0.19 0.02 275);
+  --foreground: oklch(0.95 0.01 85);
+
+  --card: oklch(0.235 0.025 275);
+  --card-foreground: oklch(0.95 0.01 85);
+
+  --popover: oklch(0.235 0.025 275);
+  --popover-foreground: oklch(0.95 0.01 85);
+
+  --primary: oklch(0.72 0.13 295);
+  --primary-foreground: oklch(0.18 0.03 290);
+
+  --secondary: oklch(0.28 0.025 275);
+  --secondary-foreground: oklch(0.95 0.01 85);
+
+  --muted: oklch(0.28 0.025 275);
+  --muted-foreground: oklch(0.72 0.02 80);
+
+  --accent: oklch(0.32 0.05 290);
+  --accent-foreground: oklch(0.92 0.03 295);
+
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: oklch(0.72 0.13 295);
+
+  --destructive: oklch(0.7 0.16 25);
+  --destructive-foreground: oklch(0.18 0.03 25);
+
+  /* ELOQ brand */
+  --eloq-purple: oklch(0.68 0.16 295);
+  --eloq-soft-purple: oklch(0.68 0.16 295 / 15%);
+
+  --eloq-orange: oklch(0.75 0.16 55);
+  --eloq-soft-orange: oklch(0.75 0.16 55 / 15%);
+
+  --eloq-green: oklch(0.68 0.14 155);
+  --eloq-soft-green: oklch(0.68 0.14 155 / 15%);
+
+  --eloq-black: oklch(0.01 0.005 270);
+
+  --base: oklch(0.95 0.01 85);
+  --border-subtle: oklch(1 0 0 / 6%);
+
+  /* Learning states */
+  --success: oklch(0.74 0.14 155);
+  --success-foreground: oklch(0.18 0.03 160);
+
+  --tip: oklch(0.82 0.14 80);
+  --tip-foreground: oklch(0.2 0.03 70);
+
+  --danger: oklch(0.7 0.16 25);
+  --danger-foreground: oklch(0.18 0.03 25);
+
+  --note: oklch(0.42 0.07 90);
+  --note-foreground: oklch(0.97 0.02 90);
+
+  /* Learning surfaces */
+  --surface: oklch(0.225 0.023 275);
+  --surface-raised: oklch(0.27 0.028 275);
+
+  /* Dialogue / speaker colors */
+  --speaker-1: oklch(0.78 0.12 295);
+  --speaker-2: oklch(0.8 0.12 60);
+  --speaker-3: oklch(0.78 0.12 165);
+  --speaker-4: oklch(0.78 0.11 245);
+
+  /* Elevation */
+  --shadow-soft:
+    0 1px 2px oklch(0 0 0 / 30%),
+    0 10px 30px -14px oklch(0 0 0 / 60%);
+
+  --shadow-float:
+    0 8px 34px -10px oklch(0 0 0 / 65%);
+}
+
+
+/* ==========================================================================
+   3. Automatic system theme
+   --------------------------------------------------------------------------
+   Used only when the application has not explicitly selected light/dark.
+   ========================================================================== */
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    /* الوضع الداكن الحيوي - قراءة مريحة وغير كئيبة */
-    --background: #090b14;       /* كحلي ليلي عميق */
-    --foreground: #141827;       /* أسطح الكروت والبطاقات */
-    --primary: #f8fafc;          /* ينعكس ليصبح فاتحاً ناصعاً في الدارك مود */
-    --base: #f1f5f9;             /* نصوص القراءة الأساسية */
-    --muted: #94a3b8;            /* النصوص الثانوية والفرعية */
-    --eloq-purple: #a855f7;      /* بنفسجي مضيء وناعم */
-    --eloq-soft-purple: rgba(168, 85, 247, 0.15);
-    --eloq-black: #030408;       /* أسود ناعم مائل للكحلي بدلاً من القاتم الميت */
-    
-    --eloq-green: #10b981;
-    --eloq-soft-green: rgba(16, 185, 129, 0.15);
-    --border-subtle: rgba(255, 255, 255, 0.06);
+  :root:not(.light):not(.dark) {
+    color-scheme: dark;
+
+    --background: oklch(0.19 0.02 275);
+    --foreground: oklch(0.95 0.01 85);
+
+    --card: oklch(0.235 0.025 275);
+    --card-foreground: oklch(0.95 0.01 85);
+
+    --popover: oklch(0.235 0.025 275);
+    --popover-foreground: oklch(0.95 0.01 85);
+
+    --primary: oklch(0.72 0.13 295);
+    --primary-foreground: oklch(0.18 0.03 290);
+
+    --secondary: oklch(0.28 0.025 275);
+    --secondary-foreground: oklch(0.95 0.01 85);
+
+    --muted: oklch(0.28 0.025 275);
+    --muted-foreground: oklch(0.72 0.02 80);
+
+    --accent: oklch(0.32 0.05 290);
+    --accent-foreground: oklch(0.92 0.03 295);
+
+    --border: oklch(1 0 0 / 12%);
+    --input: oklch(1 0 0 / 16%);
+    --ring: oklch(0.72 0.13 295);
+
+    --destructive: oklch(0.7 0.16 25);
+    --destructive-foreground: oklch(0.18 0.03 25);
+
+    --eloq-purple: oklch(0.68 0.16 295);
+    --eloq-soft-purple: oklch(0.68 0.16 295 / 15%);
+
+    --eloq-orange: oklch(0.75 0.16 55);
+    --eloq-soft-orange: oklch(0.75 0.16 55 / 15%);
+
+    --eloq-green: oklch(0.68 0.14 155);
+    --eloq-soft-green: oklch(0.68 0.14 155 / 15%);
+
+    --eloq-black: oklch(0.01 0.005 270);
+
+    --base: oklch(0.95 0.01 85);
+    --border-subtle: oklch(1 0 0 / 6%);
+
+    --success: oklch(0.74 0.14 155);
+    --success-foreground: oklch(0.18 0.03 160);
+
+    --tip: oklch(0.82 0.14 80);
+    --tip-foreground: oklch(0.2 0.03 70);
+
+    --danger: oklch(0.7 0.16 25);
+    --danger-foreground: oklch(0.18 0.03 25);
+
+    --note: oklch(0.42 0.07 90);
+    --note-foreground: oklch(0.97 0.02 90);
+
+    --surface: oklch(0.225 0.023 275);
+    --surface-raised: oklch(0.27 0.028 275);
+
+    --speaker-1: oklch(0.78 0.12 295);
+    --speaker-2: oklch(0.8 0.12 60);
+    --speaker-3: oklch(0.78 0.12 165);
+    --speaker-4: oklch(0.78 0.11 245);
+
+    --shadow-soft:
+      0 1px 2px oklch(0 0 0 / 30%),
+      0 10px 30px -14px oklch(0 0 0 / 60%);
+
+    --shadow-float:
+      0 8px 34px -10px oklch(0 0 0 / 65%);
   }
 }
 
+
 /* ==========================================================================
-   2. ربط المتغيرات بـ Tailwind CSS v4 دون إلغاء أي كلاس قديم
+   4. Tailwind v4 theme mapping
    ========================================================================== */
-@theme {
+
+@theme inline {
+  /* Application colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
   --color-primary: var(--primary);
-  --color-base: var(--base);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
   --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  /* ELOQ brand */
   --color-eloq-purple: var(--eloq-purple);
   --color-eloq-soft-purple: var(--eloq-soft-purple);
-  --color-eloq-black: var(--eloq-black);
-  
-  /* ربط الإضافات الجديدة لتايلوند */
+
+  --color-eloq-orange: var(--eloq-orange);
+  --color-eloq-soft-orange: var(--eloq-soft-orange);
+
   --color-eloq-green: var(--eloq-green);
   --color-eloq-soft-green: var(--eloq-soft-green);
+
+  --color-eloq-black: var(--eloq-black);
+  --color-base: var(--base);
   --color-border-subtle: var(--border-subtle);
 
-  /* الخطوط القياسية لمشروعك */
-  --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  /* Learning */
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+
+  --color-tip: var(--tip);
+  --color-tip-foreground: var(--tip-foreground);
+
+  --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
+
+  --color-note: var(--note);
+  --color-note-foreground: var(--note-foreground);
+
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+
+  /* Dialogue */
+  --color-speaker-1: var(--speaker-1);
+  --color-speaker-2: var(--speaker-2);
+  --color-speaker-3: var(--speaker-3);
+  --color-speaker-4: var(--speaker-4);
+
+  /* Shadows */
+  --shadow-soft: var(--shadow-soft);
+  --shadow-float: var(--shadow-float);
+
+  /* Typography */
+  --font-sans: var(--font-plus-jakarta);
+  --font-display: var(--font-bricolage);
+  --font-arabic: var(--font-ibm-plex-arabic);
   --font-mono: var(--font-geist-mono);
-  /*--font-inter: var(--font-inter);*/
 }
 
+
 /* ==========================================================================
-   3. القواعد العامة والسكرول بار التفاعلي
+   5. Base styles
    ========================================================================== */
+
 @layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    min-height: 100%;
+  }
+
   body {
+    min-height: 100%;
     background-color: var(--background);
     color: var(--base);
-    font-size: 16px;
-    
-    transition: background-color 0.2s ease, color 0.2s ease;
+    font-family: var(--font-plus-jakarta);
+    -webkit-tap-highlight-color: transparent;
+
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
   }
 
-  /* == تخصيص السكرول بار المتناغم مع الدارك مود الجديد == */
-  ::-webkit-scrollbar {
-    width: 10px;
-    height: 8px;
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-bricolage);
   }
 
-  ::-webkit-scrollbar-track {
-    background: transparent;
+  [dir="rtl"],
+  .font-arabic {
+    font-family: var(--font-ibm-plex-arabic);
+  }
+}
+
+
+/* ==========================================================================
+   6. Scrollbar
+   --------------------------------------------------------------------------
+   Visible on desktop/tablet.
+   Hidden only on small touch screens.
+   ========================================================================== */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--eloq-soft-purple);
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--eloq-purple);
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  * {
+    scrollbar-width: none;
   }
 
-  ::-webkit-scrollbar-thumb {
-    background: var(--eloq-soft-purple);
-    border-radius: 999px;
-    border: 2px solid transparent;
-    background-clip: content-box;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--eloq-purple);
-    background-clip: content-box;
-  }
-
-  ::-webkit-scrollbar-button {
+  *::-webkit-scrollbar {
     display: none;
-    width: 0;
-    height: 0;
+  }
+}
+
+
+/* ==========================================================================
+   7. ELOQ animations
+   ========================================================================== */
+
+@keyframes soft-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0 color-mix(
+        in oklab,
+        var(--eloq-purple) 45%,
+        transparent
+      );
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 8px color-mix(
+        in oklab,
+        var(--eloq-purple) 0%,
+        transparent
+      );
+  }
+}
+
+@utility animate-soft-pulse {
+  animation: soft-pulse 1.6s ease-out infinite;
+}
+
+
+@keyframes slide-down {
+  from {
+    transform: translateY(-12%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@utility animate-slide-down {
+  animation: slide-down 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+@keyframes pulse-ring {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0 color-mix(
+        in oklab,
+        var(--eloq-purple) 40%,
+        transparent
+      );
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 10px color-mix(
+        in oklab,
+        var(--eloq-purple) 0%,
+        transparent
+      );
+  }
+}
+
+@utility animate-pulse-ring {
+  animation: pulse-ring 1.8s ease-out infinite;
+}
+
+
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -1000;
+  }
+}
+
+@utility animate-dash-flow {
+  animation: dash-flow 9s linear infinite;
+}
+
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@utility animate-float-y {
+  animation: float-y 6s ease-in-out infinite;
+}
+
+
+@keyframes rise-in {
+  from {
+    transform: translateY(18px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@utility animate-rise-in {
+  animation: rise-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* تأثير نبضات الصوت المزدوجة المتتابعة */
+@keyframes audio-pulse-wave {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+.audio-pulse-ring {
+  position: relative;
+}
+
+.audio-pulse-ring::before,
+.audio-pulse-ring::after {
+  content: "";
+  position: absolute;
+  inset: -2px; /* ينطلق التموج بدقة من خلف الـ border */
+  border-radius: inherit;
+  border: 2px solid currentColor;
+  animation: audio-pulse-wave 2.2s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+  pointer-events: none;
+}
+
+/* النبضة الثانية المتأخرة لخلق التتابع السلس */
+.audio-pulse-ring::after {
+  animation-delay: 1.1s;
+}
+
+
+/* ==========================================================================
+   8. Reduced motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }

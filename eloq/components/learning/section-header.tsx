@@ -17,34 +17,37 @@ export default function SectionHeader({
   videoUrl,
 }: SectionHeaderProps) {
   return (
-    <header className="relative col-span-full mb-6 rounded-2xl bg-foreground p-5 sm:p-7 shadow-sm border border-border-subtle">
-      <div className="flex items-start gap-4">
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-3">
-            <h2 className="font-extrabold text-3xl leading-tight text-eloq-green">
+    <header className="relative col-span-full mb-6 overflow-hidden rounded-2xl border border-border-subtle bg-card p-5 sm:p-7 shadow-soft">
+      <div className="flex flex-col gap-3">
+        <div className="flex items-start justify-between gap-4">
+          <div className="space-y-1">
+            <span className="text-xs font-bold uppercase tracking-wider text-eloq-purple">
+              {type || "Lesson Session"}
+            </span>
+            <h1 className="text-2xl font-extrabold leading-tight text-foreground sm:text-3xl">
               {title}
-            </h2>
-
-            {!videoUrl && (
-              <button
-                type="button"
-                aria-label="Play lesson video"
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-eloq-purple text-white shadow-md transition hover:scale-105 active:scale-95"
-              >
-                <Play size={21} fill="currentColor" />
-              </button>
-            )}
+            </h1>
           </div>
 
-          {lesson && (
-            <p className="mt-4 max-w-3xl text-lg sm:text-xl font-medium italic leading-relaxed text-foreground">
-              {lesson}
-            </p>
-          )}
+          {!videoUrl ? (
+            <button
+              type="button"
+              aria-label="Play lesson video"
+              className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-eloq-purple text-white shadow-float transition-transform hover:scale-105 active:scale-95"
+            >
+              <Play size={20} fill="currentColor" />
+            </button>
+          ) : null}
         </div>
+
+        {lesson && (
+          <p className="mt-1 text-sm sm:text-base font-medium leading-relaxed text-muted">
+            {lesson}
+          </p>
+        )}
       </div>
 
-      {/* Lesson tools */}
+      {/* Lesson Tools */}
       {lessonTools ?? <LessonTools />}
     </header>
   );
