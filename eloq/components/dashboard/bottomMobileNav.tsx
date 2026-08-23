@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { ChevronUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { playUISound } from "@/lib/uiSounds";
 
 export interface NavLink {
   title: string;
@@ -74,7 +75,10 @@ export default function BottomMobileNav({ links }: BottomMobileNavProps) {
             <Link
               key={link.slug}
               href={link.href}
-              onClick={() => setPeek(false)}
+              onClick={() => {
+                playUISound("eloqClick"),
+                setPeek(false)
+              }}
               className={cn(
                 "flex flex-col items-center justify-center gap-1 px-3 py-1.5 rounded-xl transition-all duration-300 active:scale-95",
                 isActive

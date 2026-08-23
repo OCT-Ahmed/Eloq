@@ -3,6 +3,8 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { playUISound } from "@/lib/uiSounds";
+
 
 import {
   AlignJustify,
@@ -95,7 +97,7 @@ export default function AsideMenu({
       <div className="flex items-center justify-between">
         <button
           type="button"
-          onClick={showMenu}
+          onClick={() => (playUISound("eloqClick"), showMenu())}
           aria-label="Close menu"
           className="flex h-10 w-10 items-center justify-center rounded-xl text-eloq-purple transition-colors hover:bg-background hover:text-base"
         >
@@ -108,10 +110,11 @@ export default function AsideMenu({
       </div>
 
       {/* Profile */}
-      <div className="mt-6">
+      <Link className="mt-6"
+      href="/dashboard/profile"
+      >
         <UserCard />
-      </div>
-
+      </Link>
       {/* Menu */}
       <div className="mt-6 grid flex-1 content-start grid-cols-2 gap-3 overflow-y-auto">
         {menuItems.map((item) => {
@@ -121,7 +124,7 @@ export default function AsideMenu({
             <Link
               key={item.href}
               href={item.href}
-              onClick={showMenu}
+              onClick={() => (playUISound("eloqClick"), showMenu)}
               className="group flex items-center justify-start gap-2 rounded-2xl border border-border-subtle bg-background/60 p-3 transition-all duration-200 hover:-translate-y-0.5 hover:bg-background hover:shadow-soft"
             >
               <Icon
