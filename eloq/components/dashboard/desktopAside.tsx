@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Flame, Settings, User } from "lucide-react";
-
 import type { DashboardNavItem } from "@/app/dashboard/layout";
+import { playUISound } from "@/lib/uiSounds";
 
 export default function DesktopAside({
   links,
@@ -57,6 +57,7 @@ export default function DesktopAside({
             <Link
               key={link.slug}
               href={link.href}
+              onClick={() => playUISound("click")}
               className={[
                 "group flex items-center gap-3 rounded-xl px-3 py-2.5",
                 "text-sm font-medium transition-all duration-200",

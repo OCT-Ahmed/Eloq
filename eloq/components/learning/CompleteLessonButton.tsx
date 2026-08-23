@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { completeLessonAction, type BlockData } from "@/actions/lessons";
 import { useLearningAnswersStore } from "@/store/learningAnswersStore";
+import { playUISound } from "@/lib/uiSounds";
+
 
 interface CompleteLessonButtonProps {
   lessonId: string;
@@ -96,7 +98,7 @@ export default function CompleteLessonButton({
       <div className="flex items-center justify-center w-full">
         <Button
           type="button"
-          onClick={handleComplete}
+          onClick={() => (playUISound("click"), handleComplete)}
           disabled={loading}
           className="w-full max-w-xs py-3 bg-green-600 hover:bg-green-700 active:scale-95 disabled:opacity-50 text-white font-bold rounded-xl transition shadow-md"
         >
@@ -120,7 +122,7 @@ export default function CompleteLessonButton({
                   {modalState.message}
                 </p>
                 <Button
-                  onClick={closeModal}
+                  onClick={() => (playUISound("click"), closeModal)}
                   className="w-full mt-2 bg-slate-800 hover:bg-slate-700 text-white font-semibold rounded-xl py-2.5"
                 >
                   حسناً
@@ -131,6 +133,7 @@ export default function CompleteLessonButton({
             {/* حالة نتيجة الدرس (اجتياز أو عدم اجتياز) */}
             {modalState.type === "result" && (
               <div className="flex flex-col gap-5">
+                {modalState.data.passed ? playUISound("correctAnswer") : playUISound("wrongAnswer")}
                 {/* الهيدر والعنوان */}
                 <div className="text-center space-y-2">
                   <div className="text-5xl mb-2">
