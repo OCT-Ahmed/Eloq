@@ -7,3 +7,4 @@ export {
   fetchLessonBySlug,
   fetchBlocks,
 } from "./learning.service";
+export { fetchContinueLearning } from "./queries";

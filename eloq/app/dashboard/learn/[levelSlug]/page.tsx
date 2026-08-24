@@ -3,6 +3,7 @@ import Breadcrumb from "@/components/navigation/breadcrumb";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
 import { ArrowRight, BookOpen, Info, Layers } from "lucide-react";
+import { playUISound } from "@/lib/uiSounds";
 
 export default async function LevelPage({
   params,

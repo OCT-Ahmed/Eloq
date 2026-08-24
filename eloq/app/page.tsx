@@ -1,5 +1,7 @@
+"use client"
 import { ArrowRight, BookOpen } from "lucide-react";
 import Link from "next/link";
+import { playUISound } from "@/lib/uiSounds";
 
 export default function Home() {
   return (
@@ -26,6 +28,7 @@ export default function Home() {
         <div className="mx-auto mt-9 grid w-full max-w-md gap-3 sm:grid-cols-2">
           <Link
             href="/dashboard"
+            onClick={() => playUISound(eloqClick)}
             className="
               group flex min-h-14 items-center justify-center gap-3
               rounded-xl border border-primary
@@ -47,7 +50,8 @@ export default function Home() {
           </Link>
 
           <Link
-            href="/dashboard/learn/academic/beginner/units"
+            href="/dashboard/learn/beginner"
+            onClick={() => playUISound("eloqClick")}
             className="
               group flex min-h-14 items-center justify-center gap-3
               rounded-xl border border-border

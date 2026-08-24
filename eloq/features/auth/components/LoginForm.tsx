@@ -1,157 +1,123 @@
-"use client"
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { login } from "../actions/login"
-import { loginSchema } from "../validation/login.schema"
-import { motion } from "framer-motion"
-import GoogleSignInButton from "../components/GoogleSignInButton"
-import { Button } from "@/components/ui/button"
-import OrSeparator from "../components/OrSeparator"
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { login } from "../actions/login";
+import { loginSchema } from "../validation/login.schema";
+import GoogleSignInButton from "../components/GoogleSignInButton";
+import OrSeparator from "../components/OrSeparator";
+import { Button } from "@/components/ui/button";
+import { playUISound } from "@/lib/uiSounds";
 
 export default function LoginForm() {
-  const router = useRouter()
-  // °° INPUTS STATE
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  // °° STATES
-  const [isLoading, setIsLoading] = useState(false)
-  const [errorMessage, setErrorMessage] = useState("")
-  const [emailErrorMessage, setEmailErrorMessage] = useState("")
-  const [passwordErrorMessage, setPasswordErrorMessage] = useState("")
-  // °° VARIABLES
-  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL!;
-  const successMessage = "Logged in successfully!"
-  const failMessage = "Something went wrong."
+  const router = useRouter();
 
-  // °° SUBMIT HANDLER
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL!;
+  const failMessage = "Something went wrong. Please check your credentials.";
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    
+    e.preventDefault();
+    playUISound("click");
+
     try {
-      setIsLoading(true)
-      setEmailErrorMessage("")
-      setPasswordErrorMessage("")
-      setErrorMessage("")
-      const result = loginSchema.safeParse({
-        email,
-        password,
-      })
-    
+      setIsLoading(true);
+      setEmailErrorMessage("");
+      setPasswordErrorMessage("");
+      setErrorMessage("");
+
+      const result = loginSchema.safeParse({ email, password });
+
       if (!result.success) {
-        console.log(result.error.flatten())
-        // handle fields errors
-        const errors = result.error.flatten().fieldErrors
-        setEmailErrorMessage(errors.email?.[0])
-        setPasswordErrorMessage(errors.password?.[0])
-        return
+        const errors = result.error.flatten().fieldErrors;
+        setEmailErrorMessage(errors.email?.[0] ?? "");
+        setPasswordErrorMessage(errors.password?.[0] ?? "");
+        return;
       }
-      const loginData = result.data;
-      const authData = await login(loginData);
-    
-      alert(successMessage)
-      router.push(`${SITE_URL}/dashboard`)
-      setErrorMessage("")
-      
+
+      await login(result.data);
+      router.push(`${SITE_URL}/dashboard`);
     } catch (error) {
-      console.error(error)
-      setErrorMessage(failMessage)
+      console.error(error);
+      setErrorMessage(failMessage);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
-  
+
   return (
     <motion.form
       onSubmit={handleSubmit}
-      className="flex flex-col items-center justify-center gap-4 lg:gap-6 w-full md:w-[65%] lg:w-[50%] md:p-6 md:bg-background/5 md:border md:border-white/5 md:rounded-lg"
-      initial={false}
-      animate={{
-        opacity: 1,
-        y: 0,
-      }}
-      transition={{
-        duration: 0.8,
-        ease: "easeOut",
-        type: "spring",
-        stiffness: 200,
-        damping: 20,
-      }}
+      className="flex w-full flex-col items-center gap-4 rounded-2xl border border-border-subtle/80 bg-card/50 p-6 shadow-soft backdrop-blur-sm md:w-[65%] lg:w-[50%]"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
     >
-      
-      {/* حقل البريد الإلكتروني */}
-      <div className="flex flex-col w-full gap-1">
+      {/* البريد الإلكتروني */}
+      <div className="flex w-full flex-col gap-1.5">
+        <label className="text-xs font-semibold text-muted">Email</label>
         <motion.input
           name="email"
           type="email"
           value={email}
-          placeholder="Write your email"
-          className="w-full p-3 text-md bg-foreground font-medium border-2 rounded-lg outline-none caret-eloq-purple"
+          placeholder="name@example.com"
+          className="w-full rounded-xl border border-border-subtle bg-background p-3 text-sm font-medium text-foreground outline-none transition-all placeholder:text-muted/60 focus:border-eloq-purple focus:ring-2 focus:ring-eloq-purple/20"
           onChange={(e) => setEmail(e.target.value)}
-          whileFocus={{
-            scale: 1.02,
-            borderColor: "purple",
-          }}
-          transition={{ 
-            type: "spring", 
-            stiffness: 300, 
-            damping: 20 
-          }}
-          initial={{borderColor: "transparent"}}
         />
         {emailErrorMessage && (
-          <span className="text-sm text-red-400">
+          <span className="text-xs font-medium text-red-500">
             {emailErrorMessage}
           </span>
         )}
       </div>
 
-      {/* حقل كلمة السر */}
-      <div className="flex flex-col w-full gap-1">
+      {/* كلمة السر */}
+      <div className="flex w-full flex-col gap-1.5">
+        <label className="text-xs font-semibold text-muted">Password</label>
         <motion.input
           name="password"
           type="password"
           value={password}
-          placeholder="Write your password"
-          className="w-full p-3 text-md bg-foreground font-medium border-2 rounded-lg outline-none caret-eloq-purple"
+          placeholder="••••••••"
+          className="w-full rounded-xl border border-border-subtle bg-background p-3 text-sm font-medium text-foreground outline-none transition-all placeholder:text-muted/60 focus:border-eloq-purple focus:ring-2 focus:ring-eloq-purple/20"
           onChange={(e) => setPassword(e.target.value)}
-          whileFocus={{
-            scale: 1.02,
-            borderColor: "purple",
-          }}
-          transition={{ 
-            type: "spring", 
-            stiffness: 300, 
-            damping: 20 
-          }}
-          initial={{borderColor: "transparent"}}
         />
         {passwordErrorMessage && (
-          <span className="text-sm text-red-400">
+          <span className="text-xs font-medium text-red-500">
             {passwordErrorMessage}
           </span>
         )}
       </div>
 
-      {/* ERROR MESSAGE FIELD */}
+      {/* رسائل الخطأ العامة */}
       {errorMessage && (
-        <div className="w-full py-1 px-3 bg-red-400/15 border border-red-400/25 rounded-lg">
-          <span className="text-sm text-red-500">
+        <div className="w-full rounded-xl border border-red-500/20 bg-red-500/10 p-3">
+          <span className="text-xs font-medium text-red-500">
             {errorMessage}
           </span>
         </div>
       )}
 
-      {/* SUBMIT BUTTON*/}
+      {/* زر تسجيل الدخول */}
       <Button
         type="submit"
-        className="w-full p-3 py-5 font-medium text-md bg-eloq-purple hover:bg-eloq-purple/75 rounded-lg"
+        disabled={isLoading}
+        className="mt-2 w-full rounded-xl bg-eloq-purple py-5 font-semibold text-white shadow-sm transition-all duration-200 hover:bg-eloq-purple/90 active:scale-[0.99]"
       >
-        {isLoading ? "..." : "Login"}
+        {isLoading ? "Signing in..." : "Login"}
       </Button>
-      {/* or seprator */}
+
       <OrSeparator />
-      {/* OAuth */}
+
       <GoogleSignInButton setErrorMessage={setErrorMessage} />
     </motion.form>
-  )
+  );
 }
