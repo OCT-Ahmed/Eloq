@@ -6,7 +6,6 @@ import { completeLessonAction, type BlockData } from "@/actions/lessons";
 import { useLearningAnswersStore } from "@/store/learningAnswersStore";
 import { playUISound } from "@/lib/uiSounds";
 
-
 interface CompleteLessonButtonProps {
   lessonId: string;
   unitId: string;
@@ -22,7 +21,6 @@ type ModalState =
   | { type: "error"; message: string }
   | null;
 
-// مرجع ثابت للكائن الفارغ لتجنب إنشائه مجدداً في الذاكرة عند كل رندر
 const EMPTY_ANSWERS = {};
 
 export default function CompleteLessonButton({
@@ -35,7 +33,6 @@ export default function CompleteLessonButton({
   const [loading, setLoading] = useState(false);
   const [modalState, setModalState] = useState<ModalState>(null);
 
-  // تم نقل القيم الإفتراضية خارج الـ Selector لحفظ مرجع الذاكرة
   const answers =
     useLearningAnswersStore((state) => state.answersByLesson[lessonId]) ??
     EMPTY_ANSWERS;
@@ -62,6 +59,7 @@ export default function CompleteLessonButton({
       });
 
       if (!result.success) {
+        playUISound("wrongAnswer");
         setModalState({
           type: "error",
           message: result.error ?? "تعذر إكمال الدرس. حاول مرة أخرى.",
@@ -72,6 +70,7 @@ export default function CompleteLessonButton({
       const data = result.data;
 
       if (!data) {
+        playUISound("wrongAnswer");
         setModalState({
           type: "error",
           message: "لم تصل نتيجة صالحة من الخادم.",
@@ -79,9 +78,13 @@ export default function CompleteLessonButton({
         return;
       }
 
+      // تشغيل الصوت المناسب فور استقبال النتيجة
+      playUISound(data.passed ? "correctAnswer" : "wrongAnswer");
+
       onSuccess?.(result);
       setModalState({ type: "result", data });
     } catch (error) {
+      playUISound("wrongAnswer");
       setModalState({
         type: "error",
         message: "حدث خطأ غير متوقع. تحقق من اتصال الإنترنت وحاول مرة أخرى.",
@@ -98,7 +101,10 @@ export default function CompleteLessonButton({
       <div className="flex items-center justify-center w-full">
         <Button
           type="button"
-          onClick={() => (playUISound("click"), handleComplete)}
+          onClick={() => {
+            playUISound("click");
+            handleComplete(); // تم إضافة الأقواس لاستدعاء الدالة
+          }}
           disabled={loading}
           className="w-full max-w-xs py-3 bg-green-600 hover:bg-green-700 active:scale-95 disabled:opacity-50 text-white font-bold rounded-xl transition shadow-md"
         >
@@ -122,7 +128,10 @@ export default function CompleteLessonButton({
                   {modalState.message}
                 </p>
                 <Button
-                  onClick={() => (playUISound("click"), closeModal)}
+                  onClick={() => {
+                    playUISound("click");
+                    closeModal(); // تم إضافة الأقواس لاستدعاء الدالة
+                  }}
                   className="w-full mt-2 bg-slate-800 hover:bg-slate-700 text-white font-semibold rounded-xl py-2.5"
                 >
                   حسناً
@@ -130,11 +139,9 @@ export default function CompleteLessonButton({
               </div>
             )}
 
-            {/* حالة نتيجة الدرس (اجتياز أو عدم اجتياز) */}
+            {/* حالة نتيجة الدرس */}
             {modalState.type === "result" && (
               <div className="flex flex-col gap-5">
-                {modalState.data.passed ? playUISound("correctAnswer") : playUISound("wrongAnswer")}
-                {/* الهيدر والعنوان */}
                 <div className="text-center space-y-2">
                   <div className="text-5xl mb-2">
                     {modalState.data.passed ? "🎉" : "💪"}
@@ -151,9 +158,7 @@ export default function CompleteLessonButton({
                   </p>
                 </div>
 
-                {/* شبكة الإحصائيات والمعلومات */}
                 <div className="grid grid-cols-2 gap-3 dir-rtl">
-                  {/* النتيجة والدرجة */}
                   <div className="col-span-2 p-3.5 rounded-xl bg-slate-800/60 border border-slate-700/50 flex justify-between items-center">
                     <span className="text-sm font-medium text-slate-300">النتيجة والدرجة</span>
                     <span className="text-base font-bold text-white">
@@ -161,7 +166,6 @@ export default function CompleteLessonButton({
                     </span>
                   </div>
 
-                  {/* نقاط XP - في حال الاجتياز */}
                   {modalState.data.passed && (
                     <>
                       <div className="p-3 rounded-xl bg-emerald-950/40 border border-emerald-500/30 flex flex-col gap-1">
@@ -179,7 +183,6 @@ export default function CompleteLessonButton({
                     </>
                   )}
 
-                  {/* الستريك Streak */}
                   {modalState.data.passed && modalState.data.streak_count !== undefined && (
                     <div className="col-span-2 p-3.5 rounded-xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-orange-500/30 flex items-center justify-between">
                       <div className="flex items-center gap-2">
@@ -192,7 +195,6 @@ export default function CompleteLessonButton({
                     </div>
                   )}
 
-                  {/* الأخطاء - في حال عدم الاجتياز */}
                   {!modalState.data.passed && (
                     <div className="col-span-2 p-3.5 rounded-xl bg-red-950/30 border border-red-500/30 flex justify-between items-center">
                       <span className="text-sm font-medium text-red-300">الأخطاء</span>
@@ -203,7 +205,6 @@ export default function CompleteLessonButton({
                   )}
                 </div>
 
-                {/* زر الإغلاق / المتابعة */}
                 <Button
                   onClick={closeModal}
                   className={`w-full py-3 font-bold rounded-xl text-white transition shadow-lg mt-2 ${
@@ -222,4 +223,3 @@ export default function CompleteLessonButton({
     </div>
   );
 }
-
