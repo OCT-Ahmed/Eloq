@@ -1,4 +1,4 @@
-import { Block } from "@/types/learning";
+import { Block, LocalizedText } from "@/types/learning";
 import DialogueBlock from "./blocks/dialogueBlock";
 import FillBlanksBlock from "./blocks/fillBlanksBlock";
 import GrammarPointBlock from "./blocks/grammarPointBlock";
@@ -7,62 +7,52 @@ import FreePracticeBlock from "./blocks/freePracticeBlock";
 import WordListBlock from "./blocks/wordListBlock";
 import MatchingBlock from "./blocks/matchingBlock";
 import MultipleChoiceBlock from "./blocks/MultipleChoiceBlock";
-import ReorderWordsBlock from "./blocks/reorderWordsBlock"
+import ReorderWordsBlock from "./blocks/reorderWordsBlock";
+import Explanation from "./Explanation";
 
-// pass the whole block "block={block}" to the block component instead of passing the data "block={block.data}"
+export default function BlockRenderer({ block }: { block: Block }) {
+    let content;
 
-export default function BlockRenderer({block}: {block:Block}) {
-    switch(block.type) {
+    switch (block.type) {
         case "dialogue":
-            return (
-                <DialogueBlock data={block.data} explanation={block.extensions?.explanation} />
-            )
-        case "grammar_point": 
-            if (block.extensions?.title) {
-                return (
-                    <GrammarPointBlock data={block.data} title={block.extensions?.title} />
-                )
-            } else {
-                return (
-                    <GrammarPointBlock data={block.data} />
-                )
-            }
+            content = <DialogueBlock data={block.data} />;
+            break;
+        case "grammar_point":
+            content = <GrammarPointBlock data={block.data} />;
+            break;
         case "fill_blanks":
-            return (
-                <FillBlanksBlock id={block.id} data={block.data} />
-            )
+            content = <FillBlanksBlock id={block.id} data={block.data} />;
+            break;
         case "free_practice":
-            return (
-                <FreePracticeBlock data={block.data} />
-            )
+            content = <FreePracticeBlock data={block.data} />;
+            break;
         case "image_cards":
-            return (
-                <ImageCardsBlock data={block.data} />
-            )
+            content = <ImageCardsBlock data={block.data} />;
+            break;
         case "word_list":
-            return (
-                <WordListBlock data={block.data} />
-            )
+            content = <WordListBlock data={block.data} />;
+            break;
         case "matching":
-            return (
-              <MatchingBlock 
-              id={block.id}
-              data={block.data} />
-            )
+            content = <MatchingBlock id={block.id} data={block.data} />;
+            break;
         case "reorder_words":
-          return (
-            <ReorderWordsBlock 
-            id={block.id}
-            data={block.data} />
-          )
+            content = <ReorderWordsBlock id={block.id} data={block.data} />;
+            break;
         case "multiple_choice":
-          return (
-            <MultipleChoiceBlock
-              id={block.id}
-              data={block.data}
-            />
-          );
-        default: 
-            return null
+            content = <MultipleChoiceBlock id={block.id} data={block.data} />;
+            break;
+        default:
+            return null;
     }
+
+    return (
+        <>
+            {content}
+            <Explanation explanation={getLocalizedText(block.extensions?.explanation)} />
+        </>
+    );
+}
+
+function getLocalizedText(text?: LocalizedText) {
+    return text?.ar ?? text?.en ?? Object.values(text ?? {}).find(Boolean);
 }

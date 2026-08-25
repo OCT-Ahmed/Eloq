@@ -5,7 +5,7 @@ import { ChevronUp, HelpCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface ExplanationProps {
-  explanation: string;
+  explanation?: string;
   title?: string;
 }
 
@@ -41,7 +41,7 @@ export default function Explanation({ explanation, title = "عرض الشرح و
             className="overflow-hidden"
           >
             <p className="pt-3 text-sm leading-relaxed text-foreground/90 dir-rtl text-right border-t border-purple-500/15 mt-2 font-arabic">
-              {explanation}
+              {explanation || "لا يوجد شرح حاليا"}
             </p>
           </motion.div>
         )}

@@ -2,6 +2,7 @@ import { create } from 'zustand';
 
 interface AudioStore {
   audioUrl: string | null;
+  audioError: string | null;
   isPlaying: boolean;
   speed: number;
   isMuted: boolean;
@@ -17,6 +18,7 @@ interface AudioStore {
 
 export const useAudioStore = create<AudioStore>((set, get) => ({
   audioUrl: null,
+  audioError: null,
   isPlaying: false,
   speed: 1,
   isMuted: false,
@@ -53,15 +55,16 @@ export const useAudioStore = create<AudioStore>((set, get) => ({
 
     newAudio.onerror = () => {
       console.warn("تعذر تحميل ملف الصوت:", url);
-      set({ isPlaying: false });
+      set({ isPlaying: false, audioError: url });
     };
 
-    newAudio.play().catch(() => set({ isPlaying: false }));
+    newAudio.play().catch(() => set({ isPlaying: false, audioError: url }));
 
     set({
       audioUrl: url,
       audioInstance: newAudio,
       isPlaying: true,
+      audioError: null,
     });
   },
 

@@ -19,7 +19,7 @@ export default function SectionRenderer({ lesson }: { lesson: Lesson }) {
     (state) => state.initializeLesson
   );
 
-  const { playBlockAudio, isPlaying, audioUrl } = useAudioStore();
+  const { playBlockAudio, isPlaying, audioUrl, audioError } = useAudioStore();
 
   useEffect(() => {
     initializeLesson(lesson.id);
@@ -28,7 +28,7 @@ export default function SectionRenderer({ lesson }: { lesson: Lesson }) {
   // إظهار منبثق "الصوت قيد التجهيز" لفترة قصيرة
   const handleDisabledAudioClick = (blockId: string) => {
     setActiveTooltipId(blockId);
-    setTimeout(() => setActiveTooltipId(null), 2000);
+    setTimeout(() => setActiveTooltipId(null), 2500);
   };
 
   return (
@@ -100,7 +100,7 @@ export default function SectionRenderer({ lesson }: { lesson: Lesson }) {
 
                     {/* المنبثق الصغير العائم بديل الـ alert */}
                     <AnimatePresence>
-                      {activeTooltipId === block.id && (
+                      {(activeTooltipId === block.id || audioError === blockAudioUrl) && (
                         <motion.div
                           initial={{ opacity: 0, scale: 0.85, y: 6 }}
                           animate={{ opacity: 1, scale: 1, y: -4 }}
@@ -108,7 +108,9 @@ export default function SectionRenderer({ lesson }: { lesson: Lesson }) {
                           transition={{ duration: 0.15 }}
                           className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 whitespace-nowrap rounded-lg border border-border bg-background px-2.5 py-1 text-[11px] font-medium text-muted-foreground shadow-lg backdrop-blur pointer-events-none z-10"
                         >
-                          الصوت قيد التجهيز قريباً
+                          {audioError === blockAudioUrl
+                            ? "تعذر تشغيل الصوت"
+                            : "الصوت قيد التجهيز قريباً"}
                         </motion.div>
                       )}
                     </AnimatePresence>

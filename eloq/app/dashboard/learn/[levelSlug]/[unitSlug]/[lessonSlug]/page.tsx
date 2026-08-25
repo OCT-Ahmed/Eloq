@@ -5,9 +5,23 @@ import {
   fetchBlocks,
 } from "@/features/learning";
 import SectionRenderer from "@/components/learning/section-renderer";
-import type { Lesson } from "@/types/learning";
+import type { ExtensionType, Lesson } from "@/types/learning";
 import Breadcrumb from "@/components/navigation/breadcrumb";
 import { Card } from "@/components/ui/card";
+
+function normalizeExtensions(value: unknown): ExtensionType | undefined {
+  if (!value) return undefined;
+
+  if (typeof value === "string") {
+    try {
+      return normalizeExtensions(JSON.parse(value));
+    } catch {
+      return undefined;
+    }
+  }
+
+  return typeof value === "object" ? (value as ExtensionType) : undefined;
+}
 
 export default async function LessonPage({
   params,
@@ -46,7 +60,7 @@ export default async function LessonPage({
         id: block.id,
         type: block.type,
         data: block.content,
-        extensions: block.extensions,
+        extensions: normalizeExtensions(block.extensions),
         isActive: block.is_active,
       })),
     ],
