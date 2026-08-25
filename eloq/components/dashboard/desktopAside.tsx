@@ -1,70 +1,97 @@
-'use client'
-import { useState } from 'react'
-import { usePathname } from 'next/navigation'
-import Link from 'next/link'
-import { User, Flame, HomeIcon, Settings } from 'lucide-react'
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Flame, Settings, User } from "lucide-react";
+
+import type { DashboardNavItem } from "@/app/dashboard/layout";
 
 export default function DesktopAside({
-  links 
-  }:{
-    links:{
-      title: string;
-      slug: string;
-      href: string;
-      icon: any;
-    }[]
-  }) {
-  
+  links,
+}: {
+  links: DashboardNavItem[];
+}) {
   const pathname = usePathname();
-  
+
   return (
-                <aside className="hidden lg:flex-shrink-0 lg:flex lg:flex-col lg:items-stretch lg:justify-stretch lg:gap-4 bg-purple-300 px-4 pt-5 pb-3 w-64 h-full border-r border-black/15 shadow-2xl text-regular">
-                    <header className="flex items-start justify-start gap-2 pb-4 border-b border-primary/15">
-                        {/* <Rocket color="purple" /> */}
-                        <div className="bg-purple-500 p-2 h-10 w-10 rounded-full">
-                           <User color="none" /> 
-                        </div>
+    <aside className="hidden w-64 shrink-0 border-r border-border-subtle bg-foreground lg:flex lg:h-full lg:flex-col">
+      {/* Profile */}
+      <header className="border-b border-border-subtle px-5 py-5">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-eloq-purple/10 text-eloq-purple">
+            <User size={20} strokeWidth={1.8} />
+          </div>
 
-                        <div>
-                            <div className="flex items-center gap-1">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2">
+              <h2 className="truncate text-sm font-semibold text-base">
+                Ahmed Khyr
+              </h2>
 
-                                <h1 className="font-semibold">
-                                    Ahmed Khyr
-                                </h1>
-                                <div className="relative flex"> 
-                                    <Flame fill="darkorange" color="orange" size={15} strokeWidth={1} />
-                                    <span className="font-mono font-semibold text-[10px]">12</span>
-                                </div>
-                            </div>
-                            <span className="text-[11px] bg-white/25 filter-blur-xl rounded-full p-1 px-2 font-mono">
-                                Intermediate
-                            </span>
-                        </div>
+              <div className="flex shrink-0 items-center gap-0.5 text-tip">
+                <Flame
+                  size={15}
+                  fill="currentColor"
+                  strokeWidth={1.8}
+                />
+                <span className="text-[10px] font-bold">12</span>
+              </div>
+            </div>
 
-                        {/* add sidebar links array */}
-                    </header>
+            <span className="mt-1 inline-flex rounded-full bg-background px-2 py-0.5 text-[10px] font-medium text-muted">
+              Intermediate
+            </span>
+          </div>
+        </div>
+      </header>
 
-                    <main className="flex flex-1 flex-col gap-1 pb-4 border-b border-primary/15">
-                        <Link className="flex gap-2 p-2 hover:bg-white/35 text-sm rounded-lg transition-colors duration-300" href="/dashboard">
-                            <HomeIcon color="purple" size={18} strokeWidth={1.9} />
-                            Home
-                        </Link>
-                         {
-                        links.map(link => (
-                          <Link key={link.slug} className={` lg:flex lg:gap-2 p-2 hover:bg-white/35 text-sm lg:rounded-lg ${link.href === pathname ? "dark:text-purple-700 dark:shadow-md dark:shadow-purple-700" : "dark:text-white/85" } transition-colors duration-300`} href={link.href}>
-                            {link.icon}
-                            {link.title}
-                        </Link>
-                        ))
-                      }
-                    </main>
-                    <footer className="flex flex-col gap-2">
-                        <Link className="flex gap-2 p-2  text-sm rounded-lg hover:bg-white/35 transition-colors duration-300" href="/dashboard">
-                            <Settings size={18} />
-                            Settings
-                        </Link>
-                    </footer>
-                </aside>
-    )
+      {/* Navigation */}
+      <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-4">
+        {links.map((link) => {
+          const isActive =
+            pathname === link.href ||
+            (link.href !== "/dashboard" &&
+              pathname.startsWith(`${link.href}/`));
+
+          return (
+            <Link
+              key={link.slug}
+              href={link.href}
+              className={[
+                "group flex items-center gap-3 rounded-xl px-3 py-2.5",
+                "text-sm font-medium transition-all duration-200",
+                "hover:bg-background hover:text-base",
+                isActive
+                  ? "bg-eloq-soft-purple text-eloq-purple shadow-soft"
+                  : "text-muted",
+              ].join(" ")}
+            >
+              <span
+                className={
+                  isActive
+                    ? "text-eloq-purple"
+                    : "text-muted group-hover:text-eloq-purple"
+                }
+              >
+                {link.icon}
+              </span>
+
+              <span>{link.title}</span>
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* Footer */}
+      <footer className="border-t border-border-subtle p-3">
+        <Link
+          href="/dashboard/settings"
+          className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted transition-colors duration-200 hover:bg-background hover:text-base"
+        >
+          <Settings size={20} strokeWidth={1.8} />
+          Settings
+        </Link>
+      </footer>
+    </aside>
+  );
 }
-

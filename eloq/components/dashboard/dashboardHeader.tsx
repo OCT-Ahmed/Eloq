@@ -1,56 +1,111 @@
-'use client'
-import AsideMenu from '@/components/dashboard/menu'
-import { useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import { usePathname } from 'next/navigation'
-import Link from 'next/link'
-import { Search, Menu, AlignJustify, MoreVertical, MoreHorizantal } from 'lucide-react'
+"use client";
+
+import { useState } from "react";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  AlignJustify,
+  Search,
+  ChevronDown,
+} from "lucide-react";
+
+import AsideMenu from "@/components/dashboard/menu";
 
 export default function DashboardHeader() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
-  const currentSection = 
-    pathname === "/dashboard" ? "ELOQ" : 
-    pathname.includes("/dashboard/learn") ? "Learn" : 
-    pathname.includes("/dashboard/practice") ? "Practice" : 
-    pathname.includes("/dashboard/qhub") ? "ELOQHub" : 
-    pathname.includes("/dashboard/ai") ? "Ai" :
-    "";
-    
-    const showMenu = () => {
-      setIsOpen(s => !s);
-    }
+
+  const currentSection =
+    pathname === "/dashboard"
+    ? "ELOQ"
+    : pathname.startsWith("/dashboard/learn")
+    ? "Learn"
+    : pathname.startsWith("/dashboard/practice")
+    ? "Practice"
+    : pathname.startsWith("/dashboard/eloqhub")
+    ? "ELOQHub"
+    : pathname.startsWith("/dashboard/ai-chat")
+    ? "AI"
+    : "ELOQ";
+
+  const toggleMenu = () => {
+    setIsMenuOpen((previous) => !previous);
+  };
+
   return (
-    <header className="flex items-center justify-between gap-2 lg:items-center lg:gap-6 text-base h-18 w-full px-5 py-4 bg-foreground border-b border-border-subtle shadow-sm">
-                  
-                <AlignJustify size={24} onClick={showMenu} className="cursor-pointer text-base" />
-              <AnimatePresence>
-                {isOpen && (
-                <>
-                <motion.div
-                  initial={{opacity: 0}}
-                  animate={{opacity: 1}}
-                  exit={{opacity: 0}}
-                  className="fixed inset-0 z-1001 bg-background/75 backdrop-blur-sm"
-                  onClick={() => setIsOpen(false)}
-                ></motion.div>
-                  <AsideMenu showMenu={showMenu} />
-                </>
-                )}
-              </AnimatePresence>
-              <div className="flex flex-col items-center justify-center gap-0 lg:flex-row">
-                <span onClick={showMenu} className="lg:hidden font-semibold text-xl tracking-[1.2px] text-base cursor-pointer">
-                  { currentSection }
-                </span>
-                <Link className="hidden lg:block text-muted hover:text-base p-2 hover:bg-background/50 rounded-lg transition-all duration-300" href="/dashboard">Dashboard</Link>
-              </div>
-              <div className="flex items-center gap-4">
-                  <Search onClick={() => alert('Hi')} size={24} className="cursor-pointer text-muted hover:text-base" />
-                  
-                <div className="hidden lg:block lg:w-80">
-                    <input className="hidden lg:block text-sm p-4 rounded-xl w-full h-8 bg-background border border-border-subtle text-base placeholder:text-muted focus:outline-none" type="text" placeholder="Search for a word, lesson or .." />
-                </div>
-              </div>
-            </header>
-  )
+    <>
+      <header className="sticky top-0 z-40 flex h-16 shrink-0 items-center justify-between gap-4 border-b border-border-subtle bg-background/95 px-4 backdrop-blur-xl sm:px-5 lg:h-[68px] lg:px-6">
+        {/* Left */}
+        <div className="flex min-w-0 items-center gap-2">
+          <button
+            type="button"
+            onClick={toggleMenu}
+            aria-label="Open menu"
+            className="flex h-10 w-10 items-center justify-center rounded-xl text-muted transition-colors hover:bg-background hover:text-base"
+          >
+            <AlignJustify size={22} strokeWidth={1.8} />
+          </button>
+
+          <div className="flex min-w-0 items-center">
+            <Link
+              href="/dashboard"
+              className="hidden rounded-lg px-2 py-1 text-sm font-semibold text-base transition-colors hover:bg-background lg:block"
+            >
+              Dashboard
+            </Link>
+
+            <button
+              type="button"
+              onClick={toggleMenu}
+              className="flex items-center gap-1 rounded-lg px-2 py-1 text-lg font-bold tracking-tight text-base transition-colors hover:bg-background lg:hidden"
+            >
+              <span className="truncate">{currentSection}</span>
+              <ChevronDown size={16} />
+            </button>
+          </div>
+        </div>
+
+        {/* Right */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          <button
+            type="button"
+            aria-label="Search"
+            onClick={() => alert("Search")}
+            className="flex h-10 w-10 items-center justify-center rounded-xl text-muted transition-colors hover:bg-background hover:text-base"
+          >
+            <Search size={21} strokeWidth={1.8} />
+          </button>
+
+          <div className="hidden w-64 xl:block">
+            <input
+              type="search"
+              placeholder="Search for a word, lesson..."
+              className="h-9 w-full rounded-xl border border-border-subtle bg-background px-3 text-sm text-base outline-none transition-all placeholder:text-muted focus:border-ring focus:ring-2 focus:ring-ring/20"
+            />
+          </div>
+        </div>
+      </header>
+
+      <AnimatePresence>
+        {isMenuOpen && (
+          <>
+            <motion.button
+              type="button"
+              aria-label="Close menu"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMenuOpen(false)}
+              className="fixed inset-0 z-[1000] cursor-default bg-background/70 backdrop-blur-sm"
+            />
+
+            <AsideMenu
+              showMenu={() => setIsMenuOpen(false)}
+            />
+          </>
+        )}
+      </AnimatePresence>
+    </>
+  );
 }

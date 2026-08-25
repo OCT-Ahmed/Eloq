@@ -1,77 +1,80 @@
-import { Card } from "@/components/ui/card";
-import DashboardHeader from '@/components/dashboard/dashboardHeader'
-import BottomMobileNav from '@/components/dashboard/bottomMobileNav'
-import DesktopAside from '@/components/dashboard/desktopAside'
-import { useAuth } from "@/features/auth"
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarProvider } from "@/components/ui/sidebar";
-import { BookOpen, Bot, Brain, BrainIcon, Earth, FireExtinguisher, Flame, Grid2x2, Home, HomeIcon, KanbanSquare, Layers2, LayoutDashboardIcon, LayoutGrid, LayoutList, Rocket, Settings, SidebarIcon, User, UserCircle, Search } from "lucide-react";
-import Link from "next/link";
-import { Nunito } from 'next/font/google'
+import DashboardHeader from "@/components/dashboard/dashboardHeader";
+import BottomMobileNav from "@/components/dashboard/bottomMobileNav";
+import DesktopAside from "@/components/dashboard/desktopAside";
+
+import { HomeIcon, GraduationCap, Sparkles, Dumbbell, Users, ChevronRight } from "lucide-react";
+
+import { Nunito } from "next/font/google";
 
 const nunito = Nunito({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800', '900'],
-  variable: '--font-nunito',
-})
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-nunito",
+});
 
-const links =  [
+export type DashboardNavItem = {
+  title: string;
+  slug: string;
+  href: string;
+  icon: React.ReactNode;
+};
+
+const links: DashboardNavItem[] = [
+  {
+    title: "Home",
+    slug: "home",
+    href: "/dashboard",
+    icon: <HomeIcon size={22} strokeWidth={1.9} />,
+  },
+  {
+    title: "Learn",
+    slug: "learn",
+    href: "/dashboard/learn",
+    icon: <GraduationCap size={22} strokeWidth={1.9} />,
+  },
     {
-      title: "Home",
-      slug: "home",
-      href: "/dashboard",
-      icon: <HomeIcon size={24} strokeWidth={1.9}  />
-    },
-    {
-      title: "Learn",
-      slug: "learn",
-      href: "/dashboard/learn",
-      icon: <BookOpen size={24} />
-    },
-    {
-      title: "Practice",
-      slug: "practice",
-      href: "/dashboard/practice",
-      icon: <BrainIcon size={24} />
-    },
-    {
-      title: "ELOQHub",
-      slug: "eloqhub",
-      href: "/dashboard/eloqhub",
-      icon:  <Earth size={24} />
-    },
-    {
-      title: "AI Chat",
-      slug: "ai-chat",
-      href: "/dashboard/ai-chat",
-      icon: <Bot size={24} />
-    },
-    /*{
-      title: "Settings",
-      slug: "settings",
-      href: "/dashboard/settings",
-      icon:  <Settings size={18} />
-    },*/
-  ];
+    title: "AI Chat",
+    slug: "ai-chat",
+    href: "/dashboard/ai-chat",
+    icon: <Sparkles size={22} strokeWidth={1.9} />,
+  },
+  {
+    title: "Practice",
+    slug: "practice",
+    href: "/dashboard/practice",
+    icon: <Dumbbell size={22} strokeWidth={1.9} />,
+  },
+  {
+    title: "ELOQHub",
+    slug: "eloqhub",
+    href: "/dashboard/eloqhub",
+    icon: <Users size={22} strokeWidth={1.9} />,
+  },
+];
 
 export default function DashboardLayout({
-    children,
-}:{
-    children: React.ReactNode,
+  children,
+}: {
+  children: React.ReactNode;
 }) {
-
   return (
-    <div 
-      className={`${nunito.variable} flex flex-col items-center justify-stretch w-full h-screen overflow-hidden text-base`}
+    <div
       id="dashboard-container"
+      className={`${nunito.variable} flex h-dvh min-h-0 w-full flex-col overflow-hidden bg-background text-foreground`}
     >
       <DashboardHeader />
-      <main className="lg:flex lg:items-stretch lg:justify-start w-full h-[calc(100vh-64px)]">
+
+      <div className="flex min-h-0 flex-1 w-full">
         <DesktopAside links={links} />
-        <BottomMobileNav links={links} />
-        <section className="w-full h-full lg:py-4 lg:px-6 overflow-x-hidden overflow-y-auto lg:overflow-hidden bg-background scrollbar-none lg:scrollbar">
-          {children}
-        </section>
-      </main>    
-    </div>      
-  )
+
+        <main className="min-h-0 min-w-0 flex-1 overflow-y-auto overflow-x-hidden bg-background pb-24 lg:pb-0">
+          <div className="mx-auto min-h-full w-full max-w-[1600px] px-4 py-4 sm:px-6 lg:px-8 lg:py-6">
+            {children}
+          </div>
+        </main>
+      </div>
+
+      <BottomMobileNav links={links} />
+    </div>
+  );
 }
