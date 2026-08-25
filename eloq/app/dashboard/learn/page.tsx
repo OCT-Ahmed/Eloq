@@ -3,6 +3,8 @@ import Breadcrumb from "@/components/navigation/breadcrumb";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
 import { ArrowRight, Compass, Layers, Sparkles, TestTube } from "lucide-react";
+import { playUISound } from "@/lib/uiSounds";
+
 
 // نصوص محفزة ومحددة لكل مستوى تساعد الطالب على تحديد مستواه
 const LEVEL_META: Record<string, { desc: string }> = {

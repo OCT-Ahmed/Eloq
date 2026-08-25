@@ -10,6 +10,7 @@ import {
 import "./globals.css";
 import { AuthInitializer } from "@/features/auth";
 import DevNavigation from "@/components/layout/DevNavigation";
+import { Providers } from "./providers";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -50,14 +51,15 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${inter.variable} ${geistSans.variable} ${geistMono.variable} ${nunito.variable} ${lato.variable} h-full antialiased`}
     >
       <body className="min-h-dvh bg-background text-foreground">
-        <AuthInitializer />
-
-        <DevNavigation />
-
-        {children}
+        <Providers>
+          <AuthInitializer />
+          <DevNavigation />
+          {children}
+        </Providers>
       </body>
     </html>
   );

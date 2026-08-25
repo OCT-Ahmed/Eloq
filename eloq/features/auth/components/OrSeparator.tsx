@@ -1,9 +1,11 @@
 export default function OrSeparator() {
   return (
-    <div className="flex items-center justify-between w-full gap-2 text-muted mt-2 mb-2">
-      <div className="flex-1 h-[0.3px] bg-muted rounded-full"></div>
-      <span>or</span>
-      <div className="flex-1 h-[0.3px] bg-muted rounded-full" />
+    <div className="my-2 flex w-full items-center gap-3">
+      <div className="h-[1px] flex-1 bg-border-subtle/80" />
+      <span className="text-[11px] font-bold uppercase tracking-wider text-muted">
+        or
+      </span>
+      <div className="h-[1px] flex-1 bg-border-subtle/80" />
     </div>
-  )
+  );
 }

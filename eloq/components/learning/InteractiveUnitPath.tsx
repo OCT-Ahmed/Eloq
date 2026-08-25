@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { BookOpen, Check, Play, Sparkles, X, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { playUISound } from "@/lib/uiSounds";
 
 export type LessonItem = {
   id: string;
@@ -49,7 +50,8 @@ export default function InteractiveUnitPath({
               {/* Node Button */}
               <button
                 type="button"
-                onClick={() => setSelectedLesson(lesson)}
+                onClick={() => { playUISound("click"); setSelectedLesson(lesson); }}
+
                 className={`group relative flex h-16 w-16 items-center justify-center rounded-full border-4 shadow-lg transition-all duration-300 hover:scale-110 active:scale-95 ${
                   isSelected
                     ? "border-eloq-green bg-eloq-purple text-white ring-4 ring-eloq-purple/30"
@@ -88,7 +90,7 @@ export default function InteractiveUnitPath({
               {/* Close Button */}
               <button
                 type="button"
-                onClick={() => setSelectedLesson(null)}
+                onClick={() => (playUISound("click"), setSelectedLesson(null))}
                 className="absolute right-4 top-4 rounded-full p-1 text-muted transition-colors hover:bg-border-subtle/40 hover:text-foreground"
               >
                 <X className="h-5 w-5" />
@@ -120,6 +122,7 @@ export default function InteractiveUnitPath({
               {/* Start Lesson CTA */}
               <div className="mt-6">
                 <Link
+                onClick={() => playUISound("click")}
                   href={`/dashboard/learn/${levelSlug}/${unitSlug}/${selectedLesson.slug}`}
                   className="block w-full"
                 >

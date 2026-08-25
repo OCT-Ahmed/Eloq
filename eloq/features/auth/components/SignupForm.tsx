@@ -1,192 +1,149 @@
-"use client"
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { signup } from "../actions/signup"
-import { signupSchema } from "../validation/signup.schema"
-import { motion } from "framer-motion"
-import GoogleSignInButton from "../components/GoogleSignInButton"
-import { Button } from "@/components/ui/button"
-import OrSeparator from "../components/OrSeparator"
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { signup } from "../actions/signup";
+import { signupSchema } from "../validation/signup.schema";
+import GoogleSignInButton from "../components/GoogleSignInButton";
+import OrSeparator from "../components/OrSeparator";
+import { Button } from "@/components/ui/button";
+import { playUISound } from "@/lib/uiSounds";
 
 export default function SignupForm() {
   const router = useRouter();
-  // °° INPUTS STATE
-  const [fullName, setFullName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  // °° STATES
-  const [isLoading, setIsLoading] = useState(false)
-  const [errorMessage, setErrorMessage] = useState("")
-  const [fullNameErrorMessage, setFullNameErrorMessage] = useState("") // إضافة حالة خطأ الاسم
-  const [emailErrorMessage, setEmailErrorMessage] = useState("")
-  const [passwordErrorMessage, setPasswordErrorMessage ] = useState("")
-  // °° VARIABLES
-  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL!;
-  const successMessage = "Account created successfully!";
-  const failMessage = "Something went wrong."
 
-  // °° SUBMIT HANDLER
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [fullNameErrorMessage, setFullNameErrorMessage] = useState("");
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+
+  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL!;
+  const failMessage = "Something went wrong. Please try again.";
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
+    e.preventDefault();
+    playUISound("click");
+
     try {
-      setIsLoading(true)
-      setFullNameErrorMessage("")
-      setEmailErrorMessage("")
-      setPasswordErrorMessage("")
-      setErrorMessage("")
+      setIsLoading(true);
+      setFullNameErrorMessage("");
+      setEmailErrorMessage("");
+      setPasswordErrorMessage("");
+      setErrorMessage("");
+
       const result = signupSchema.safeParse({
         fullName,
         email,
         password,
-      })
+      });
+
       if (!result.success) {
-        console.log(result.error.flatten())
-        // handle fields errors
-        const errors = result.error.flatten().fieldErrors
-        setFullNameErrorMessage(errors.fullName?.[0] || errors.full_name?.[0])
-        setEmailErrorMessage(errors.email?.[0])
-        setPasswordErrorMessage(errors.password?.[0])
-        return
+        const errors = result.error.flatten().fieldErrors;
+        setFullNameErrorMessage(errors.fullName?.[0] || errors.full_name?.[0] || "");
+        setEmailErrorMessage(errors.email?.[0] ?? "");
+        setPasswordErrorMessage(errors.password?.[0] ?? "");
+        return;
       }
-      const signupData = result.data;
-      await signup(signupData)
-      alert(successMessage)
-      router.push(`${SITE_URL}/dashboard`)
-      setErrorMessage("")
+
+      await signup(result.data);
+      router.push(`${SITE_URL}/dashboard`);
     } catch (error) {
-      console.error(error)
-      setErrorMessage(failMessage)
+      console.error(error);
+      setErrorMessage(failMessage);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
-  
+
   return (
-    <motion.form 
+    <motion.form
       onSubmit={handleSubmit}
-      className="flex flex-col items-center justify-center gap-4 lg:gap-6 w-full md:w-[65%] lg:w-[50%] md:p-6 md:bg-background/5 md:border md:border-white/5 md:rounded-lg"
-      initial={{
-        opacity: 0,
-        y: 50,
-      }}
-      animate={{
-        opacity: 1,
-        y: 0,
-      }}
-      transition={{
-        duration: 0.8,
-        ease: "easeOut",
-        type: "spring",
-        stiffness: 200,
-        damping: 20,
-      }}
+      className="flex w-full flex-col items-center gap-4 rounded-2xl border border-border-subtle/80 bg-card/50 p-6 shadow-soft backdrop-blur-sm md:w-[65%] lg:w-[50%]"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
     >
-      {/* حقل الاسم الكامل */}
-      <div className="flex flex-col w-full gap-1">
-        <motion.input 
+      {/* الاسم الكامل */}
+      <div className="flex w-full flex-col gap-1.5">
+        <label className="text-xs font-semibold text-muted">Full Name</label>
+        <motion.input
           name="full_name"
           type="text"
           value={fullName}
-          placeholder="Write your full name"
-          className="w-full p-3 text-md bg-foreground font-medium border-2 rounded-lg outline-none caret-eloq-purple"
-          onChange={(e) => {
-            setFullName(e.target.value)
-          }}
-          whileFocus={{
-            scale: 1.02,
-            borderColor: "purple",
-          }}
-          transition={{ 
-            type: "spring", 
-            stiffness: 300, 
-            damping: 20 
-          }}
-          initial={{borderColor: "transparent"}}
+          placeholder="Ahmed Mohammed"
+          className="w-full rounded-xl border border-border-subtle bg-background p-3 text-sm font-medium text-foreground outline-none transition-all placeholder:text-muted/60 focus:border-eloq-purple focus:ring-2 focus:ring-eloq-purple/20"
+          onChange={(e) => setFullName(e.target.value)}
         />
         {fullNameErrorMessage && (
-          <span className="text-sm text-red-400">
+          <span className="text-xs font-medium text-red-500">
             {fullNameErrorMessage}
           </span>
         )}
       </div>
 
-      {/* حقل البريد الإلكتروني */}
-      <div className="flex flex-col w-full gap-1">
-        <motion.input 
+      {/* البريد الإلكتروني */}
+      <div className="flex w-full flex-col gap-1.5">
+        <label className="text-xs font-semibold text-muted">Email</label>
+        <motion.input
           name="email"
           type="email"
           value={email}
-          placeholder="Write your email"
-          className="w-full p-3 text-md bg-foreground font-medium border-2 rounded-lg outline-none caret-eloq-purple"
-          onChange={(e) => {
-            setEmail(e.target.value)
-          }}
-          whileFocus={{
-            scale: 1.02,
-            borderColor: "purple",
-          }}
-          transition={{ 
-            type: "spring", 
-            stiffness: 300, 
-            damping: 20 
-          }}
-          initial={{borderColor: "transparent"}}
+          placeholder="name@example.com"
+          className="w-full rounded-xl border border-border-subtle bg-background p-3 text-sm font-medium text-foreground outline-none transition-all placeholder:text-muted/60 focus:border-eloq-purple focus:ring-2 focus:ring-eloq-purple/20"
+          onChange={(e) => setEmail(e.target.value)}
         />
         {emailErrorMessage && (
-          <span className="text-sm text-red-400">
+          <span className="text-xs font-medium text-red-500">
             {emailErrorMessage}
           </span>
         )}
       </div>
 
-      {/* حقل كلمة السر */}
-      <div className="flex flex-col w-full gap-1">
-        <motion.input 
+      {/* كلمة السر */}
+      <div className="flex w-full flex-col gap-1.5">
+        <label className="text-xs font-semibold text-muted">Password</label>
+        <motion.input
           name="password"
           type="password"
           value={password}
-          placeholder="Write your password"
-          className="w-full p-3 text-md bg-foreground font-medium border-2 rounded-lg outline-none caret-eloq-purple"
-          onChange={(e) => {
-            setPassword(e.target.value)
-          }}
-          whileFocus={{
-            scale: 1.02,
-            borderColor: "purple",
-          }}
-          transition={{ 
-            type: "spring", 
-            stiffness: 300, 
-            damping: 20 
-          }}
-          initial={{borderColor: "transparent"}}
+          placeholder="••••••••"
+          className="w-full rounded-xl border border-border-subtle bg-background p-3 text-sm font-medium text-foreground outline-none transition-all placeholder:text-muted/60 focus:border-eloq-purple focus:ring-2 focus:ring-eloq-purple/20"
+          onChange={(e) => setPassword(e.target.value)}
         />
         {passwordErrorMessage && (
-          <span className="text-sm text-red-400">
+          <span className="text-xs font-medium text-red-500">
             {passwordErrorMessage}
           </span>
         )}
       </div>
 
-      {/* ERROR MESSAGE FIELD */}
+      {/* رسائل الخطأ العامة */}
       {errorMessage && (
-        <div className="w-full py-1 px-3 bg-red-400/15 border border-red-400/25 rounded-lg">
-          <span className="text-sm text-red-500">
+        <div className="w-full rounded-xl border border-red-500/20 bg-red-500/10 p-3">
+          <span className="text-xs font-medium text-red-500">
             {errorMessage}
           </span>
         </div>
       )}
 
-      {/* SUBMIT BUTTON */}
-      <Button 
+      {/* زر إنشاء الحساب */}
+      <Button
         type="submit"
-        className="w-full p-3 font-medium text-md bg-eloq-purple hover:bg-eloq-purple/75 rounded-lg"
+        disabled={isLoading}
+        className="mt-2 w-full rounded-xl bg-eloq-purple py-5 font-semibold text-white shadow-sm transition-all duration-200 hover:bg-eloq-purple/90 active:scale-[0.99]"
       >
-        {isLoading ? "..." : "Create Account"}
+        {isLoading ? "Creating account..." : "Create Account"}
       </Button>
+
       <OrSeparator />
-      {/* OAuth */}
+
       <GoogleSignInButton setErrorMessage={setErrorMessage} />
     </motion.form>
-  )
+  );
 }
