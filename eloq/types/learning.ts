@@ -245,6 +245,7 @@ export interface ExtensionType {
   audio?: {
     url: string;
     ref?: string;
+    transcript?; string;
   };
 
   tip?: {
